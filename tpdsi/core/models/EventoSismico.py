@@ -1,3 +1,6 @@
+import  from django.db import models
+import from estado.models import Estado
+
 class EventoSismico(models.Model):
     fecha_hora_fin = models.DateTimeField()
     fecha_hora_ocurrencia = models.DateTimeField()
