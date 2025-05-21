@@ -10,3 +10,8 @@ class EventoSismico:
         self.longitudEpicentro = longitudEpicentro
         self.longitudHipocentro = longitudHipocentro
         self.valorMagnitud = valorMagnitud
+
+    def obtenerEventosAD(eventos: int):
+        for evento in eventos:
+            if evento.fechaHoraOcurrencia > datetime.now():
+                return evento
