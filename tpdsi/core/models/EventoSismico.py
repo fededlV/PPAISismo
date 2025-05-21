@@ -1,3 +1,9 @@
+from django.db import models
+from .Estado import Estado
+from .AlcanceSismo import AlcanceSismo
+from .OrigenDeGeneracion import OrigenDeGeneracion
+from .ClasificacionSismo import ClasificacionSismo
+
 class EventoSismico(models.Model):
     fecha_hora_fin = models.DateTimeField()
     fecha_hora_ocurrencia = models.DateTimeField()
@@ -12,6 +18,21 @@ class EventoSismico(models.Model):
     estado = models.ForeignKey(
         Estado,
         on_delete=models.PROTECT,  # o CASCADE si querés que se borren los eventos con el estado
+        related_name='eventos'
+    )
+    alcance = models.ForeignKey(
+        AlcanceSismo,
+        on_delete=models.PROTECT,
+        related_name='eventos'
+    )
+    origen = models.ForeignKey(
+        OrigenDeGeneracion,
+        on_delete=models.PROTECT,
+        related_name='eventos'
+    )
+    clasificacion = models.ForeignKey(
+        ClasificacionSismo,
+        on_delete=models.PROTECT,
         related_name='eventos'
     )
 

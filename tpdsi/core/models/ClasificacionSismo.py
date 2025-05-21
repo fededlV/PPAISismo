@@ -1,5 +1,9 @@
-class ClasificacionSismo:
-    def __init__(self, kmProfundidadDesde: float, kmProfundidadHasta: float, nombre: str):
-        self.kmProfundidadDesde = kmProfundidadDesde
-        self.kmProfundidadHasta = kmProfundidadHasta
-        self.nombre = nombre
+from django.db import models
+
+class ClasificacionSismo(models.Model):
+    kmProfundidadDesde = models.FloatField()
+    kmProfundidadHasta = models.FloatField()
+    nombre = models.CharField(max_length=100)
+
+    def getDatosClasificacion(self):
+        return self.kmProfundidadDesde, self.kmProfundidadHasta, self.nombre
