@@ -1,4 +1,8 @@
-class OrigenDeGeneracion:
-    def __init__(self, descripcion: str, nombre: str):
-        self.descripcion = descripcion
-        self.nombre = nombre
+from django.db import models
+
+class OrigenDeGeneracion(models.Model):
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
+
+    def getDatosOrigen(self):
+        return nombre, descripcion

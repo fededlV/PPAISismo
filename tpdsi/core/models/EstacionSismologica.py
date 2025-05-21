@@ -7,5 +7,6 @@ class EstacionSismologica:
         self.latitud = latitud
         self.longitud = longitud
         self.nroCertificacionAdquisicion = nroCertificacionAdquisicion
+        
     def getCodigoEstacion(self) -> str:
         return self.codigoEstacion

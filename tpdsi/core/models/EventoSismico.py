@@ -1,17 +1,14 @@
-from datetime import datetime
+from django.db import models
 
-class EventoSismico:
-    def __init__(self, fechaHoraFin: datetime, fechaHoraOcurrencia: datetime, latitudEpicentro: float, 
-                 latitudHipocentro: float, longitudEpicentro: float, longitudHipocentro: float, valorMagnitud: float):
-        self.fechaHoraFin = fechaHoraFin
-        self.fechaHoraOcurrencia = fechaHoraOcurrencia
-        self.latitudEpicentro = latitudEpicentro
-        self.latitudHipocentro = latitudHipocentro
-        self.longitudEpicentro = longitudEpicentro
-        self.longitudHipocentro = longitudHipocentro
-        self.valorMagnitud = valorMagnitud
+class EventoSismico(models.Model):
+    fechaHoraFin = models.DateTimeField()
+    fechaHoraOcurrencia = models.DateTimeField()
+    latitudEpicentro = models.FloatField()
+    latitudHipocentro = models.FloatField()
+    longitudEpicentro = models.FloatField()
+    longitudHipocentro = models.FloatField()
+    valorMagnitud = models.FloatField()
+    estadoActual = models.ForeignKey(Estado, on_delete=models.PROTECT, related_name='eventos_actuales')
 
-    def obtenerEventosAD(eventos: int):
-        for evento in eventos:
-            if evento.fechaHoraOcurrencia > datetime.now():
-                return evento
+    def __str__(self):
+        return f"Evento {self.pk} - Magnitud: {self.valorMagnitud} - Estado: {self.estadoActual}"
