@@ -1,15 +1,14 @@
-import datetime
+from django.db import models
 
-
-class Sismografo:
-    def __init__(self, fechaHoraAdquisicion: datetime, identificadorSismografo: str, nroSerie: int):
-        self.fechaHoraAdquisicion = fechaHoraAdquisicion
-        self.identificadorSismografo = identificadorSismografo
-        self.nroSerie = nroSerie
-        self.estacion = None  # Inicializar la estación como None
+class Sismografo(models.Model):
+    fechaHoraAdquisicion = models.DateTimeField()
+    identificadorSismografo = models.CharField(max_length=100)
+    nroSerie = models.IntegerField()
+    # Suponiendo que existe un modelo Estacion, puedes descomentar la siguiente línea:
+    # estacion = models.ForeignKey('Estacion', null=True, blank=True, on_delete=models.SET_NULL)
 
     def obtenerDatosEstacion(self):
-        if self.estacion:
+        if hasattr(self, 'estacion') and self.estacion:
             return self.estacion.getCodigo()
         else:
             return "No tiene estación asociada"
