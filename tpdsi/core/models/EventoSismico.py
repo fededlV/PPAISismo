@@ -1,9 +1,3 @@
-from django.db import models
-from .Estado import Estado
-from .AlcanceSismo import AlcanceSismo
-from .OrigenDeGeneracion import OrigenDeGeneracion
-from .ClasificacionSismo import ClasificacionSismo
-
 class EventoSismico(models.Model):
     fecha_hora_fin = models.DateTimeField()
     fecha_hora_ocurrencia = models.DateTimeField()
