@@ -1,11 +1,12 @@
-class EstacionSismologica:
-    def __init__(self, codigoEstacion: str, documentoCertificacionAdq: str, nombre: str, 
-                 latitud: float, longitud: float, nroCertificacionAdquisicion: int):
-        self.codigoEstacion = codigoEstacion
-        self.documentoCertificacionAdq = documentoCertificacionAdq
-        self.nombre = nombre
-        self.latitud = latitud
-        self.longitud = longitud
-        self.nroCertificacionAdquisicion = nroCertificacionAdquisicion
-    def getCodigoEstacion(self) -> str:
+from django.db import models
+
+class EstacionSismologica(models.Model):
+    codigoEstacion = models.CharField(max_length=50, unique=True)
+    documentoCertificacionAdq = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100)
+    latitud = models.FloatField()
+    longitud = models.FloatField()
+    nroCertificacionAdquisicion = models.IntegerField()
+
+    def getCodigo(self):
         return self.codigoEstacion
