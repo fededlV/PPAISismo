@@ -22,17 +22,17 @@ class EventoSismico(models.Model):
     alcance = models.ForeignKey(
         AlcanceSismo,
         on_delete=models.PROTECT,
-        related_name='eventos'
+        related_name='alcance'
     )
     origen = models.ForeignKey(
         OrigenDeGeneracion,
         on_delete=models.PROTECT,
-        related_name='eventos'
+        related_name='origen'
     )
     clasificacion = models.ForeignKey(
         ClasificacionSismo,
         on_delete=models.PROTECT,
-        related_name='eventos'
+        related_name='clasificacion'
     )
 
     def __str__(self):
