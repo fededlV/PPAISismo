@@ -12,4 +12,3 @@ class EstacionSismologica(models.Model):
         return self.nombre
 
     def getCodigoEstacion(self) -> str:
-        return self.codigoEstacion
