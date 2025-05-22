@@ -17,3 +17,11 @@ class CambioEstado(models.Model):
         :return: True si es el actual, False en caso contrario.
         """
         return self.fechaHoraFin is None
+
+    def setFechaHoraFin(self, fechaHoraFin):
+        """
+        Establece la fecha y hora de fin del cambio de estado.
+        :param fechaHoraFin: Fecha y hora de fin.
+        """
+        self.fechaHoraFin = fechaHoraFin
+        self.save()

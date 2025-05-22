@@ -6,9 +6,17 @@ from .entities.EventoSismico import EventoSismico
 def home(request):
     return render(request, 'home.html')
 
+# secundario (borrar comentario)
 def ordenarEventos(eventos):
     eventos.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
     return eventos
+
+def getFechaYHoraActual():
+    return datetime.now()
+
+
+
+# self
 
 def buscarEventosSismicos():
     EventoSismicosAD = EventoSismico.obtenerEventosAD()
@@ -25,6 +33,9 @@ def buscarEstadoBloqueado(evento):
                 return estado
     return None
 
+def bloquearEvento(eventoBloqueado, fechaYHoraActual):
+    
+
 
     
 # Tomar 
@@ -33,6 +44,5 @@ def tomarOpcSeleccionada(request):
 
 def tomarEvento(request, evento):
     eventoBloqueado = buscarEstadoBloqueado(evento)
-    #get fecha y hora actual
-
-    fechaHoraActual = datetime.now()
+    fechaYHoraActual = getFechaYHoraActual()
+    bloquearEvento(eventoBloqueado, fechaYHoraActual)
