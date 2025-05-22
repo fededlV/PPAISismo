@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from datetime import datetime
 from .entities.EventoSismico import EventoSismico
 # Create your views here.
 
@@ -14,7 +15,10 @@ def buscarEventosSismicos():
     EventoSismicosAD = ordenarEventos(EventoSismicosAD)
     return render(request, 'pantallaRevision.html', {'eventos': EventoSismicosAD})
 
-def buscarEstadoBloqueado(estados):
+def buscarEstadoBloqueado(evento):
+    # Tomar todos los estados del evento
+    estados = evento.obtenerEstados()
+
     for estado in estados:
         if estado.esAmbitoEventoSismico():
             if estado.esBloqueado():
@@ -24,9 +28,11 @@ def buscarEstadoBloqueado(estados):
 
     
 # Tomar 
-
 def tomarOpcSeleccionada(request):
     return buscarEventosSismicos()
 
-def tomarEvento(request, id):
-    buscarEventosSismicos()
+def tomarEvento(request, evento):
+    eventoBloqueado = buscarEstadoBloqueado(evento)
+    #get fecha y hora actual
+
+    fechaHoraActual = datetime.now()

@@ -30,3 +30,10 @@ class EventoSismico(models.Model):
                 ambito_estado_sismico.append(evento)
         return ambito_estado_sismico
 
+    def bloquear(evento, fechaYHoraActual):
+        ceSeleccionado = None
+        for ce in cambioEstado.all():
+            if ce.esActual():
+                ceSeleccionado = ce
+        ceSeleccionado.setFechaHoraFin(fechaYHoraActual)
+        

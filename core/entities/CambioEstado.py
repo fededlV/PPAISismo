@@ -9,3 +9,11 @@ class CambioEstado(models.Model):
 
     class Meta:
         app_label = 'core'
+
+
+    def esActual(self):
+        """
+        Verifica si el cambio de estado es el actual.
+        :return: True si es el actual, False en caso contrario.
+        """
+        return self.fechaHoraFin is None
