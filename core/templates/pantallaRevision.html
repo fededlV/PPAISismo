@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla de Revisión</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Pantalla de Revisión</h1>
+    </header>
+    <main>
+        <h2>Eventos Sísmicos</h2>
+        <form method="post" action="{% url 'tomarOpcSeleccionada' %}">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Seleccionar</th>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Magnitud</th>
+                        <!-- Agrega más columnas según sea necesario -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evento in eventos %}
+                    <tr>
+                        <td>
+                            <input type="radio" name="evento_id" value="{{ evento.id }}" required>
+                        </td>
+                        <td>{{ evento.id }}</td>
+                        <td>{{ evento.fecha }}</td>
+                        <td>{{ evento.magnitud }}</td>
+                        <!-- Más columnas si es necesario -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Buscar Estado Bloqueado</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025</p>
+    </footer>
+</body>
+</html>
