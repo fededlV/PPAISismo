@@ -12,34 +12,42 @@
     </header>
     <main>
         <h2>Eventos Sísmicos</h2>
-        <form method="post" action="{% url 'tomarOpcSeleccionada' %}">
-            {% csrf_token %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Seleccionar</th>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Magnitud</th>
-                        <!-- Agrega más columnas según sea necesario -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for evento in eventos %}
-                    <tr>
-                        <td>
-                            <input type="radio" name="evento_id" value="{{ evento.id }}" required>
-                        </td>
-                        <td>{{ evento.id }}</td>
-                        <td>{{ evento.fecha }}</td>
-                        <td>{{ evento.magnitud }}</td>
-                        <!-- Más columnas si es necesario -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <button type="submit">Buscar Estado Bloqueado</button>
-        </form>
+        <table>
+        <thead>
+            <tr>
+                <th>Seleccionar</th>
+                <th>ID</th>
+                <th>Fecha de Ocurrencia</th>
+                <th>Fecha de Fin</th>
+                <th>Latitud Epicentro</th>
+                <th>Longitud Epicentro</th>
+                <th>Latitud Hipocentro</th>
+                <th>Longitud Hipocentro</th>
+                <th>Magnitud</th>
+                <th>Estado Actual</th>
+                <th>Ámbito</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evento in eventos %}
+            <tr>
+                <td>
+                    <a href="{% url 'tomarEvento' evento.id %}">Seleccionar</a>
+                </td>
+                <td>{{ evento.id }}</td>
+                <td>{{ evento.fechaHoraOcurrencia }}</td>
+                <td>{{ evento.fechaHoraFin }}</td>
+                <td>{{ evento.latitudEpicentro }}</td>
+                <td>{{ evento.longitudEpicentro }}</td>
+                <td>{{ evento.latitudHipocentro }}</td>
+                <td>{{ evento.longitudHipocentro }}</td>
+                <td>{{ evento.valorMagnitud }}</td>
+                <td>{{ evento.estadoActual.nombreEstado }}</td>
+                <td>{{ evento.estadoActual.ambito }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </main>
     <footer>
         <p>&copy; 2025</p>
