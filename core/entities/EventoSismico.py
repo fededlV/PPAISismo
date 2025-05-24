@@ -30,10 +30,20 @@ class EventoSismico(models.Model):
                 ambito_estado_sismico.append(evento)
         return ambito_estado_sismico
 
-    def bloquear(evento, fechaYHoraActual):
+
+    def crearCE(ce):
+        """
+        Crea un nuevo cambio de estado para el evento sismico.
+        :return: Nuevo cambio de estado creado.
+        """
+        nuevo_cambio_estado = ce.CambioEstado(evento=evento, estado="bloqueadoEnRevicion", fechaHoraInicio=ce.fechaYHoraActual)
+        nuevo_cambio_estado.save()
+        return nuevo_cambio_estado
+
+    def bloquear(evento, estado, fechaYHoraActual):
         ceSeleccionado = None
-        for ce in cambioEstado.all():
+        for ce in evento.cambioEstado.all():
             if ce.esActual():
                 ceSeleccionado = ce
         ceSeleccionado.setFechaHoraFin(fechaYHoraActual)
-        
+        evento.crearCE(evento, ce, fechaYHoraActual)

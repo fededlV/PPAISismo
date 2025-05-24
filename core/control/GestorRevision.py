@@ -8,6 +8,9 @@ from typing import List
 
 
 class GestorRevision:
+    eventosSeleccionadosAd = []
+    eventoSeleccionado = None
+
     @staticmethod
     def tomarEvento(evento_id: int) -> HttpResponse:
         """
@@ -55,3 +58,27 @@ class GestorRevision:
         """
         eventos.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
         return eventos
+    
+    @staticmethod
+    def buscarEstadoBloqueado(evento: EventoSismico):
+        """
+        Busca el estado bloqueado de un evento sismico.
+        :param evento: Evento sismico.
+        :return: Estado bloqueado del evento sismico.
+        """
+        from ..entities.Estado import Estado
+        estados = Estado.objects.all()
+        for estado_obj in estados:
+            if estado_obj.esAmbitoEventoSismico() and estado_obj.esBloqueado():
+                return estado_obj
+        return None
+
+    @staticmethod
+    def cambioEstadoBloqueado(eventoBloqueado: EventoSismico) -> None:
+        """
+        Cambia el estado de un evento sismico a bloqueado.
+        :param eventoBloqueado: Evento sismico a bloquear.
+        :param fechaYHoraActual: Fecha y hora actual.
+        """
+        buscarEstado = GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
+        fechaYHoraActual = GestorRevision.getFechaYHoraActual()
