@@ -1,5 +1,5 @@
 from datetime import datetime
-from dominio import DetalleMuestraSismica
+from models import DetalleMuestraSismica
 
 class MuestraSismica:
     def __init__(self, fechaHoraMuestra: datetime):

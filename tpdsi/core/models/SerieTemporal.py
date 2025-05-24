@@ -1,5 +1,5 @@
 from datetime import datetime
-from dominio import MuestraSismica
+from models import MuestraSismica
 
 class SerieTemporal:
     def __init__(self, condicionAlarma: bool, fechaHoraInicioRegistroMuestras: datetime, fechaHoraRegistro: datetime, frecuenciaMuestreo: float):
