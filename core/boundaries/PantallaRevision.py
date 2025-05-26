@@ -21,7 +21,19 @@ def tomarEvento(request, evento_id=None):
         gestor = GestorRevision()
         gestor.cambioEstadoBloqueado(evento_id)
         print("(: Evento bloqueado exitosamente")
-        return redirect('tomarOpcSeleccionada')
+        mostrarAlcance(request, evento_id)
     else:
         # Si se accede por GET, redirigir a la pantalla de selección
         return redirect('tomarOpcSeleccionada')
+    
+
+def mostrarAlcance(request, evento_id):
+    evento = get_object_or_404(EventoSismico, id=evento_id)
+    alcance = evento.mostrarAlcance()
+    return render(request, 'alcanceEvento.html', {'evento': evento, 'alcance': alcance})
+
+
+def obtenerDatosClasificacion(request, evento_id):
+    evento = get_object_or_404(EventoSismico, id=evento_id)
+    datos_clasificacion = evento.obtenerDatosClasificacion()
+    return render(request, 'datosClasificacion.html', {'evento': evento, 'datos_clasificacion': datos_clasificacion})

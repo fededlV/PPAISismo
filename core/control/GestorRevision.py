@@ -80,5 +80,24 @@ class GestorRevision:
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        buscarEstado = GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
-        fechaYHoraActual = GestorRevision.getFechaYHoraActual()
+        GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
+        GestorRevision.getFechaYHoraActual()
+        return eventoBloqueado.alcance.getDatosAlcance()
+    
+    @staticmethod
+    def mostrarAlcance(evento: EventoSismico) -> dict:
+        """
+        Muestra el alcance del evento sismico.
+        :param evento: Evento sismico.
+        :return: Diccionario con los datos del alcance del evento sismico.
+        """
+        return evento.alcance.getDatosAlcance()
+
+    @staticmethod
+    def obtenerDatosClasificacion(evento: EventoSismico) -> dict:
+        """
+        Obtiene los datos de la clasificación del evento sismico.
+        :param evento: Evento sismico.
+        :return: Diccionario con los datos de la clasificación del evento sismico.
+        """
+        return evento.obtenerDatosClasificacion()

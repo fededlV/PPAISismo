@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos de Clasificación del Evento Sísmico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #0078d7; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Datos de Clasificación del Evento Sísmico</h1>
+        <h2>ID del Evento: {{ evento.id }}</h2>
+        <table>
+            <tbody>
+                {% for key, value in datos_clasificacion.items %}
+                <tr>
+                    <th>{{ key|capfirst }}</th>
+                    <td>{{ value }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2">No hay datos de clasificación disponibles.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/tomarOpcSeleccionada/">&larr; Volver a la revisión</a>
+    </div>
+</body>
+</html>
