@@ -90,6 +90,41 @@ class GestorRevision:
         fechaYHoraActual = GestorRevision.getFechaYHoraActual()
 
     @staticmethod
+    def mostrarAlcance(evento: EventoSismico) -> dict:
+        """
+        Muestra el alcance del evento sismico.
+        :param evento: Evento sismico.
+        :return: Diccionario con los datos del alcance del evento sismico.
+        """
+        return evento.alcance.getDatosAlcance()
+
+    # cambiar el nombre a obtenerClasificacion()
+    @staticmethod
+    def obtenerClasificacion(evento: EventoSismico) -> dict:
+        """
+        Obtiene los datos de la clasificación del evento sismico.
+        :param evento: Evento sismico.
+        :return: Diccionario con los datos de la clasificación del evento sismico.
+        """
+        return evento.obtenerDatosClasificacion()
+    
+    @staticmethod
+    def obtenerOrigen() : pass
+    
+    @staticmethod
+    def obtenerDatosSerieYMuestra() : pass
+
+    @staticmethod
+    def obtenerDatosEstacion(): pass
+    
+    @staticmethod
+    def clasificarPorEstacion() : pass
+    
+    @staticmethod
+    def llamarCU18() -> str:
+        return "Llamando CU 18"
+
+    @staticmethod
     def tomarRechazoVisualizacion(opcion: str) -> bool:
         """ 
         Procesa el rechazo de visualización de un evento sismico.
@@ -131,3 +166,29 @@ class GestorRevision:
             print("(: Opción seleccionada: Rechazar")
             return True
         return False
+
+    @staticmethod
+    def validarExistenciaDatos() : pass
+    
+    @staticmethod
+    def validarAccionSeleccionada(): pass
+    
+    @staticmethod
+    def registrarRechazoEvento(): pass
+    
+    @staticmethod
+    def obtenerEmpleadoLogueado(): pass
+    
+    @staticmethod
+    def obtenerFechaHoraActual() -> datetime:
+        return timezone.now()
+    
+    @staticmethod
+    def buscarEstadoRechazado(): pass
+    
+    @staticmethod
+    def registrarRevision(): pass
+    
+    @staticmethod
+    def finCU() -> str:
+        return "Fin de CU"

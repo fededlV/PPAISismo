@@ -9,6 +9,12 @@ from django.shortcuts import render
 def habilitarPantalla(request):
     return render(request, 'home.html')
 
+def mostrarEventosAD():pass
+
+def solicitarSeleccion():pass
+
+
+#¿Este metodo cual metodo seria en el diagrama de secuencia de casos de uso?
 def tomarOpcSeleccionada(request):
     gestor = GestorRevision()
     EventoSismicosAD = gestor.buscarEventosSismicosAD()
@@ -84,6 +90,8 @@ def tomarAccionRechazarEvento(request):
         print("(: Acción de rechazar evento tomada exitosamente")
         # Redirige a la pantalla en la que se ven los eventos sismicos. 
         return redirect('tomarAccionRechazarEvento')
+
+
 
 
 
