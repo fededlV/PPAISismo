@@ -119,7 +119,8 @@ class GestorRevision:
     def clasificarPorEstacion() : pass
     
     @staticmethod
-    def llamarCU18() : pass
+    def llamarCU18() -> str:
+        return "Llamando CU 18"
     
     @staticmethod
     def validarExistenciaDatos() : pass
@@ -134,7 +135,8 @@ class GestorRevision:
     def obtenerEmpleadoLogueado(): pass
     
     @staticmethod
-    def obtenerFechaHoraActual(): pass
+    def obtenerFechaHoraActual() -> datetime:
+        return timezone.now()
     
     @staticmethod
     def buscarEstadoRechazado(): pass
@@ -143,4 +145,5 @@ class GestorRevision:
     def registrarRevision(): pass
     
     @staticmethod
-    def finCU():pass
+    def finCU() -> str:
+        return "Fin de CU"
