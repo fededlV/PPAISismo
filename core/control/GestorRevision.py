@@ -140,21 +140,15 @@ class GestorRevision:
         return False
     
     @staticmethod
-    def tomarRechazoModificacion(opcion: str) -> bool:
-        if opcion == "Rechazar":
-            print("(: Opción seleccionada: Rechazar")
-            return True
-        return False
-    
-    @staticmethod
-    def tomarRechazoModificacion(opcion: str) -> bool:
+    def tomarRechazoModificacion(opcion: str, valor_rechazo: str = "Si") -> bool:
         """
         Procesa el rechazo de modificación de un evento sismico.
         :param opcion: Opción seleccionada por el usuario.
-        :return: True si la opción es "Si", False en caso contrario.
+        :param valor_rechazo: Valor que representa el rechazo (por defecto "Si").
+        :return: True si la opción es igual a valor_rechazo, False en caso contrario.
         """
-        if opcion == "Si":
-            print("(: Opción seleccionada: Si")
+        if opcion == valor_rechazo:
+            print(f"(: Opción seleccionada: {valor_rechazo}")
             return True
         return False
     
