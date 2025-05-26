@@ -123,6 +123,15 @@ class GestorRevision:
         return "Llamando CU 18"
     
     @staticmethod
+    def tomarRechazoVisualizacion(): pass
+    
+    @staticmethod
+    def tomarRechazoModificacion():pass
+    
+    @staticmethod
+    def tomarAccionRechazarEvento(): pass
+    
+    @staticmethod
     def validarExistenciaDatos() : pass
     
     @staticmethod

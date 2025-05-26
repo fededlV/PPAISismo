@@ -9,11 +9,11 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'home.html')
 
-def tomarOpcSeleccionada(request):
-    gestor = GestorRevision()
-    EventoSismicosAD = gestor.buscarEventosSismicosAD()
-    EventoSismicosAD = gestor.ordenarEventos(EventoSismicosAD)
-    return render(request, 'pantallaRevision.html', {'eventos': EventoSismicosAD})
+def habilitarPantalla():pass
+
+def mostrarEventosAD():pass
+
+def solicitarSeleccion():pass
 
 def tomarEvento(request, evento_id=None):
     if request.method == 'POST':
@@ -26,13 +26,34 @@ def tomarEvento(request, evento_id=None):
         # Si se accede por GET, redirigir a la pantalla de selección
         return redirect('tomarOpcSeleccionada')
     
+def tomarOpcSeleccionada(request):
+    gestor = GestorRevision()
+    EventoSismicosAD = gestor.buscarEventosSismicosAD()
+    EventoSismicosAD = gestor.ordenarEventos(EventoSismicosAD)
+    return render(request, 'pantallaRevision.html', {'eventos': EventoSismicosAD})
 
 def mostrarAlcance(request, evento_id):
     evento = get_object_or_404(EventoSismico, id=evento_id)
     alcance = evento.mostrarAlcance()
     return render(request, 'alcanceEvento.html', {'evento': evento, 'alcance': alcance})
 
+def mostrarClasificacion(): pass
 
+def mostrarDatosOrigen(): pass
+
+def permitirVisualizarMapa() : pass
+
+def tomarRechazoVisualizacion(): pass
+
+def permitirModificarDatos(): pass
+
+def tomarRechazoModificacion() : pass
+
+def solicitarAccion(): pass
+
+def tomarAccionRechazarEvento(): pass
+
+#### Esto en el diagrama de secuencia es del GESTOR no de la pantalla
 def obtenerDatosClasificacion(request, evento_id):
     evento = get_object_or_404(EventoSismico, id=evento_id)
     datos_clasificacion = evento.obtenerDatosClasificacion()
