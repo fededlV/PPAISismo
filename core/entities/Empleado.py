@@ -1,4 +1,5 @@
 from django.db import models
+from .Usuario import Usuario  # Importa Usuario si están en el mismo paquete
 
 class Empleado(models.Model):
     apellido = models.CharField(max_length=100)
