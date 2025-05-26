@@ -84,6 +84,39 @@ def tomarAccionRechazarEvento(request):
         print("(: Acción de rechazar evento tomada exitosamente")
         # Redirige a la pantalla en la que se ven los eventos sismicos. 
         return redirect('tomarAccionRechazarEvento')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
 
