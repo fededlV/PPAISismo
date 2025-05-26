@@ -86,10 +86,9 @@ class GestorRevision:
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
-        GestorRevision.getFechaYHoraActual()
-        return eventoBloqueado.alcance.getDatosAlcance()
-    
+        buscarEstado = GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
+        fechaYHoraActual = GestorRevision.getFechaYHoraActual()
+
     @staticmethod
     def mostrarAlcance(evento: EventoSismico) -> dict:
         """
@@ -101,7 +100,7 @@ class GestorRevision:
 
     # cambiar el nombre a obtenerClasificacion()
     @staticmethod
-    def obtenerDatosClasificacion(evento: EventoSismico) -> dict:
+    def obtenerClasificacion(evento: EventoSismico) -> dict:
         """
         Obtiene los datos de la clasificación del evento sismico.
         :param evento: Evento sismico.
@@ -116,6 +115,10 @@ class GestorRevision:
     @staticmethod
     def obtenerDatosEstacion(evento: EventoSismico) -> dict:
         return evento.obtenerDatosEstacion()
+    def obtenerDatosSerieYMuestra() : pass
+
+    @staticmethod
+    def obtenerDatosEstacion(): pass
     
     @staticmethod
     def clasificarPorEstacion() : pass
@@ -123,16 +126,50 @@ class GestorRevision:
     @staticmethod
     def llamarCU18() -> str:
         return "Llamando CU 18"
+
+    @staticmethod
+    def tomarRechazoVisualizacion(opcion: str) -> bool:
+        """ 
+        Procesa el rechazo de visualización de un evento sismico.
+        :param opcion: Opción seleccionada por el usuario.
+        :return: True si la opción Visualizar, False en caso contrario.
+        """
+        if opcion == "Rechazar":
+            print("(: Opción seleccionada: Rechazar")
+            return True
+        return False
     
     @staticmethod
-    def tomarRechazoVisualizacion(): pass
+    def tomarRechazoModificacion(opcion: str) -> bool:
+        if opcion == "Rechazar":
+            print("(: Opción seleccionada: Rechazar")
+            return True
+        return False
     
     @staticmethod
-    def tomarRechazoModificacion():pass
+    def tomarRechazoModificacion(opcion: str) -> bool:
+        """
+        Procesa el rechazo de modificación de un evento sismico.
+        :param opcion: Opción seleccionada por el usuario.
+        :return: True si la opción es "Si", False en caso contrario.
+        """
+        if opcion == "Si":
+            print("(: Opción seleccionada: Si")
+            return True
+        return False
     
     @staticmethod
-    def tomarAccionRechazarEvento(): pass
-    
+    def tomarAccionRechazarEvento(opcion: str) -> bool:
+        """
+        Procesa la acción de rechazar un evento sismico.
+        :param opcion: Opción seleccionada por el usuario.
+        :return: True si la opción es "Rechazar", False en caso contrario.
+        """
+        if opcion == "Rechazar":
+            print("(: Opción seleccionada: Rechazar")
+            return True
+        return False
+
     @staticmethod
     def validarExistenciaDatos() : pass
     
