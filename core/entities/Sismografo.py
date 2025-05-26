@@ -9,3 +9,5 @@ class Sismografo(models.Model):
     nroSerie = models.IntegerField()
     estacion = models.ForeignKey(EstacionSismologica, null=True, blank=True, on_delete=models.SET_NULL)
 
+    def obtenerDatosEstacion(self):
+        return self.estacion.getCodigo()

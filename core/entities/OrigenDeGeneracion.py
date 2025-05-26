@@ -6,3 +6,10 @@ class OrigenDeGeneracion(models.Model):
 
     class Meta:
         app_label = 'core'
+
+    
+    def getDatosOrigen(self):
+        return {
+            'nombre': self.nombre,
+            'descripcion': self.descripcion
+        }

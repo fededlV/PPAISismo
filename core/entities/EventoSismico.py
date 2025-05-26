@@ -1,7 +1,10 @@
 from django.db import models
 from .Estado import Estado
 from typing import List
-
+from .AlcanceSismo import AlcanceSismo
+from .ClasificacionSismo import ClasificacionSismo
+from .OrigenDeGeneracion import OrigenDeGeneracion
+from .SerieTemporal import SerieTemporal
 class EventoSismico(models.Model):
     fechaHoraFin = models.DateTimeField()
     fechaHoraOcurrencia = models.DateTimeField()
@@ -11,7 +14,12 @@ class EventoSismico(models.Model):
     longitudHipocentro = models.FloatField()
     valorMagnitud = models.FloatField()
     estadoActual = models.ForeignKey(Estado, on_delete=models.PROTECT, related_name='eventos_actuales')
-
+    
+    alcance = models.ForeignKey(AlcanceSismo,on_delete=models.PROTECT, related_name='eventos_alcance')
+    clasificacion = models.ForeignKey(ClasificacionSismo,on_delete=models.PROTECT,related_name='eventos_clasificados')
+    origen = models.ForeignKey(OrigenDeGeneracion,on_delete=models.PROTECT,related_name='eventos_origen')
+    series_temporales = models.ManyToManyField(SerieTemporal, related_name='eventos')
+    
     class Meta:
         app_label = 'core'
 
@@ -61,3 +69,9 @@ class EventoSismico(models.Model):
         :return: Diccionario con los datos de la clasificación.
         """
         return evento.clasificacion.getDatosClasificacion()
+    
+    def obtenerDatosOrigen(evento):
+        return evento.origen.getDatosOrigen()
+    
+def obtenerDatosEstacion(self):
+    return [serie.obtenerDatosEstacion() for serie in self.series_temporales.all()]

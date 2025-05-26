@@ -110,10 +110,12 @@ class GestorRevision:
         return evento.obtenerDatosClasificacion()
     
     @staticmethod
-    def obtenerOrigen() : pass
+    def obtenerOrigen(evento: EventoSismico) -> dict:
+        return evento.obtenerDatosOrigen()
     
     @staticmethod
-    def obtenerDatosEstacion() : pass
+    def obtenerDatosEstacion(evento: EventoSismico) -> dict:
+        return evento.obtenerDatosEstacion()
     
     @staticmethod
     def clasificarPorEstacion() : pass

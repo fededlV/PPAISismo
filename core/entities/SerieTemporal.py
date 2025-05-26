@@ -1,11 +1,16 @@
-from datetime import datetime
-from dominio import MuestraSismica
+from django.db import models
+from .Sismografo import Sismografo
 
-class SerieTemporal:
-    def __init__(self, condicionAlarma: bool, fechaHoraInicioRegistroMuestras: datetime, fechaHoraRegistro: datetime, frecuenciaMuestreo: float):
-        self.condicionAlarma = condicionAlarma
-        self.fechaHoraInicioRegistroMuestras = fechaHoraInicioRegistroMuestras
-        self.fechaHoraRegistro = fechaHoraRegistro
-        self.frecuenciaMuestreo = frecuenciaMuestreo
-        self.muestras = []
+class SerieTemporal(models.Model):
+    condicionAlarma = models.BooleanField()
+    fechaHoraInicioRegistroMuestras = models.DateTimeField()
+    fechaHoraRegistro = models.DateTimeField()
+    frecuenciaMuestreo = models.FloatField()
+    sismografo = models.ForeignKey(
+        Sismografo,
+        on_delete=models.CASCADE,
+        related_name='series_temporales'
+    )
 
+    def obtenerDatosEstacion(self):
+        return self.sismografo.obtenerDatosEstacion()
