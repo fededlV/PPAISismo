@@ -115,6 +115,8 @@ class GestorRevision:
     @staticmethod
     def obtenerDatosEstacion(evento: EventoSismico) -> dict:
         return evento.obtenerDatosEstacion()
+    
+    @staticmethod
     def obtenerDatosSerieYMuestra() : pass
 
     @staticmethod
