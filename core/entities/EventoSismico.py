@@ -47,3 +47,17 @@ class EventoSismico(models.Model):
                 ceSeleccionado = ce
         ceSeleccionado.setFechaHoraFin(fechaYHoraActual)
         evento.crearCE(evento, ce, fechaYHoraActual)
+
+    def mostrarAlcance(evento):
+        """
+        Muestra el alcance del evento sismico.
+        :return: Alcance del evento sismico.
+        """
+        return evento.alcance.descripcion
+    
+    def obtenerDatosClasificacion(evento):
+        """
+        Obtiene los datos de la clasificación del evento sismico.
+        :return: Diccionario con los datos de la clasificación.
+        """
+        return evento.clasificacion.getDatosClasificacion()

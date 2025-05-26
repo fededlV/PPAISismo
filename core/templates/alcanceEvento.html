@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alcance del Evento Sísmico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 40px; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        p { color: #666; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alcance del Evento Sísmico</h1>
+        <p><span class="label">ID Evento:</span> {{ evento.id }}</p>
+        <p><span class="label">Fecha de Ocurrencia:</span> {{ evento.fechaHoraOcurrencia }}</p>
+        <p><span class="label">Magnitud:</span> {{ evento.valorMagnitud }}</p>
+        <hr>
+        <h2>Datos de Alcance</h2>
+        {% if alcance %}
+            <p><span class="label">Nombre:</span> {{ alcance.nombre }}</p>
+            <p><span class="label">Descripción:</span> {{ alcance.descripcion }}</p>
+        {% else %}
+            <p>No hay datos de alcance disponibles para este evento.</p>
+        {% endif %}
+        <a href="{% url 'tomarOpcSeleccionada' %}">Volver a la revisión</a>
+    </div>
+</body>
+</html>

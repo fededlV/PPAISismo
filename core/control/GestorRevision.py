@@ -12,17 +12,6 @@ class GestorRevision:
     eventoSeleccionado = None
 
     @staticmethod
-    def tomarEvento(evento_id: int) -> HttpResponse:
-        """
-        Toma un evento sismico por su ID.
-        :param evento_id: ID del evento sismico.
-        :return: HttpResponse con el evento sismico.
-        """
-        from PPAISismo.core.entities.EventoSismico import EventoSismico
-        evento = EventoSismico.objects.get(id=evento_id)
-        return HttpResponse(f"Evento Sismico tomado: {evento}")
-
-    @staticmethod
     def tomarOpcSeleccionada(opcion: str) -> HttpResponse:
         """
         Toma la opcion seleccionada por el usuario.
@@ -31,6 +20,7 @@ class GestorRevision:
         """
         return HttpResponse(f"Opcion seleccionada: {opcion}")
     
+    # cambiar el nombre a buscarEventosSismicos( )
     @staticmethod
     def buscarEventosSismicosAD() -> List:
         """
@@ -42,12 +32,7 @@ class GestorRevision:
         return EventoSismicosAD
     
     @staticmethod
-    def getFechaYHoraActual() -> datetime:
-        """
-        Obtiene la fecha y hora actual.
-        :return: Fecha y hora actual.
-        """
-        return timezone.now()
+    def mostrarDatosEventos(): pass
     
     @staticmethod
     def ordenarEventos(eventos: List[EventoSismico]) -> List[EventoSismico]:
@@ -59,6 +44,17 @@ class GestorRevision:
         eventos.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
         return eventos
     
+    @staticmethod
+    def tomarEvento(evento_id: int) -> HttpResponse:
+        """
+        Toma un evento sismico por su ID.
+        :param evento_id: ID del evento sismico.
+        :return: HttpResponse con el evento sismico.
+        """
+        from PPAISismo.core.entities.EventoSismico import EventoSismico
+        evento = EventoSismico.objects.get(id=evento_id)
+        return HttpResponse(f"Evento Sismico tomado: {evento}")
+
     @staticmethod
     def buscarEstadoBloqueado(evento: EventoSismico):
         """
@@ -73,6 +69,16 @@ class GestorRevision:
                 return estado_obj
         return None
 
+    # cambiar el nombre a obtenerFechaHoraActual()
+    @staticmethod
+    def getFechaYHoraActual() -> datetime:
+        """
+        Obtiene la fecha y hora actual.
+        :return: Fecha y hora actual.
+        """
+        return timezone.now()
+    
+    # cambiar el nombre a bloquearEvento()
     @staticmethod
     def cambioEstadoBloqueado(eventoBloqueado: EventoSismico) -> None:
         """
