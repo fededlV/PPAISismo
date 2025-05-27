@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponse
 from ..entities.EventoSismico import EventoSismico
+from ..entities.Estado import Estado
 from typing import List
 
 
@@ -183,8 +184,18 @@ class GestorRevision:
         return timezone.now()
     
     @staticmethod
-    def buscarEstadoRechazado(): pass
-    
+    def buscarEstadoRechazado(estados: list[Estado]) -> list[Estado]:
+        """
+        Busca los estados rechazados en una lista de estados.
+        :param estados: Lista de objetos Estado.
+        :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
+        """
+        estadosRechazados = []
+        for estado in estados:
+            if estado.esAmbitoEventoSismico() and estado.esRechazado():
+                estadosRechazados.append(estado)
+        return estadosRechazados
+                
     @staticmethod
     def registrarRevision(): pass
     
