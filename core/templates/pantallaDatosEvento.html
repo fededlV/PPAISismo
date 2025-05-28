@@ -1,0 +1,38 @@
+<!-- filepath: /Users/matiask/Documents/programacion/ppai/PPAISismo/core/templates/pantallaDatosEvento.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos del Evento Sísmico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #0078d7; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Datos del Evento Sísmico</h1>
+        {% if evento %}
+        <table>
+            <tr><th>ID</th><td>{{ evento.id }}</td></tr>
+            <tr><th>Fecha de Ocurrencia</th><td>{{ evento.fechaHoraOcurrencia }}</td></tr>
+            <tr><th>Fecha de Fin</th><td>{{ evento.fechaHoraFin }}</td></tr>
+            <tr><th>Latitud Epicentro</th><td>{{ evento.latitudEpicentro }}</td></tr>
+            <tr><th>Longitud Epicentro</th><td>{{ evento.longitudEpicentro }}</td></tr>
+            <tr><th>Latitud Hipocentro</th><td>{{ evento.latitudHipocentro }}</td></tr>
+            <tr><th>Longitud Hipocentro</th><td>{{ evento.longitudHipocentro }}</td></tr>
+            <tr><th>Magnitud</th><td>{{ evento.valorMagnitud }}</td></tr>
+            <tr><th>Estado Actual</th><td>{{ evento.estadoActual.nombreEstado }}</td></tr>
+            <tr><th>Ámbito</th><td>{{ evento.estadoActual.ambito }}</td></tr>
+        </table>
+        {% else %}
+        <p>No se encontró información del evento sísmico.</p>
+        {% endif %}
+        <a href="{% url 'tomarOpcSeleccionada' %}">&larr; Volver a la revisión</a>
+    </div>
+</body>
+</html>
