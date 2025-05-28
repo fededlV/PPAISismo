@@ -9,8 +9,5 @@ class Usuario(models.Model):
     class Meta:
         app_label = 'core'
 
-    def getAsLogueado(self):
-        empleado = getattr(self, 'empleado', None)
-        if empleado and empleado.logueado:
-            return empleado
-        return None
+    def getAsLogueado(usuario):
+        return usuario.empleado.getDatos()

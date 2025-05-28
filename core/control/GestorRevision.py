@@ -5,12 +5,24 @@ from django.utils import timezone
 from django.http import HttpResponse
 from ..entities.EventoSismico import EventoSismico
 from ..entities.Estado import Estado
+from ..entities.Usuario import Usuario
 from typing import List
 
 
 class GestorRevision:
-    eventosSeleccionadosAd = []
-    eventoSeleccionado = None
+    def __init__(self):
+        self.eventosSismicosAd = []
+        self.eventoSismicoSeleccionado = None
+        self.alcanceEvento = None
+        self.clasificacionEvento = None
+        self.origenEvento = None
+        self.valoresVelocidadDeOnda = []
+        self.valoresFrecuenciaDeOnda = []
+        self.valoresLongitud = []
+        self.fechaHoraActual = None
+        self.asLogueado = None
+        self.accionSeleccionada = None
+
 
     @staticmethod
     def tomarOpcSeleccionada(opcion: str) -> HttpResponse:
@@ -23,17 +35,20 @@ class GestorRevision:
     
     # cambiar el nombre a buscarEventosSismicos( )
     @staticmethod
-    def buscarEventosSismicosAD() -> List:
+    #Le agregue el self para poder igualar las listas de lo que se busco con lo que tiene el gestor. -> FEDE 
+    def buscarEventosSismicos(self) -> List:
         """
         Busca eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
         """
         EventoSismicosAD = EventoSismico.obtenerEventosAD()
-        EventoSismicosAD = GestorRevision.ordenarEventos(EventoSismicosAD)
+        #Le agrego para que los eventos que se buscaron se agreguen al array que tiene como atributo. -> FEDE 
+        self.eventosSismicosAd = EventoSismicosAD
         return EventoSismicosAD
     
     @staticmethod
-    def mostrarDatosEventos(): pass
+    def mostrarDatosEventos(self): 
+        pass
     
     @staticmethod
     def ordenarEventos(eventos: List[EventoSismico]) -> List[EventoSismico]:
@@ -72,7 +87,7 @@ class GestorRevision:
 
     # cambiar el nombre a obtenerFechaHoraActual()
     @staticmethod
-    def getFechaYHoraActual() -> datetime:
+    def obtenerFechaYHoraActual() -> datetime:
         """
         Obtiene la fecha y hora actual.
         :return: Fecha y hora actual.
@@ -81,7 +96,7 @@ class GestorRevision:
     
     # cambiar el nombre a bloquearEvento()
     @staticmethod
-    def cambioEstadoBloqueado(eventoBloqueado: EventoSismico) -> None:
+    def bloquearEvento(eventoBloqueado: EventoSismico) -> None:
         """
         Cambia el estado de un evento sismico a bloqueado.
         :param eventoBloqueado: Evento sismico a bloquear.
@@ -118,7 +133,8 @@ class GestorRevision:
         return evento.obtenerDatosEstacion()
     
     @staticmethod
-    def obtenerDatosSerieYMuestra() : pass
+    def obtenerDatosSerieYMuestra(evento: EventoSismico) : 
+        return evento.obtenerDatosSerieYMuestra()
 
     @staticmethod
     def obtenerDatosEstacion(): pass
@@ -156,7 +172,7 @@ class GestorRevision:
         return False
     
     @staticmethod
-    def tomarAccionRechazarEvento(opcion: str) -> bool:
+    def tomarAccionRechazarEvento(self, opcion: str) -> bool:
         """
         Procesa la acción de rechazar un evento sismico.
         :param opcion: Opción seleccionada por el usuario.
@@ -164,20 +180,33 @@ class GestorRevision:
         """
         if opcion == "Rechazar":
             print("(: Opción seleccionada: Rechazar")
+            self.accionSeleccionada = opcion
             return True
         return False
 
     @staticmethod
-    def validarExistenciaDatos() : pass
+    def validarExistenciaDatos(self): 
+        if not self.eventoSismicoSeleccionado:
+            raise ValueError("No se ha seleccionado un evento sismico.")
+        else: 
+            return True
     
     @staticmethod
-    def validarAccionSeleccionada(): pass
+    def validarAccionSeleccionada(self): 
+        if not self.accionSeleccionada:
+            raise ValueError("No se ha seleccionado una acción.")
+        else:
+            return True
     
     @staticmethod
-    def registrarRechazoEvento(): pass
+    def registrarRechazoEvento(self): 
+        print("(: Registrando rechazo del evento sismico")
+        #Aca no se que mas podriamos hacer en este metodo, ya que solamente seria como un disparador de todo, el cual ese todo comenzaria con el self de obtenerEmpleadoLogueado()
     
     @staticmethod
-    def obtenerEmpleadoLogueado(): pass
+    def obtenerEmpleadoLogueado(usuario: Usuario): 
+        asLogueado = usuario.getAsLogueado()
+        return usuario.getAsLogueado()
     
     @staticmethod
     def obtenerFechaHoraActual() -> datetime:
@@ -197,8 +226,9 @@ class GestorRevision:
         return estadosRechazados
                 
     @staticmethod
-    def registrarRevision(): pass
-    
+    def registrarRevision(self):
+        self.eventoSismicoSeleccionado.registrarRevision("rechazado", self.fechaHoraActual, self.asLogueado)
+        
     @staticmethod
     def finCU() -> str:
         return "Fin de CU"

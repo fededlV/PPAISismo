@@ -7,3 +7,6 @@ class DetalleMuestraSismica(models.Model):
     class Meta:
         app_label = 'core'
 
+    def obtenerDenominacionYValor():
+        pass
+

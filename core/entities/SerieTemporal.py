@@ -12,5 +12,10 @@ class SerieTemporal(models.Model):
         related_name='series_temporales'
     )
 
+    def obtenerDatosMuestras(self):
+        pass
+
     def obtenerDatosEstacion(self):
         return self.sismografo.obtenerDatosEstacion()
+    
+    
