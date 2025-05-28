@@ -8,6 +8,5 @@ class MuestraSismica:
 
     def obtenerDenominacionYValor(self):
         pass
-    
 
-    
+

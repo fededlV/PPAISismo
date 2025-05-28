@@ -125,8 +125,8 @@ def tomarAccionRechazarEvento(request):
 
 
 
-    
-    
+
+
 
 
 

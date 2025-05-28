@@ -7,10 +7,6 @@ class ClasificacionSismo(models.Model):
 
 
     def getDatosClasificacion(self):
-        """
-        Obtiene los datos de la clasificación del sismo.
-        :return: Diccionario con los datos de la clasificación.
-        """
         return {
             'kmProfundidadDesde': self.kmProfundidadDesde,
             'kmProfundidadHasta': self.kmProfundidadHasta,

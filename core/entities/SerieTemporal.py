@@ -17,5 +17,4 @@ class SerieTemporal(models.Model):
 
     def obtenerDatosEstacion(self):
         return self.sismografo.obtenerDatosEstacion()
-    
-    
+

@@ -14,7 +14,6 @@ class Estado(models.Model):
     def esBloqueado(self):
         return self.nombreEstado == "Bloqueado"
 
-    # cambiar nombre esRechazar()
     def esRechazado(self):
         return self.nombreEstado == "Rechazado"
 

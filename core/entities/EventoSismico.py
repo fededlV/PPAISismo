@@ -7,6 +7,8 @@ from .OrigenDeGeneracion import OrigenDeGeneracion
 from .SerieTemporal import SerieTemporal
 from .CambioEstado import CambioEstado
 from .Empleado import Empleado
+
+
 class EventoSismico(models.Model):
     fechaHoraFin = models.DateTimeField()
     fechaHoraOcurrencia = models.DateTimeField()
@@ -29,76 +31,51 @@ class EventoSismico(models.Model):
         app_label = 'core'
 
     @classmethod
-    def obtenerEventosAD(cls):
+    def obtenerEventosAd(cls):
         """
         Obtiene los eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
         """
-        eventos_sismicos = cls.objects.all()
-        ambito_estado_sismico = []
-        for evento in eventos_sismicos:
+        eventosSismicos = cls.objects.all()
+        ambitoEstadoSismico = []
+        for evento in eventosSismicos:
             a = evento.estadoActual.esAmbitoEventoSismico()
             b = evento.estadoActual.esAutoDetectado()
             if a and b:
-                ambito_estado_sismico.append(evento)
-        return ambito_estado_sismico
+                ambitoEstadoSismico.append(evento)
+        return ambitoEstadoSismico
 
-
-    
-    def crearCE(ce):
-        """
-        Crea un nuevo cambio de estado para el evento sismico.
-        :return: Nuevo cambio de estado creado.
-        """
-        nuevo_cambio_estado = ce.CambioEstado(evento=evento, estado="bloqueadoEnRevicion", fechaHoraInicio=ce.fechaYHoraActual)
-        nuevo_cambio_estado.save()
-        return nuevo_cambio_estado
-
-    def bloquearEvento(evento, estado, fechaYHoraActual):
-        ceSeleccionado = None
-        for ce in evento.cambioEstado.all():
-            if ce.esActual():
-                ceSeleccionado = ce
-        ceSeleccionado.setFechaHoraFin(fechaYHoraActual)
-        evento.crearCE(evento, ce, fechaYHoraActual)
-
-    def mostrarAlcance(evento):
+    def mostrarAlcance(self):
         """
         Muestra el alcance del evento sismico.
         :return: Alcance del evento sismico.
         """
-        #Aca le cambie el .descripcion por getDatosAlcance() 
-        return evento.alcance.getDatosAlcance()
+        return self.alcance.getDatosAlcance()
     
-    def obtenerDatosClasificacion(evento):
+    def obtenerDatosClasificacion(self):
         """
         Obtiene los datos de la clasificación del evento sismico.
         :return: Diccionario con los datos de la clasificación.
         """
-        return evento.clasificacion.getDatosClasificacion()
+        return self.clasificacion.getDatosClasificacion()
     
-    def obtenerDatosOrigen(evento):
-        return evento.origen.getDatosOrigen()
+    def obtenerDatosOrigen(self):
+        return self.origen.getDatosOrigen()
     
-    def obtenerDatosSerieYMuestra(evento):
-        return [serie.ontenerDatosMuestras() for serie in evento.serieTemporal.all()]
+    def obtenerDatosSerieYmuestra(self):
+        return [serie.obtenerDatosMuestras() for serie in self.serieTemporal.all()]
 
-    
-    #Revisar este Metodo, no se a que hace referencia en el diagrama de secuencia y que hace. 
     def obtenerDatosEstacion(self):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
-    
-    def registrarRevision(evento, fechaYHoraActual):
-        ceSeleccionado = None
-        for ce in evento.cambioEstado.all():
-            if ce.esActual():
-                ceSeleccionado = ce
-        ceSeleccionado.setFechaHoraFin(fechaYHoraActual)
-        evento.crearCE(evento, ce, fechaYHoraActual)
-    
+
+    def registrarRevision(self, fechaHoraActual, estado, empleado):
+        """
+        Registra la revisión del evento cambiando el estado actual y creando uno nuevo.
+        """
+        self.crearCambioEstado(estado, fechaHoraActual, empleado)
+
     def crearCambioEstado(self, estado, fechaHora, empleado):
         """
-        Version FEDE, chatgpt
         Crea un nuevo cambio de estado para el evento sismico.
         :return: Nuevo cambio de estado creado.
         """
@@ -106,12 +83,12 @@ class EventoSismico(models.Model):
         if cambioEstadoActual:
             cambioEstadoActual.setFechaHoraFin(fechaHora)
 
-        nuevo_cambio_estado = CambioEstado(
+        nuevoCambioEstado = CambioEstado(
             evento=self,
             estado=estado,
             empleado=empleado,
             fechaHoraInicio=fechaHora
         )
-        nuevo_cambio_estado.save()
-        self.cambioEstado.add(nuevo_cambio_estado)
-        return nuevo_cambio_estado        
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado

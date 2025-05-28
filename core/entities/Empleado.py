@@ -10,10 +10,6 @@ class Empleado(models.Model):
         app_label = 'core'
 
     def getDatos(self):
-        """
-        Devuelve los datos del empleado.
-        :return: Diccionario con los datos del empleado.
-        """
         return {
             'apellido': self.apellido,
             'mail': self.mail,

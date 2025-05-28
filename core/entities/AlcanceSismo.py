@@ -6,10 +6,6 @@ class AlcanceSismo(models.Model):
 
     
     def getDatosAlcance(self):
-        """
-        Obtiene los datos del alcance del sismo.
-        :return: Diccionario con los datos del alcance.
-        """
         return {
             'descripcion': self.descripcion,
             'nombre': self.nombre
