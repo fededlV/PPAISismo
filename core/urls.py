@@ -3,7 +3,7 @@ from .boundaries import PantallaRevision
 
 
 urlpatterns = [
-    path('tomarOpcSeleccionada/', PantallaRevision.tomarOpcSeleccionada, name='tomarOpcSeleccionada'),
+    path('opcRegistrarResRevisionMan/', PantallaRevision.opcRegistrarResRevisionMan, name='opcRegistrarResRevisionMan'),
     path('tomarEvento/', PantallaRevision.tomarEvento, name='tomarEvento'),
     path('tomarRechazoVisualizacion/', PantallaRevision.tomarRechazoVisualizacion, name='tomarRechazoVisualizacion'),
     path('permitirModificarDatos/', PantallaRevision.permitirModificarDatos, name='permitirModificarDatos'),

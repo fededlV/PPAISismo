@@ -36,7 +36,7 @@ class EventoSismico(models.Model):
         Obtiene los eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
         """
-        eventosSismicos = cls.objects.all()
+        eventosSismicos = EventoSismico.objects.all()
         ambitoEstadoSismico = []
         for evento in eventosSismicos:
             a = evento.estadoActual.esAmbitoEventoSismico()
@@ -74,14 +74,16 @@ class EventoSismico(models.Model):
         """
         self.crearCambioEstado(estado, fechaHoraActual, empleado)
 
-    def crearCambioEstado(self, estado, fechaHora, empleado):
+    def crearCambioEstado(self, fechaHora, estado=None, empleado=None):
         """
         Crea un nuevo cambio de estado para el evento sismico.
         :return: Nuevo cambio de estado creado.
         """
-        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-        if cambioEstadoActual:
-            cambioEstadoActual.setFechaHoraFin(fechaHora)
+        if estado:
+            cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
+            if cambioEstadoActual:
+                cambioEstadoActual.setFechaHoraFin(fechaHora)
+
 
         nuevoCambioEstado = CambioEstado(
             evento=self,
@@ -92,3 +94,10 @@ class EventoSismico(models.Model):
         nuevoCambioEstado.save()
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
+    
+    def bloquear(self, fechaHora):
+        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
+        if cambioEstadoActual:
+            cambioEstadoActual.setFechaHoraFin(fechaHora)
+            self.crearCambioEstado(self)
+    

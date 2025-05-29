@@ -1,7 +1,7 @@
 from datetime import datetime
-from entities import DetalleMuestraSismica
+from django.db import models
 
-class MuestraSismica:
+class MuestraSismica(models.Model):
     def __init__(self, fechaHoraMuestra: datetime):
         self.fechaHoraMuestra = fechaHoraMuestra
         self.detalles = []

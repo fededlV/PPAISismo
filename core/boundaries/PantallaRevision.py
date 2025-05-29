@@ -15,17 +15,17 @@ def solicitarSeleccion():pass
 
 
 #¿Este metodo cual metodo seria en el diagrama de secuencia de casos de uso?
-def tomarOpcSeleccionada(request):
+def opcRegistrarResRevisionMan(request):
     gestor = GestorRevision()
-    EventoSismicosAD = gestor.buscarEventosSismicosAD()
-    EventoSismicosAD = gestor.ordenarEventos(EventoSismicosAD)
-    return render(request, 'pantallaRevision.html', {'eventos': EventoSismicosAD})
+    eventosSismicosAd = gestor.buscarEventosSismicos()
+    eventosSismicosAd = gestor.ordenarEventos(eventosSismicosAd)
+    return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
 def tomarEvento(request, evento_id=None):
     if request.method == 'POST':
         evento_id = request.POST.get('evento_id')
         gestor = GestorRevision()
-        gestor.cambioEstadoBloqueado(evento_id)
+        gestor.tomarEvento(evento_id)
         print("(: Evento bloqueado exitosamente")
         return redirect('tomarOpcSeleccionada')
     else:
@@ -78,7 +78,7 @@ def solicitarAccion(request):
         opcion = request.POST.get('opcion')
         if opcion == 'Rechazar':
             print("(: Se solicita la acción de rechazar evento")
-            return redirect('tomarEvento')
+            # return redirect('tomarEvento1')
         elif opcion == 'Validar':
             pass
 

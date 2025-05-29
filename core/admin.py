@@ -11,6 +11,8 @@ from .entities.OrigenDeGeneracion import OrigenDeGeneracion
 from .entities.Sismografo import Sismografo
 from .entities.TipoDeDato import TipoDeDato
 from .entities.Usuario import Usuario
+from .entities.MuestraSismica import MuestraSismica
+from .entities.SerieTemporal import SerieTemporal
 
 admin.site.register(AlcanceSismo)
 admin.site.register(CambioEstado)
@@ -24,3 +26,6 @@ admin.site.register(OrigenDeGeneracion)
 admin.site.register(Sismografo)
 admin.site.register(TipoDeDato)
 admin.site.register(Usuario)
+admin.site.register(MuestraSismica)
+admin.site.register(SerieTemporal)
+

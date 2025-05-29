@@ -34,24 +34,20 @@ class GestorRevision:
         return HttpResponse(f"Opcion seleccionada: {opcion}")
     
     # cambiar el nombre a buscarEventosSismicos( )
-    @staticmethod
-    #Le agregue el self para poder igualar las listas de lo que se busco con lo que tiene el gestor. -> FEDE 
     def buscarEventosSismicos(self) -> List:
         """
         Busca eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
         """
-        EventoSismicosAD = EventoSismico.obtenerEventosAD()
+        EventoSismicosAD = EventoSismico.obtenerEventosAd()
         #Le agrego para que los eventos que se buscaron se agreguen al array que tiene como atributo. -> FEDE 
         self.eventosSismicosAd = EventoSismicosAD
         return EventoSismicosAD
     
-    @staticmethod
     def mostrarDatosEventos(self): 
         pass
     
-    @staticmethod
-    def ordenarEventos(eventos: List[EventoSismico]) -> List[EventoSismico]:
+    def ordenarEventos(self, eventos: List[EventoSismico]) -> List[EventoSismico]:
         """
         Ordena los eventos sismicos por fecha y hora de ocurrencia.
         :param eventos: Lista de eventos sismicos.
@@ -61,7 +57,7 @@ class GestorRevision:
         return eventos
     
     @staticmethod
-    def tomarEvento(evento_id: int) -> HttpResponse:
+    def tomarEvento1(evento_id: int) -> HttpResponse:
         """
         Toma un evento sismico por su ID.
         :param evento_id: ID del evento sismico.
@@ -94,7 +90,7 @@ class GestorRevision:
         """
         return timezone.now()
     
-    # cambiar el nombre a bloquearEvento()
+
     @staticmethod
     def bloquearEvento(eventoBloqueado: EventoSismico) -> None:
         """
@@ -102,8 +98,31 @@ class GestorRevision:
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        buscarEstado = GestorRevision.buscarEstadoBloqueado(eventoBloqueado)
-        fechaYHoraActual = GestorRevision.getFechaYHoraActual()
+        eventoBloqueado = eventoBloqueado.bloquear()
+        mostrarAlcance = eventoBloqueado.mostrarAlcance()
+        
+          
+    
+    @staticmethod
+    def tomarEvento(evento_id: int) -> None:
+        """
+        Cambia el estado de un evento sismico a bloqueado.
+        :param evento_id: ID del evento sismico a bloquear.
+        """
+        try:
+            evento = EventoSismico.objects.get(id=evento_id)
+            estado_bloqueado = GestorRevision.buscarEstadoBloqueado(evento)
+            if estado_bloqueado:
+                fechaYHoraActual = GestorRevision.obtenerFechaYHoraActual()
+                evento.bloquear(fechaYHoraActual)
+                
+                print(f"(: Evento {evento_id} bloqueado exitosamente")
+            else:
+                print("(: No se encontró un estado bloqueado válido")
+
+            
+        except EventoSismico.DoesNotExist:
+            print(f"(: No se encontró el evento con ID {evento_id}")
 
     @staticmethod
     def mostrarAlcance(evento: EventoSismico) -> dict:
