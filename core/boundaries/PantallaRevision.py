@@ -6,19 +6,13 @@ from ..control.GestorRevision import GestorRevision
 from django.shortcuts import render
 
 
-def habilitarPantalla(request):
-    return render(request, 'home.html')
-
-def mostrarEventosAD():pass
-
-def solicitarSeleccion():pass
+# Pantalla de Revision
 
 
-#¿Este metodo cual metodo seria en el diagrama de secuencia de casos de uso?
+# 1 Opcion Registrar Res Revicion Manual
 def opcRegistrarResRevisionMan(request):
     gestor = GestorRevision()
-    eventosSismicosAd = gestor.buscarEventosSismicos()
-    eventosSismicosAd = gestor.ordenarEventos(eventosSismicosAd)
+    eventosSismicosAd = gestor.tomarOpcSeleccionada()
     return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
 def tomarEvento(request, evento_id=None):
@@ -131,3 +125,9 @@ def tomarAccionRechazarEvento(request):
 
 
 
+def habilitarPantalla(request):
+    return render(request, 'home.html')
+
+def mostrarEventosAD():pass
+
+def solicitarSeleccion():pass

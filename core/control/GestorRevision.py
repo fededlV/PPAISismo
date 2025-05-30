@@ -10,62 +10,47 @@ from typing import List
 
 
 class GestorRevision:
-    def __init__(self):
-        self.eventosSismicosAd = []
-        self.eventoSismicoSeleccionado = None
-        self.alcanceEvento = None
-        self.clasificacionEvento = None
-        self.origenEvento = None
-        self.valoresVelocidadDeOnda = []
-        self.valoresFrecuenciaDeOnda = []
-        self.valoresLongitud = []
-        self.fechaHoraActual = None
-        self.asLogueado = None
-        self.accionSeleccionada = None
+    def __init__(self, eventoSismicoSeleccionado: EventoSismico = None):
+        self.eventosSismicosAd = EventoSismico.objects.all()
+        self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
+
+    # 3 Tomar opción seleccionada
+    def tomarOpcSeleccionada(self):
+        """
+        Toma la opción seleccionada por el usuario y actualiza la lista ordenada de eventos sísmicos.
+        """
+        self.buscarEventosSismicos()
+        mostrarDatosEventos = self.mostrarDatosEventos()
+        self.eventosSismicosAd = self.ordenarEventos(mostrarDatosEventos)
+        return self.eventosSismicosAd
+
+    # 4 Buscar eventos sísmicos
+    def buscarEventosSismicos(self) -> List[EventoSismico]:
+        """
+        Recupera los eventos sísmicos desde la capa de entidades.
+        """
+        self.eventosSismicosAd = EventoSismico.obtenerEventosAd(self)
 
 
-    @staticmethod
-    def tomarOpcSeleccionada(opcion: str) -> HttpResponse:
+    # 10 Ordenar eventos sismicos
+    def ordenarEventos(self, eventos: List[dict]) -> List[dict]:
         """
-        Toma la opcion seleccionada por el usuario.
-        :param opcion: Opcion seleccionada.
-        :return: HttpResponse con la opcion seleccionada.
+        Ordena los eventos sísmicos por fecha de ocurrencia descendente.
         """
-        return HttpResponse(f"Opcion seleccionada: {opcion}")
+        return sorted(eventos, key=lambda evento: evento['fechaHoraOcurrencia'], reverse=True)
+
     
-    # cambiar el nombre a buscarEventosSismicos( )
-    def buscarEventosSismicos(self) -> List:
+    # 8 Mostrar datos de eventos
+    def mostrarDatosEventos(self) -> List[dict]: 
         """
-        Busca eventos sismicos activos en la base de datos.
-        :return: Lista de eventos sismicos activos.
+        Muestra los datos de los eventos sismicos.
+        :return: Lista de diccionarios con los datos de los eventos sismicos.
         """
-        EventoSismicosAD = EventoSismico.obtenerEventosAd()
-        #Le agrego para que los eventos que se buscaron se agreguen al array que tiene como atributo. -> FEDE 
-        self.eventosSismicosAd = EventoSismicosAD
-        return EventoSismicosAD
-    
-    def mostrarDatosEventos(self): 
-        pass
-    
-    def ordenarEventos(self, eventos: List[EventoSismico]) -> List[EventoSismico]:
-        """
-        Ordena los eventos sismicos por fecha y hora de ocurrencia.
-        :param eventos: Lista de eventos sismicos.
-        :return: Lista de eventos sismicos ordenados.
-        """
-        eventos.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
-        return eventos
-    
-    @staticmethod
-    def tomarEvento1(evento_id: int) -> HttpResponse:
-        """
-        Toma un evento sismico por su ID.
-        :param evento_id: ID del evento sismico.
-        :return: HttpResponse con el evento sismico.
-        """
-        from PPAISismo.core.entities.EventoSismico import EventoSismico
-        evento = EventoSismico.objects.get(id=evento_id)
-        return HttpResponse(f"Evento Sismico tomado: {evento}")
+        datosEventos = []
+        for i in self.eventosSismicosAd:
+            datosEventos.append(i.getDatosEventoSismico())
+        return datosEventos  
+
 
     @staticmethod
     def buscarEstadoBloqueado(evento: EventoSismico):
@@ -110,7 +95,6 @@ class GestorRevision:
         :param evento_id: ID del evento sismico a bloquear.
         """
         try:
-            evento = EventoSismico.objects.get(id=evento_id)
             estado_bloqueado = GestorRevision.buscarEstadoBloqueado(evento)
             if estado_bloqueado:
                 fechaYHoraActual = GestorRevision.obtenerFechaYHoraActual()

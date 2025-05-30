@@ -4,11 +4,14 @@ class Estado(models.Model):
     ambito = models.CharField(max_length=100)
     nombreEstado = models.CharField(max_length=100)
 
-    # cambiar nombre AmbitoEventoSismico()
-    def esAmbitoEventoSismico(self):
+    # 6 Ambito eventos sismicos
+    def AmbitoEventoSismico(self):
+        print(self.ambito)
         return self.ambito == "EventoSismico"
 
+    # 7 Es auto detectado
     def esAutoDetectado(self):
+        print(self.nombreEstado)
         return self.nombreEstado == "AutoDetectado"
 
     def esBloqueado(self):

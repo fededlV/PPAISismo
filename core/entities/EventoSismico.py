@@ -30,8 +30,8 @@ class EventoSismico(models.Model):
     class Meta:
         app_label = 'core'
 
-    @classmethod
-    def obtenerEventosAd(cls):
+    # 5 Obtener eventos sismicos
+    def obtenerEventosAd(self):
         """
         Obtiene los eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
@@ -39,11 +39,33 @@ class EventoSismico(models.Model):
         eventosSismicos = EventoSismico.objects.all()
         ambitoEstadoSismico = []
         for evento in eventosSismicos:
-            a = evento.estadoActual.esAmbitoEventoSismico()
+            a = evento.estadoActual.AmbitoEventoSismico()
             b = evento.estadoActual.esAutoDetectado()
             if a and b:
                 ambitoEstadoSismico.append(evento)
-        return ambitoEstadoSismico
+        return ambitoEstadoSismico 
+    
+    # 9 Obtener datos del evento sismico
+    def getDatosEventoSismico(self):
+        """
+        Obtiene los datos del evento sismico.
+        :return: Diccionario con los datos del evento sismico.
+        """
+        return {
+            'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
+            'latitudEpicentro': self.latitudEpicentro,
+            'latitudHipocentro': self.latitudHipocentro,
+            'longitudEpicentro': self.longitudEpicentro,
+            'longitudHipocentro': self.longitudHipocentro,
+            'valorMagnitud': self.valorMagnitud,
+            'estadoActual': self.estadoActual.nombreEstado,
+            'alcanceSismo': self.alcanceSismo.getDatosAlcance(),
+            'clasificacion': self.clasificacion.getDatosClasificacion(),
+            'origenGeneracion': self.origenGeneracion.getDatosOrigen(),
+            'serieTemporal': self.serieTemporal,
+            'cambioEstado': self.cambioEstado,
+            'analistaSuperior': self.analistaSuperior
+        }
 
     def mostrarAlcance(self):
         """
