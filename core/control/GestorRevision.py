@@ -11,6 +11,7 @@ from typing import List
 
 class GestorRevision:
     def __init__(self):
+        self.eventos = EventoSismico.objects.all()  # Obtiene todos los eventos sismicos
         self.eventosSismicosAd = []
         self.eventoSismicoSeleccionado = None
         self.alcanceEvento = None
@@ -24,39 +25,63 @@ class GestorRevision:
         self.accionSeleccionada = None
 
 
-    @staticmethod
+    """ @staticmethod
     def tomarOpcSeleccionada(opcion: str) -> HttpResponse:
-        """
         Toma la opcion seleccionada por el usuario.
         :param opcion: Opcion seleccionada.
         :return: HttpResponse con la opcion seleccionada.
-        """
-        return HttpResponse(f"Opcion seleccionada: {opcion}")
+        
+        return HttpResponse(f"Opcion seleccionada: {opcion}") """
     
-    # cambiar el nombre a buscarEventosSismicos( )
-    def buscarEventosSismicos(self) -> List:
-        """
-        Busca eventos sismicos activos en la base de datos.
-        :return: Lista de eventos sismicos activos.
-        """
-        EventoSismicosAD = EventoSismico.obtenerEventosAd()
-        #Le agrego para que los eventos que se buscaron se agreguen al array que tiene como atributo. -> FEDE 
-        self.eventosSismicosAd = EventoSismicosAD
-        return EventoSismicosAD
+    def tomarOpcSeleccionada(self): 
+        return self.ordenarEventos(self)
     
-    def mostrarDatosEventos(self): 
-        pass
+    # Funcion para buscar los eventos sismicos auto detectados. 
+    def buscarEventosSismicos(self, eventos) -> List:
+        eventos = self.eventos #Agarra el atributo que contiene los eventos 
+        eventosAD = [] #Lista de eventos sismicos auto detectados
+        for evento in eventos:
+            if evento.estado.ambitoEventosSismico() and evento.estado.esAutoDetectado():
+                eventosAD.append(evento)
+        self.eventosSismicosAd = eventosAD
+
     
-    def ordenarEventos(self, eventos: List[EventoSismico]) -> List[EventoSismico]:
+    def mostrarDatosEventos(self):
+        eventosAD = self.eventosSismicosAd
+        eventoDatos = []
+        for evento in eventosAD: 
+            fechaHoraFin = evento.getFechaHoraFin()
+            fechaHoraOcurrencia = evento.getFechaHoraOcurrencia()
+            latitudEpicentro = evento.getLatitudEpicentro()
+            latitudHipocentro = evento.getLatitudHipocentro()
+            longitudEpicentro = evento.getLongitudEpicentro()
+            longitudHipocentro = evento.getLongitudHipocentro()
+            valorMagnitud = evento.getValorMagnitud()
+            eventoData = {
+                    'fechaHoraFin': fechaHoraFin,
+                    'fechaHoraOcurrencia': fechaHoraOcurrencia,
+                    'latitudEpicentro': latitudEpicentro,
+                    'latitudHipocentro': latitudHipocentro,
+                    'longitudEpicentro': longitudEpicentro,
+                    'longitudHipocentro': longitudHipocentro,
+                    'valorMagnitud': valorMagnitud
+            }
+            eventoDatos.append(eventoData)
+        self.eventosSismicosAd = eventoDatos
+            
+        
+    
+    def ordenarEventos(self):
         """
         Ordena los eventos sismicos por fecha y hora de ocurrencia.
         :param eventos: Lista de eventos sismicos.
         :return: Lista de eventos sismicos ordenados.
         """
-        eventos.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
-        return eventos
+        eventosAD = self.eventosSismicosAd
+        eventosAD.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
+        return eventosAD
     
-    @staticmethod
+    
     def tomarEvento1(evento_id: int) -> HttpResponse:
         """
         Toma un evento sismico por su ID.

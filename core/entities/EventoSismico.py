@@ -101,3 +101,86 @@ class EventoSismico(models.Model):
             cambioEstadoActual.setFechaHoraFin(fechaHora)
             self.crearCambioEstado(self)
     
+    def get_fechaHoraFin(self):
+        return self.fechaHoraFin
+
+    def set_fechaHoraFin(self, value):
+        self.fechaHoraFin = value
+
+    def get_fechaHoraOcurrencia(self):
+        return self.fechaHoraOcurrencia
+
+    def set_fechaHoraOcurrencia(self, value):
+        self.fechaHoraOcurrencia = value
+
+    def get_latitudEpicentro(self):
+        return self.latitudEpicentro
+
+    def set_latitudEpicentro(self, value):
+        self.latitudEpicentro = value
+
+    def get_latitudHipocentro(self):
+        return self.latitudHipocentro
+
+    def set_latitudHipocentro(self, value):
+        self.latitudHipocentro = value
+
+    def get_longitudEpicentro(self):
+        return self.longitudEpicentro
+
+    def set_longitudEpicentro(self, value):
+        self.longitudEpicentro = value
+
+    def get_longitudHipocentro(self):
+        return self.longitudHipocentro
+
+    def set_longitudHipocentro(self, value):
+        self.longitudHipocentro = value
+
+    def get_valorMagnitud(self):
+        return self.valorMagnitud
+
+    def set_valorMagnitud(self, value):
+        self.valorMagnitud = value
+
+    def get_estadoActual(self):
+        return self.estadoActual
+
+    def set_estadoActual(self, value):
+        self.estadoActual = value
+
+    def get_alcanceSismo(self):
+        return self.alcanceSismo
+
+    def set_alcanceSismo(self, value):
+        self.alcanceSismo = value
+
+    def get_clasificacion(self):
+        return self.clasificacion
+
+    def set_clasificacion(self, value):
+        self.clasificacion = value
+
+    def get_origenGeneracion(self):
+        return self.origenGeneracion
+
+    def set_origenGeneracion(self, value):
+        self.origenGeneracion = value
+
+    def get_serieTemporal(self):
+        return self.serieTemporal.all()
+
+    def set_serieTemporal(self, series):
+        self.serieTemporal.set(series)
+
+    def get_cambioEstado(self):
+        return self.cambioEstado.all()
+
+    def set_cambioEstado(self, cambios):
+        self.cambioEstado.set(cambios)
+
+    def get_analistaSuperior(self):
+        return self.analistaSuperior
+
+    def set_analistaSuperior(self, value):
+        self.analistaSuperior = value

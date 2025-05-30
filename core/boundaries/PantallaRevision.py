@@ -6,20 +6,21 @@ from ..control.GestorRevision import GestorRevision
 from django.shortcuts import render
 
 
+def opcRegistrarResRevisionMan(request):
+    pass
+
 def habilitarPantalla(request):
     return render(request, 'home.html')
 
-def mostrarEventosAD():pass
+def mostrarEventosAD(request):
+    gestor = GestorRevision()
+    # Supón que tienes una función para obtener todos los eventos
+    eventos = gestor.tomarOpcSeleccionada(gestor) #ACA NO SE SI ES ASI O SE TENDRIA QUE SUSTITUIR EL METODO QUE IMPLEMENTA EL TOMAROPCSELECCIONADA POR MOSTRARDATOS.
+    # Ahora gestor.eventosSismicosAd es una lista de diccionarios ordenados
+    return render(request, 'pantallaRevision.html', {'eventos': eventos})
 
 def solicitarSeleccion():pass
 
-
-#¿Este metodo cual metodo seria en el diagrama de secuencia de casos de uso?
-def opcRegistrarResRevisionMan(request):
-    gestor = GestorRevision()
-    eventosSismicosAd = gestor.buscarEventosSismicos()
-    eventosSismicosAd = gestor.ordenarEventos(eventosSismicosAd)
-    return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
 def tomarEvento(request, evento_id=None):
     if request.method == 'POST':
