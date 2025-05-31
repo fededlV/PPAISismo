@@ -29,7 +29,7 @@ class EventoSismico(models.Model):
     analistaSuperior = models.ForeignKey(Empleado, on_delete=models.PROTECT, related_name='eventos_analista_superior', null=True, blank=True)
     
     def __str__(self):
-        return f"Evento {self.id} - {self.fechaHoraOcurrencia}"
+        return f"Evento {self.id} - {self.estadoActual}"
     
     class Meta:
         app_label = 'core'
@@ -58,12 +58,14 @@ class EventoSismico(models.Model):
         return {
             'id': self.id,
             'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
+            'fechaHoraFin': self.fechaHoraFin,
             'latitudEpicentro': self.latitudEpicentro,
             'latitudHipocentro': self.latitudHipocentro,
             'longitudEpicentro': self.longitudEpicentro,
             'longitudHipocentro': self.longitudHipocentro,
             'valorMagnitud': self.valorMagnitud,
             'estadoActual': self.estadoActual.nombreEstado,
+            'ambitoEstado': self.estadoActual.ambito,  # <-- agrega esta línea
             'alcanceSismico': self.alcanceSismico.getDatosAlcance(),
             'clasificacion': self.clasificacion.getDatosClasificacion(),
             'origenGeneracion': self.origenGeneracion.getDatosOrigen(),
