@@ -69,13 +69,13 @@ class EventoSismico(models.Model):
             'analistaSuperior': self.analistaSuperior
         }
 
-    # 25 Mostrar alcance
+    # 26 Mostrar alcance
     def mostrarAlcance(self):
         """
         Muestra el alcance del evento sismico.
         :return: Alcance del evento sismico.
         """
-        return self.alcance.getDatosAlcance()
+        return self.alcanceSismo.getDatosAlcance()
     
     def obtenerDatosClasificacion(self):
         """
