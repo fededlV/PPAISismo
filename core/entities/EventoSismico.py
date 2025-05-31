@@ -1,7 +1,7 @@
 from django.db import models
 from .Estado import Estado
 from typing import List
-from .AlcanceSismo import AlcanceSismo
+from .AlcanceSismico import AlcanceSismico
 from .ClasificacionSismo import ClasificacionSismo
 from .OrigenDeGeneracion import OrigenDeGeneracion
 from .SerieTemporal import SerieTemporal
@@ -20,7 +20,7 @@ class EventoSismico(models.Model):
     valorMagnitud = models.FloatField()
 
     estadoActual = models.ForeignKey(Estado, on_delete=models.PROTECT, related_name='eventos_actuales')
-    alcanceSismo = models.ForeignKey(AlcanceSismo,on_delete=models.PROTECT, related_name='eventos_alcance')
+    alcanceSismico = models.ForeignKey(AlcanceSismico,on_delete=models.PROTECT, related_name='eventos_alcance')
     clasificacion = models.ForeignKey(ClasificacionSismo,on_delete=models.PROTECT,related_name='eventos_clasificados')
     origenGeneracion = models.ForeignKey(OrigenDeGeneracion,on_delete=models.PROTECT,related_name='eventos_origen')
     serieTemporal = models.ManyToManyField(SerieTemporal, related_name='eventos')
@@ -61,7 +61,7 @@ class EventoSismico(models.Model):
             'longitudHipocentro': self.longitudHipocentro,
             'valorMagnitud': self.valorMagnitud,
             'estadoActual': self.estadoActual.nombreEstado,
-            'alcanceSismo': self.alcanceSismo.getDatosAlcance(),
+            'alcanceSismico': self.alcanceSismico.getDatosAlcance(),
             'clasificacion': self.clasificacion.getDatosClasificacion(),
             'origenGeneracion': self.origenGeneracion.getDatosOrigen(),
             'serieTemporal': self.serieTemporal,
@@ -75,7 +75,7 @@ class EventoSismico(models.Model):
         Muestra el alcance del evento sismico.
         :return: Alcance del evento sismico.
         """
-        return self.alcanceSismo.getDatosAlcance()
+        return self.alcanceSismico.getDatosAlcance()
     
     def obtenerDatosClasificacion(self):
         """

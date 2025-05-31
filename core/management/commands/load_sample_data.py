@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import datetime, timedelta
 from core.entities.Estado import Estado
-from core.entities.AlcanceSismo import AlcanceSismo
+from core.entities.AlcanceSismico import AlcanceSismico
 from core.entities.ClasificacionSismo import ClasificacionSismo
 from core.entities.OrigenDeGeneracion import OrigenDeGeneracion
 from core.entities.Empleado import Empleado
@@ -43,7 +43,7 @@ class Command(BaseCommand):
         ]
         
         for alcance_data in alcances:
-            alcance, created = AlcanceSismo.objects.get_or_create(**alcance_data)
+            alcance, created = AlcanceSismico.objects.get_or_create(**alcance_data)
             if created:
                 self.stdout.write(f'  ✓ Alcance creado: {alcance.nombre}')
 
@@ -197,7 +197,7 @@ class Command(BaseCommand):
         ]
 
         estado_autodetectado = Estado.objects.get(nombreEstado='AutoDetectado')
-        alcance_local = AlcanceSismo.objects.get(nombre='Local')
+        alcance_local = AlcanceSismico.objects.get(nombre='Local')
         clasificacion_superficial = ClasificacionSismo.objects.get(nombre='Superficial')
         origen_tectonico = OrigenDeGeneracion.objects.get(nombre='Tectónico')
         empleado_supervisor = Empleado.objects.first()
@@ -205,7 +205,7 @@ class Command(BaseCommand):
         for i, evento_data in enumerate(eventos_data):
             evento_data.update({
                 'estadoActual': estado_autodetectado,
-                'alcanceSismo': alcance_local,
+                'alcanceSismico': alcance_local,
                 'clasificacion': clasificacion_superficial,
                 'origenGeneracion': origen_tectonico,
                 'analistaSuperior': empleado_supervisor if i == 1 else None,  # Solo el segundo evento tiene analista
@@ -235,7 +235,7 @@ class Command(BaseCommand):
             self.style.SUCCESS(
                 f'\n¡Datos de prueba cargados exitosamente!'
                 f'\n- {Estado.objects.count()} Estados'
-                f'\n- {AlcanceSismo.objects.count()} Alcances de Sismo'
+                f'\n- {AlcanceSismico.objects.count()} Alcances de Sismo'
                 f'\n- {ClasificacionSismo.objects.count()} Clasificaciones'
                 f'\n- {OrigenDeGeneracion.objects.count()} Orígenes de Generación'
                 f'\n- {Empleado.objects.count()} Empleados'

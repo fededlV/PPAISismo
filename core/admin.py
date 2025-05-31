@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .entities.AlcanceSismo import AlcanceSismo
+from .entities.AlcanceSismico import AlcanceSismico
 from .entities.CambioEstado import CambioEstado
 from .entities.ClasificacionSismo import ClasificacionSismo
 from .entities.DetalleMuestraSismica import DetalleMuestraSismica
@@ -14,7 +14,7 @@ from .entities.Usuario import Usuario
 from .entities.MuestraSismica import MuestraSismica
 from .entities.SerieTemporal import SerieTemporal
 
-admin.site.register(AlcanceSismo)
+admin.site.register(AlcanceSismico)
 admin.site.register(CambioEstado)
 admin.site.register(ClasificacionSismo)
 admin.site.register(DetalleMuestraSismica)
