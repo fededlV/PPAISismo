@@ -10,10 +10,12 @@ class CambioEstado(models.Model):
     class Meta:
         app_label = 'core'
 
+    # 21. Es actual
     def esActual(self):
         """Retorna True si este cambio de estado es el actual."""
         return self.fechaHoraFin is None
 
+    # 22. Set fecha y hora de Fin
     def setFechaHoraFin(self, fechaHoraFin):
         """Establece la fecha y hora de fin del cambio de estado."""
         self.fechaHoraFin = fechaHoraFin

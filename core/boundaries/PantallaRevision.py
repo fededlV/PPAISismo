@@ -15,8 +15,11 @@ def opcRegistrarResRevisionMan(request):
     eventosSismicosAd = gestor.tomarOpcSeleccionada()
     return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
-def tomarEvento(request, evento_id=None):
+# 13 Tomar eventos seleccionado
+def tomarEvento(request):
     if request.method == 'POST':
+        print("(: Tomando evento seleccionado")
+        print(f"(: Evento ID: {request.POST}")
         evento_id = request.POST.get('evento_id')
         gestor = GestorRevision()
         gestor.tomarEvento(evento_id)

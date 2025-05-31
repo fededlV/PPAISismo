@@ -7,6 +7,7 @@ from ..entities.EventoSismico import EventoSismico
 from ..entities.Estado import Estado
 from ..entities.Usuario import Usuario
 from typing import List
+from ..entities.Estado import Estado
 
 
 class GestorRevision:
@@ -21,7 +22,7 @@ class GestorRevision:
         """
         self.buscarEventosSismicos()
         mostrarDatosEventos = self.mostrarDatosEventos()
-        self.eventosSismicosAd = self.ordenarEventos(mostrarDatosEventos)
+        self.eventosSismicosAd = self.ordenarPorFechaYHoraOcurrencia(mostrarDatosEventos)
         return self.eventosSismicosAd
 
     # 4 Buscar eventos sísmicos
@@ -33,7 +34,7 @@ class GestorRevision:
 
 
     # 10 Ordenar eventos sismicos
-    def ordenarEventos(self, eventos: List[dict]) -> List[dict]:
+    def ordenarPorFechaYHoraOcurrencia(self, eventos: List[dict]) -> List[dict]:
         """
         Ordena los eventos sísmicos por fecha de ocurrencia descendente.
         """
@@ -51,54 +52,51 @@ class GestorRevision:
             datosEventos.append(i.getDatosEventoSismico())
         return datosEventos  
 
-
-    @staticmethod
-    def buscarEstadoBloqueado(evento: EventoSismico):
+    # 15 Buscar estado bloqueado
+    def buscarEstadoBloqueado(self):
         """
         Busca el estado bloqueado de un evento sismico.
         :param evento: Evento sismico.
         :return: Estado bloqueado del evento sismico.
         """
-        from ..entities.Estado import Estado
         estados = Estado.objects.all()
-        for estado_obj in estados:
-            if estado_obj.esAmbitoEventoSismico() and estado_obj.esBloqueado():
-                return estado_obj
+        for estado in estados:
+            if estado.ambitoEventoSismico() and estado.esBloqueado():
+                return estado
         return None
 
-    # cambiar el nombre a obtenerFechaHoraActual()
+    # 18 Obtener fecha y hora actual
     @staticmethod
-    def obtenerFechaYHoraActual() -> datetime:
+    def obtenerFechaHoraActual() -> datetime:
         """
         Obtiene la fecha y hora actual.
         :return: Fecha y hora actual.
         """
         return timezone.now()
     
-
-    @staticmethod
-    def bloquearEvento(eventoBloqueado: EventoSismico) -> None:
+    # 19 Bloquear evento
+    def bloquearEvento(self, fechaHoraActual: datetime, estado: Estado) -> None:
         """
         Cambia el estado de un evento sismico a bloqueado.
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        eventoBloqueado = eventoBloqueado.bloquear()
-        mostrarAlcance = eventoBloqueado.mostrarAlcance()
+        eventoBloqueado = eventoBloqueado.bloquear(fechaHora=fechaHoraActual, estado=estado, evento=self.eventoSismicoSeleccionado)
+        mostrarAlcance = eventoBloqueado.mostrarAlcance(eventoBloqueado)
         
           
-    
-    @staticmethod
-    def tomarEvento(evento_id: int) -> None:
+    # 14 Tomar evento sismico
+    def tomarEvento(self, evento_id: int) -> None:
         """
         Cambia el estado de un evento sismico a bloqueado.
         :param evento_id: ID del evento sismico a bloquear.
         """
+        self.eventoSismicoSeleccionado = self.eventosSismicosAd.get(id=evento_id)
         try:
-            estado_bloqueado = GestorRevision.buscarEstadoBloqueado(evento)
+            estado_bloqueado = self.buscarEstadoBloqueado(self.eventoSismicoSeleccionado)
             if estado_bloqueado:
-                fechaYHoraActual = GestorRevision.obtenerFechaYHoraActual()
-                evento.bloquear(fechaYHoraActual)
+                fechaYHoraActual = self.obtenerFechaHoraActual()
+                self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
                 
                 print(f"(: Evento {evento_id} bloqueado exitosamente")
             else:
@@ -211,9 +209,6 @@ class GestorRevision:
         asLogueado = usuario.getAsLogueado()
         return usuario.getAsLogueado()
     
-    @staticmethod
-    def obtenerFechaHoraActual() -> datetime:
-        return timezone.now()
     
     @staticmethod
     def buscarEstadoRechazado(estados: list[Estado]) -> list[Estado]:
@@ -224,7 +219,7 @@ class GestorRevision:
         """
         estadosRechazados = []
         for estado in estados:
-            if estado.esAmbitoEventoSismico() and estado.esRechazado():
+            if estado.ambitoEventoSismico() and estado.esRechazado():
                 estadosRechazados.append(estado)
         return estadosRechazados
                 

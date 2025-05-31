@@ -7,6 +7,7 @@ from .OrigenDeGeneracion import OrigenDeGeneracion
 from .SerieTemporal import SerieTemporal
 from .CambioEstado import CambioEstado
 from .Empleado import Empleado
+from datetime import datetime
 
 
 class EventoSismico(models.Model):
@@ -52,6 +53,7 @@ class EventoSismico(models.Model):
         :return: Diccionario con los datos del evento sismico.
         """
         return {
+            'id': self.id,
             'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
             'latitudEpicentro': self.latitudEpicentro,
             'latitudHipocentro': self.latitudHipocentro,
@@ -67,6 +69,7 @@ class EventoSismico(models.Model):
             'analistaSuperior': self.analistaSuperior
         }
 
+    # 25 Mostrar alcance
     def mostrarAlcance(self):
         """
         Muestra el alcance del evento sismico.
@@ -94,9 +97,9 @@ class EventoSismico(models.Model):
         """
         Registra la revisión del evento cambiando el estado actual y creando uno nuevo.
         """
-        self.crearCambioEstado(estado, fechaHoraActual, empleado)
+        self.crearCE(estado, fechaHoraActual, empleado)
 
-    def crearCambioEstado(self, fechaHora, estado=None, empleado=None):
+    def crearCambioEstado(self, fechaHora, estado=None, empleado=None): # Revisar logica con 20 que solapa
         """
         Crea un nuevo cambio de estado para el evento sismico.
         :return: Nuevo cambio de estado creado.
@@ -117,9 +120,29 @@ class EventoSismico(models.Model):
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
     
-    def bloquear(self, fechaHora):
+    # 23 Crear cambio de estado
+    def crearCE(self, estado: Estado, fechaHora: datetime):
+        """
+        Crea un nuevo cambio de estado para el evento sismico.
+        :param estado: Estado del evento sismico.
+        :param fechaHora: Fecha y hora del cambio de estado.
+        :return: Nuevo cambio de estado creado.
+        """
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=None,
+            fechaHoraInicio=fechaHora
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado
+
+
+    # 20 Bloquear evento sismico
+    def bloquear(self, fechaHora: datetime, cambioEstado: CambioEstado):
         cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
         if cambioEstadoActual:
             cambioEstadoActual.setFechaHoraFin(fechaHora)
-            self.crearCambioEstado(self)
+            self.crearCE(self, fechaHora=fechaHora, estado=cambioEstado)
     
