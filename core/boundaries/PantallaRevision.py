@@ -30,8 +30,6 @@ def solicitarSeleccion():
 # 13 Tomar eventos seleccionado
 def tomarEvento(request):
     if request.method == 'POST':
-        print("(: Tomando evento seleccionado")
-        print(f"(: Evento ID: {request.POST}")
         evento_id = request.POST.get('evento_id')
         gestor = GestorRevision()
         gestor.tomarEvento(evento_id)

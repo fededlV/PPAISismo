@@ -76,9 +76,9 @@ class GestorRevision:
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        self.eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
-        mostrarAlcance = self.mostrarAlcance(self.eventoSismicoSeleccionado)
-        
+
+        eventoSismicoSeleccionado = self.eventoSismicoSeleccionado
+        eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
           
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
@@ -92,23 +92,20 @@ class GestorRevision:
             if estado_bloqueado:
                 fechaYHoraActual = self.obtenerFechaHoraActual()
                 self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
-                
                 print(f"(: Evento {evento_id} bloqueado exitosamente")
-            else:
-                print("(: No se encontró un estado bloqueado válido")
-
-            
+                return self.mostrarAlcance()
+                
         except EventoSismico.DoesNotExist:
             print(f"(: No se encontró el evento con ID {evento_id}")
 
-    @staticmethod
-    def mostrarAlcance(evento: EventoSismico) -> dict:
+    # 25 Mostrar alcance
+    def mostrarAlcance(self) -> dict:
         """
         Muestra el alcance del evento sismico.
         :param evento: Evento sismico.
         :return: Diccionario con los datos del alcance del evento sismico.
         """
-        return evento.mostrarAlcance()
+        return self.eventoSismicoSeleccionado.mostrarAlcance()
 
     # cambiar el nombre a obtenerClasificacion()
     @staticmethod
