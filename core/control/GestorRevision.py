@@ -99,7 +99,7 @@ class GestorRevision:
                 self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
                 print(f"(: Evento {evento_id} bloqueado exitosamente")
                 return self.mostrarAlcance(self.eventoSismicoSeleccionado)
-            
+                
         except EventoSismico.DoesNotExist:
             print(f"(: No se encontró el evento con ID {evento_id}")
 
