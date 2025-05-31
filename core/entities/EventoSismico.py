@@ -40,7 +40,7 @@ class EventoSismico(models.Model):
         eventosSismicos = EventoSismico.objects.all()
         ambitoEstadoSismico = []
         for evento in eventosSismicos:
-            a = evento.estadoActual.AmbitoEventoSismico()
+            a = evento.estadoActual.ambitoEventoSismico()
             b = evento.estadoActual.esAutoDetectado()
             if a and b:
                 ambitoEstadoSismico.append(evento)
@@ -75,7 +75,7 @@ class EventoSismico(models.Model):
         Muestra el alcance del evento sismico.
         :return: Alcance del evento sismico.
         """
-        return self.alcance.getDatosAlcance()
+        return self.alcanceSismo.getDatosAlcance()
     
     def obtenerDatosClasificacion(self):
         """
@@ -132,6 +132,7 @@ class EventoSismico(models.Model):
             evento=self,
             estado=estado,
             empleado=None,
+            fecha_cambio=fechaHora,
             fechaHoraInicio=fechaHora
         )
         nuevoCambioEstado.save()
@@ -140,9 +141,12 @@ class EventoSismico(models.Model):
 
 
     # 20 Bloquear evento sismico
-    def bloquear(self, fechaHora: datetime, cambioEstado: CambioEstado):
-        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-        if cambioEstadoActual:
-            cambioEstadoActual.setFechaHoraFin(fechaHora)
-            self.crearCE(self, fechaHora=fechaHora, estado=cambioEstado)
+    # def bloquear(self, fechaHora: datetime, cambioEstado: CambioEstado):
+    #     cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
+    #     if cambioEstadoActual:
+    #         cambioEstadoActual.setFechaHoraFin(fechaHora)
+    #         self.crearCE(self, fechaHora=fechaHora, estado=cambioEstado)
     
+    def bloquear(self, fechaHoraActual: datetime, estado: Estado) -> None:
+        # Primero crea el cambio de estado
+        self.crearCE(estado, fechaHoraActual)

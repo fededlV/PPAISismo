@@ -15,6 +15,18 @@ def opcRegistrarResRevisionMan(request):
     eventosSismicosAd = gestor.tomarOpcSeleccionada()
     return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
+# 2
+def habilitarPantalla():
+    pass
+
+# 11
+def mostrarEventosAD():
+    pass
+
+# 12
+def solicitarSeleccion():
+    pass
+
 # 13 Tomar eventos seleccionado
 def tomarEvento(request):
     if request.method == 'POST':
@@ -24,7 +36,7 @@ def tomarEvento(request):
         gestor = GestorRevision()
         gestor.tomarEvento(evento_id)
         print("(: Evento bloqueado exitosamente")
-        return redirect('tomarOpcSeleccionada')
+        return redirect('opcRegistrarResRevisionMan')
     else:
         # Si se accede por GET, redirigir a la pantalla de selección
         return redirect('tomarOpcSeleccionada')
@@ -128,9 +140,4 @@ def tomarAccionRechazarEvento(request):
 
 
 
-def habilitarPantalla(request):
-    return render(request, 'home.html')
 
-def mostrarEventosAD():pass
-
-def solicitarSeleccion():pass

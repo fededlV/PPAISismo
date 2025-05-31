@@ -54,11 +54,6 @@ class GestorRevision:
 
     # 15 Buscar estado bloqueado
     def buscarEstadoBloqueado(self):
-        """
-        Busca el estado bloqueado de un evento sismico.
-        :param evento: Evento sismico.
-        :return: Estado bloqueado del evento sismico.
-        """
         estados = Estado.objects.all()
         for estado in estados:
             if estado.ambitoEventoSismico() and estado.esBloqueado():
@@ -81,8 +76,8 @@ class GestorRevision:
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        eventoBloqueado = eventoBloqueado.bloquear(fechaHora=fechaHoraActual, estado=estado, evento=self.eventoSismicoSeleccionado)
-        mostrarAlcance = eventoBloqueado.mostrarAlcance(eventoBloqueado)
+        self.eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
+        mostrarAlcance = self.mostrarAlcance(self.eventoSismicoSeleccionado)
         
           
     # 14 Tomar evento sismico
@@ -93,7 +88,7 @@ class GestorRevision:
         """
         self.eventoSismicoSeleccionado = self.eventosSismicosAd.get(id=evento_id)
         try:
-            estado_bloqueado = self.buscarEstadoBloqueado(self.eventoSismicoSeleccionado)
+            estado_bloqueado = self.buscarEstadoBloqueado()
             if estado_bloqueado:
                 fechaYHoraActual = self.obtenerFechaHoraActual()
                 self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
@@ -113,7 +108,7 @@ class GestorRevision:
         :param evento: Evento sismico.
         :return: Diccionario con los datos del alcance del evento sismico.
         """
-        return evento.alcance.getDatosAlcance()
+        return evento.mostrarAlcance()
 
     # cambiar el nombre a obtenerClasificacion()
     @staticmethod
@@ -210,18 +205,18 @@ class GestorRevision:
         return usuario.getAsLogueado()
     
     
-    @staticmethod
-    def buscarEstadoRechazado(estados: list[Estado]) -> list[Estado]:
-        """
-        Busca los estados rechazados en una lista de estados.
-        :param estados: Lista de objetos Estado.
-        :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
-        """
-        estadosRechazados = []
-        for estado in estados:
-            if estado.ambitoEventoSismico() and estado.esRechazado():
-                estadosRechazados.append(estado)
-        return estadosRechazados
+    # @staticmethod
+    # def buscarEstadoRechazado(estados: list[Estado]) -> list[Estado]:
+    #     """
+    #     Busca los estados rechazados en una lista de estados.
+    #     :param estados: Lista de objetos Estado.
+    #     :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
+    #     """
+    #     estadosRechazados = []
+    #     for estado in estados:
+    #         if estado.ambitoEventoSismico() and estado.esRechazado():
+    #             estadosRechazados.append(estado)
+    #     return estadosRechazados
                 
     @staticmethod
     def registrarRevision(self):

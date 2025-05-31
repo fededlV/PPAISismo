@@ -1,6 +1,7 @@
 from django.db import models
 
 class CambioEstado(models.Model):
+    evento = models.ForeignKey('EventoSismico', on_delete=models.CASCADE, related_name='cambios_estado',null=True, blank=True)
     estado = models.ForeignKey('Estado', on_delete=models.CASCADE)
     empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE, null=True, blank=True)
     fecha_cambio = models.DateTimeField()

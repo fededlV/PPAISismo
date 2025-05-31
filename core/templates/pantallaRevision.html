@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pantalla de Revisión</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
     <header>
@@ -33,19 +34,19 @@
             <tbody>
                 {% for evento in eventos %}
                 <tr>
-                    <td>
+                    <td data-label="Seleccionar">
                         <input type="radio" name="evento_id" value="{{ evento.id }}" required>
                     </td>
-                    <td>{{ evento.id }}</td>
-                    <td>{{ evento.fechaHoraOcurrencia }}</td>
-                    <td>{{ evento.fechaHoraFin }}</td>
-                    <td>{{ evento.latitudEpicentro }}</td>
-                    <td>{{ evento.longitudEpicentro }}</td>
-                    <td>{{ evento.latitudHipocentro }}</td>
-                    <td>{{ evento.longitudHipocentro }}</td>
-                    <td>{{ evento.valorMagnitud }}</td>
-                    <td>{{ evento.estadoActual.nombreEstado }}</td>
-                    <td>{{ evento.estadoActual.ambito }}</td>
+                    <td data-label="ID">{{ evento.id }}</td>
+                    <td data-label="Fecha de Ocurrencia">{{ evento.fechaHoraOcurrencia }}</td>
+                    <td data-label="Fecha de Fin">{{ evento.fechaHoraFin }}</td>
+                    <td data-label="Latitud Epicentro">{{ evento.latitudEpicentro }}</td>
+                    <td data-label="Longitud Epicentro">{{ evento.longitudEpicentro }}</td>
+                    <td data-label="Latitud Hipocentro">{{ evento.latitudHipocentro }}</td>
+                    <td data-label="Longitud Hipocentro">{{ evento.longitudHipocentro }}</td>
+                    <td data-label="Magnitud">{{ evento.valorMagnitud }}</td>
+                    <td data-label="Estado Actual">{{ evento.estadoActual.nombreEstado }}</td>
+                    <td data-label="Ámbito">{{ evento.estadoActual.ambito }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
