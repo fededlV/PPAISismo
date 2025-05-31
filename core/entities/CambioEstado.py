@@ -8,6 +8,9 @@ class CambioEstado(models.Model):
     fechaHoraInicio = models.DateTimeField(null=True, blank=True)
     fechaHoraFin = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.estado} ({self.fecha_cambio})"
+    
     class Meta:
         app_label = 'core'
 

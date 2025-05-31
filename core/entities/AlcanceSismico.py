@@ -10,3 +10,6 @@ class AlcanceSismico(models.Model):
             'descripcion': self.descripcion,
             'nombre': self.nombre
         }
+        
+    def __str__(self):
+        return f"Alcance {self.nombre}"

@@ -6,6 +6,8 @@ class Usuario(models.Model):
     nombreUsuario = models.CharField(max_length=150, unique=True)
     empleado = models.OneToOneField(Empleado, on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return f"Evento {self.id} - {self.nombreUsuario}"
     class Meta:
         app_label = 'core'
 

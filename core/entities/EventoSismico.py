@@ -28,6 +28,9 @@ class EventoSismico(models.Model):
     cambioEstado = models.ManyToManyField(CambioEstado, related_name='eventos_cambios_estado')
     analistaSuperior = models.ForeignKey(Empleado, on_delete=models.PROTECT, related_name='eventos_analista_superior', null=True, blank=True)
     
+    def __str__(self):
+        return f"Evento {self.id} - {self.fechaHoraOcurrencia}"
+    
     class Meta:
         app_label = 'core'
 

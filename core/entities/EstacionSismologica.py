@@ -8,6 +8,8 @@ class EstacionSismologica(models.Model):
     longitud = models.FloatField()
     nroCertificacionAdquisicion = models.IntegerField()
 
+    def __str__(self):
+        return f"Alcance {self.nombre}"
     class Meta:
         app_label = 'core'
 

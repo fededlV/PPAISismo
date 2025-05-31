@@ -4,6 +4,8 @@ class Estado(models.Model):
     ambito = models.CharField(max_length=100)
     nombreEstado = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"Alcance {self.nombreEstado}"
     # 6, 16 Ambito eventos sismicos
     def ambitoEventoSismico(self):
         return self.ambito == "EventoSismico"

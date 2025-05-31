@@ -12,6 +12,9 @@ class SerieTemporal(models.Model):
         related_name='series_temporales'
     )
 
+    def __str__(self):
+        return f"Evento {self.id} - {self.fechaHoraInicioRegistroMuestras} - {self.sismografo}"
+    
     def obtenerDatosMuestras(self):
         pass
 

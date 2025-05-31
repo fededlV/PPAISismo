@@ -5,6 +5,9 @@ class TipoDeDato(models.Model):
     nombreUnidadMedida = models.CharField(max_length=100)
     valorUmbral = models.FloatField()
 
+    def __str__(self):
+        return f"Evento {self.id} - {self.nombreUnidadMedida}"
+    
     class Meta:
         app_label = 'core'
 

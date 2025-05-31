@@ -5,6 +5,8 @@ class ClasificacionSismo(models.Model):
     kmProfundidadHasta = models.FloatField()
     nombre = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"Alcance {self.nombre}"
 
     def getDatosClasificacion(self):
         return {
@@ -12,3 +14,4 @@ class ClasificacionSismo(models.Model):
             'kmProfundidadHasta': self.kmProfundidadHasta,
             'nombre': self.nombre
         }
+    

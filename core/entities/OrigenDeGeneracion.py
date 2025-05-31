@@ -7,6 +7,8 @@ class OrigenDeGeneracion(models.Model):
     class Meta:
         app_label = 'core'
 
+    def __str__(self):
+        return f"Evento {self.id} - {self.nombre}"
     
     def getDatosOrigen(self):
         return {

@@ -6,6 +6,8 @@ class Empleado(models.Model):
     nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=20)
 
+    def __str__(self):
+        return f"Alcance {self.nombre}"
     class Meta:
         app_label = 'core'
 
