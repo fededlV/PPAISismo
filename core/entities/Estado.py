@@ -4,10 +4,11 @@ class Estado(models.Model):
     ambito = models.CharField(max_length=100)
     nombreEstado = models.CharField(max_length=100)
 
-    # cambiar nombre AmbitoEventoSismico()
+    #6. Listo
     def ambitoEventosSismico(self):
         return self.ambito == "EventoSismico"
-
+    
+    #7. Listo
     def esAutoDetectado(self):
         return self.nombreEstado == "AutoDetectado"
 

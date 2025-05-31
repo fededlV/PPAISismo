@@ -26,13 +26,11 @@
             <tr><th>Latitud Hipocentro</th><td>{{ evento.latitudHipocentro }}</td></tr>
             <tr><th>Longitud Hipocentro</th><td>{{ evento.longitudHipocentro }}</td></tr>
             <tr><th>Magnitud</th><td>{{ evento.valorMagnitud }}</td></tr>
-            <tr><th>Estado Actual</th><td>{{ evento.estadoActual.nombreEstado }}</td></tr>
-            <tr><th>Ámbito</th><td>{{ evento.estadoActual.ambito }}</td></tr>
         </table>
         {% else %}
         <p>No se encontró información del evento sísmico.</p>
         {% endif %}
-        <a href="{% url 'tomarOpcSeleccionada' %}">&larr; Volver a la revisión</a>
+        <a href="{% url 'opcRegistrarResRevisionMan' %}">&larr; Volver a la revisión</a>
     </div>
 </body>
 </html>

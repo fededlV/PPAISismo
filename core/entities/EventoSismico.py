@@ -30,20 +30,38 @@ class EventoSismico(models.Model):
     class Meta:
         app_label = 'core'
 
-    @classmethod
-    def obtenerEventosAd(cls):
+    #5. Listo
+    def obtenerEventosAD(self):
         """
         Obtiene los eventos sismicos activos en la base de datos.
         :return: Lista de eventos sismicos activos.
         """
-        eventosSismicos = EventoSismico.objects.all()
-        ambitoEstadoSismico = []
-        for evento in eventosSismicos:
-            a = evento.estadoActual.esAmbitoEventoSismico()
-            b = evento.estadoActual.esAutoDetectado()
-            if a and b:
-                ambitoEstadoSismico.append(evento)
-        return ambitoEstadoSismico
+        return self.estadoActual.ambitoEventosSismico() and self.estadoActual.esAutoDetectado() 
+
+    def bloquear(self, fechaHora):
+        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None) #Esta línea busca el primer elemento de la colección self.cambioEstado.all() que cumpla con la condición ce.esActual(). Si no encuentra ninguno, devuelve None.
+        if cambioEstadoActual:
+            cambioEstadoActual.setFechaHoraFin(fechaHora)
+            self.crearCambioEstado(self) 
+        print("Se finalizo el estado actual")
+
+    def crearCambioEstado(self, fechaHora, estado=None, empleado=None):
+        """
+        Crea un nuevo cambio de estado para el evento sismico.
+        :return: Nuevo cambio de estado creado.
+        """
+
+
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=empleado,
+            fechaHoraInicio=fechaHora
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        print("Se creo un nuevo cambio de estado")
+        return nuevoCambioEstado
 
     def mostrarAlcance(self):
         """
@@ -74,113 +92,91 @@ class EventoSismico(models.Model):
         """
         self.crearCambioEstado(estado, fechaHoraActual, empleado)
 
-    def crearCambioEstado(self, fechaHora, estado=None, empleado=None):
-        """
-        Crea un nuevo cambio de estado para el evento sismico.
-        :return: Nuevo cambio de estado creado.
-        """
-        if estado:
-            cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-            if cambioEstadoActual:
-                cambioEstadoActual.setFechaHoraFin(fechaHora)
-
-
-        nuevoCambioEstado = CambioEstado(
-            evento=self,
-            estado=estado,
-            empleado=empleado,
-            fechaHoraInicio=fechaHora
-        )
-        nuevoCambioEstado.save()
-        self.cambioEstado.add(nuevoCambioEstado)
-        return nuevoCambioEstado
     
-    def bloquear(self, fechaHora):
-        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-        if cambioEstadoActual:
-            cambioEstadoActual.setFechaHoraFin(fechaHora)
-            self.crearCambioEstado(self)
     
-    def get_fechaHoraFin(self):
+    
+    
+    #9. Listo | Todos estos para abajo representan el getDatosEventoSismico()
+    def getFechaHoraFin(self):
         return self.fechaHoraFin
 
-    def set_fechaHoraFin(self, value):
+    def setFechaHoraFin(self, value):
         self.fechaHoraFin = value
 
-    def get_fechaHoraOcurrencia(self):
+    def getFechaHoraOcurrencia(self):
         return self.fechaHoraOcurrencia
 
-    def set_fechaHoraOcurrencia(self, value):
+    def setFechaHoraOcurrencia(self, value):
         self.fechaHoraOcurrencia = value
 
-    def get_latitudEpicentro(self):
+    def getLatitudEpicentro(self):
         return self.latitudEpicentro
 
-    def set_latitudEpicentro(self, value):
+    def setLatitudEpicentro(self, value):
         self.latitudEpicentro = value
 
-    def get_latitudHipocentro(self):
+    def getLatitudHipocentro(self):
         return self.latitudHipocentro
 
-    def set_latitudHipocentro(self, value):
+    def setLatitudHipocentro(self, value):
         self.latitudHipocentro = value
 
-    def get_longitudEpicentro(self):
+    def getLongitudEpicentro(self):
         return self.longitudEpicentro
 
-    def set_longitudEpicentro(self, value):
+    def setLongitudEpicentro(self, value):
         self.longitudEpicentro = value
 
-    def get_longitudHipocentro(self):
+    def getLongitudHipocentro(self):
         return self.longitudHipocentro
 
-    def set_longitudHipocentro(self, value):
+    def setLongitudHipocentro(self, value):
         self.longitudHipocentro = value
 
-    def get_valorMagnitud(self):
+    def getValorMagnitud(self):
         return self.valorMagnitud
 
-    def set_valorMagnitud(self, value):
+    def setValorMagnitud(self, value):
         self.valorMagnitud = value
 
-    def get_estadoActual(self):
+    def getEstadoActual(self):
         return self.estadoActual
 
-    def set_estadoActual(self, value):
+    def setEstadoActual(self, value):
         self.estadoActual = value
 
-    def get_alcanceSismo(self):
+    def getAlcanceSismo(self):
         return self.alcanceSismo
 
-    def set_alcanceSismo(self, value):
+    def setAlcanceSismo(self, value):
         self.alcanceSismo = value
 
-    def get_clasificacion(self):
+    def getClasificacion(self):
         return self.clasificacion
 
-    def set_clasificacion(self, value):
+    def setClasificacion(self, value):
         self.clasificacion = value
 
-    def get_origenGeneracion(self):
+    def getOerigenGeneracion(self):
         return self.origenGeneracion
 
-    def set_origenGeneracion(self, value):
+    def setOrigenGeneracion(self, value):
         self.origenGeneracion = value
 
-    def get_serieTemporal(self):
+    def getSerieTemporal(self):
         return self.serieTemporal.all()
 
-    def set_serieTemporal(self, series):
+    def setSerieTemporal(self, series):
         self.serieTemporal.set(series)
 
-    def get_cambioEstado(self):
+    def getCambioEstado(self):
         return self.cambioEstado.all()
 
-    def set_cambioEstado(self, cambios):
+    def setCambioEstado(self, cambios):
         self.cambioEstado.set(cambios)
 
-    def get_analistaSuperior(self):
+    def getAnalistaSuperior(self):
         return self.analistaSuperior
 
-    def set_analistaSuperior(self, value):
+    def setAnalistaSuperior(self, value):
         self.analistaSuperior = value

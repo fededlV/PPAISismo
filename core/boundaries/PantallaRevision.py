@@ -5,13 +5,17 @@ from ..entities.CambioEstado import *
 from ..control.GestorRevision import GestorRevision
 from django.shortcuts import render
 
-
+#1. Listo
 def opcRegistrarResRevisionMan(request):
-    pass
+    gestor = GestorRevision()
+    eventosSismicosAd = gestor.tomarOpcSeleccionada()
+    return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
 
+#2. Listo
 def habilitarPantalla(request):
     return render(request, 'home.html')
 
+#11. Listo 
 def mostrarEventosAD(request):
     gestor = GestorRevision()
     # Supón que tienes una función para obtener todos los eventos
@@ -19,19 +23,32 @@ def mostrarEventosAD(request):
     # Ahora gestor.eventosSismicosAd es una lista de diccionarios ordenados
     return render(request, 'pantallaRevision.html', {'eventos': eventos})
 
+#12. Listo
 def solicitarSeleccion():pass
 
-
-def tomarEvento(request, evento_id=None):
+#13. Listo
+def tomarEvento(request):
     if request.method == 'POST':
-        evento_id = request.POST.get('evento_id')
-        gestor = GestorRevision()
-        gestor.tomarEvento(evento_id)
-        print("(: Evento bloqueado exitosamente")
-        return redirect('tomarOpcSeleccionada')
+        seleccionado = request.POST.get("evento_seleccionado")
+        if seleccionado: 
+            fecha, lat, lon = seleccionado.split('|')
+            gestor = GestorRevision()
+            gestor.tomarOpcSeleccionada() # Esto lo que hace es que se cargue la lista de eventos sismicos activos en la base de datos.
+            eventoSel = gestor.tomarEvento(fecha, lat, lon)
+        
+        return mostrarAlcance(eventoSel) #Esto hay q cambiarlo 
     else:
         # Si se accede por GET, redirigir a la pantalla de selección
-        return redirect('tomarOpcSeleccionada')
+        return HttpResponse('Esta vista solo admite solicitudes POST')
+    
+def mostrarAlcance():
+    return mostrarClasificacion()
+
+def mostrarClasificacion():
+    return mostrarDatosOrigen()
+
+def mostrarDatosOrigen(): 
+    return permitirVisualizarMapa()
     
 def permitirVisualizarMapa(request): 
     if request.method == 'POST':

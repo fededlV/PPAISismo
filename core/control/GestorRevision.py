@@ -12,6 +12,7 @@ from typing import List
 class GestorRevision:
     def __init__(self):
         self.eventos = EventoSismico.objects.all()  # Obtiene todos los eventos sismicos
+        self.estados = Estado.objects.all()
         self.eventosSismicosAd = []
         self.eventoSismicoSeleccionado = None
         self.alcanceEvento = None
@@ -33,19 +34,24 @@ class GestorRevision:
         
         return HttpResponse(f"Opcion seleccionada: {opcion}") """
     
+    #3. Listo
     def tomarOpcSeleccionada(self): 
-        return self.ordenarEventos(self)
+        eventos = self.eventos  # Obtiene todos los eventos sismicos
+        self.buscarEventosSismicos()
+        mostraDatos = self.mostrarDatosEventos()
+        self.eventosSismicosAd = self.ordenarEventos()
+        return self.eventosSismicosAd
     
-    # Funcion para buscar los eventos sismicos auto detectados. 
-    def buscarEventosSismicos(self, eventos) -> List:
+    #4. Listo | Funcion para buscar los eventos sismicos auto detectados. 
+    def buscarEventosSismicos(self):
         eventos = self.eventos #Agarra el atributo que contiene los eventos 
         eventosAD = [] #Lista de eventos sismicos auto detectados
         for evento in eventos:
-            if evento.estado.ambitoEventosSismico() and evento.estado.esAutoDetectado():
+            if evento.obtenerEventosAD():
                 eventosAD.append(evento)
         self.eventosSismicosAd = eventosAD
 
-    
+    #8. Listo
     def mostrarDatosEventos(self):
         eventosAD = self.eventosSismicosAd
         eventoDatos = []
@@ -68,9 +74,10 @@ class GestorRevision:
             }
             eventoDatos.append(eventoData)
         self.eventosSismicosAd = eventoDatos
+        
             
         
-    
+    #10. Listo
     def ordenarEventos(self):
         """
         Ordena los eventos sismicos por fecha y hora de ocurrencia.
@@ -78,62 +85,76 @@ class GestorRevision:
         :return: Lista de eventos sismicos ordenados.
         """
         eventosAD = self.eventosSismicosAd
-        eventosAD.sort(key=lambda x: x.fechaHoraOcurrencia, reverse=True)
+        eventosAD.sort(key=lambda x: x["fechaHoraOcurrencia"], reverse=True)
+
         return eventosAD
     
-    
-    def tomarEvento1(evento_id: int) -> HttpResponse:
+    #14. Listo | obtiene la fecha, latitud y longitud 
+    def tomarEvento(self, fecha, lat, lon):
         """
         Toma un evento sismico por su ID.
         :param evento_id: ID del evento sismico.
         :return: HttpResponse con el evento sismico.
         """
-        from PPAISismo.core.entities.EventoSismico import EventoSismico
-        evento = EventoSismico.objects.get(id=evento_id)
-        return HttpResponse(f"Evento Sismico tomado: {evento}")
-
-    @staticmethod
-    def buscarEstadoBloqueado(evento: EventoSismico):
+        print("Iniciada la busqueda del evento sismico")
+        print(self.eventosSismicosAd)
+        print(f"Fecha: {fecha}, Latitud: {lat}, Longitud: {lon}")
+        for evento in self.eventosSismicosAd: #Esta busqueda mejorarla. 
+            if (str(evento["fechaHoraOcurrencia"]) == fecha and
+                str(evento["latitudEpicentro"]) == lat and
+                str(evento["longitudEpicentro"]) == lon):
+                self.eventoSismicoSeleccionado = evento 
+                print("Evento sismico encontrado")
+                self.buscarEstadoBloqueado()
+                self.obtenerFechaHoraActual()
+                self.bloquearEvento()
+                print("Secuencia ejecutada correctamente")
+                return self.eventoSismicoSeleccionado
+        print("No se encontró el evento sismico con los datos proporcionados")
+        return None
+        
+    #15. 
+    def buscarEstadoBloqueado(self):
         """
         Busca el estado bloqueado de un evento sismico.
         :param evento: Evento sismico.
         :return: Estado bloqueado del evento sismico.
         """
-        from ..entities.Estado import Estado
-        estados = Estado.objects.all()
-        for estado_obj in estados:
+        print("(: Buscando estado bloqueado del evento sismico")
+        for estado_obj in self.estados:
             if estado_obj.esAmbitoEventoSismico() and estado_obj.esBloqueado():
+                print("Se encontro un estado bloqueado") 
                 return estado_obj
         return None
 
-    # cambiar el nombre a obtenerFechaHoraActual()
-    @staticmethod
-    def obtenerFechaYHoraActual() -> datetime:
+    #18. 
+    def obtenerFechaYHoraActual(self):
         """
         Obtiene la fecha y hora actual.
         :return: Fecha y hora actual.
         """
-        return timezone.now()
+        print("(: Obteniendo fecha y hora actual")
+        self.fechaHoraActual = timezone.now()
+        return self.fechaHoraActual
     
 
-    @staticmethod
-    def bloquearEvento(eventoBloqueado: EventoSismico) -> None:
+    def bloquearEvento(self):
         """
         Cambia el estado de un evento sismico a bloqueado.
         :param eventoBloqueado: Evento sismico a bloquear.
         :param fechaYHoraActual: Fecha y hora actual.
         """
-        eventoBloqueado = eventoBloqueado.bloquear()
-        mostrarAlcance = eventoBloqueado.mostrarAlcance()
+        return self.eventoSismicoSeleccionado.bloquear(self.fechaHoraActual)
+        
         
           
     
-    @staticmethod
+    """ @staticmethod
     def tomarEvento(evento_id: int) -> None:
-        """
+        
         Cambia el estado de un evento sismico a bloqueado.
         :param evento_id: ID del evento sismico a bloquear.
-        """
+        
         try:
             evento = EventoSismico.objects.get(id=evento_id)
             estado_bloqueado = GestorRevision.buscarEstadoBloqueado(evento)
@@ -147,7 +168,7 @@ class GestorRevision:
 
             
         except EventoSismico.DoesNotExist:
-            print(f"(: No se encontró el evento con ID {evento_id}")
+            print(f"(: No se encontró el evento con ID {evento_id}") """
 
     @staticmethod
     def mostrarAlcance(evento: EventoSismico) -> dict:
