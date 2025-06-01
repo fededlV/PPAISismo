@@ -121,47 +121,47 @@ class GestorRevision:
     def tomarAccionRechazarEvento(self, opcion):
         return opcion == "Si"
 
-    @staticmethod
-    def validarExistenciaDatos(self): 
+    # 60. Validar existencia de datods
+    def validarExistenciaDatos(self) -> bool: 
         if not self.eventoSismicoSeleccionado:
             raise ValueError("No se ha seleccionado un evento sismico.")
         else: 
             return True
     
-    @staticmethod
-    def validarAccionSeleccionada(self): 
+    # 61. Validar accion seleccionada
+    def validarAccionSeleccionada(self) -> bool: 
         if not self.accionSeleccionada:
             raise ValueError("No se ha seleccionado una acción.")
         else:
             return True
     
-    @staticmethod
+    # 62 registrar rechazo del evento sismico ??????????????????????????????????????
     def registrarRechazoEvento(self): 
         print("(: Registrando rechazo del evento sismico")
+        return None
         #Aca no se que mas podriamos hacer en este metodo, ya que solamente seria como un disparador de todo, el cual ese todo comenzaria con el self de obtenerEmpleadoLogueado()
     
-    @staticmethod
-    def obtenerEmpleadoLogueado(usuario: Usuario): 
-        asLogueado = usuario.getAsLogueado()
-        return usuario.getAsLogueado()
+    # 63 Obtener empleado logueado
+    def obtenerEmpleadoLogueado(self, usuario: Usuario): 
+        self.asLogueado =  usuario.getAsLogueado()
     
     
-    # @staticmethod
-    # def buscarEstadoRechazado(estados: list[Estado]) -> list[Estado]:
-    #     """
-    #     Busca los estados rechazados en una lista de estados.
-    #     :param estados: Lista de objetos Estado.
-    #     :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
-    #     """
-    #     estadosRechazados = []
-    #     for estado in estados:
-    #         if estado.ambitoEventoSismico() and estado.esRechazado():
-    #             estadosRechazados.append(estado)
-    #     return estadosRechazados
+    # 67 Buscar estados rechazados
+    def buscarEstadoRechazado(self) -> list[Estado]:
+        """
+        Busca los estados rechazados en una lista de estados.
+        :param estados: Lista de objetos Estado.
+        :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
+        """
+        for estado in self.estados:
+            if estado.ambitoEventoSismico() and estado.esRechazado():
+                return estado
+        return None
                 
-    @staticmethod
-    def registrarRevision(self):
-        self.eventoSismicoSeleccionado.registrarRevision("rechazado", self.fechaHoraActual, self.asLogueado)
+    # 70 Registrar revision
+    def registrarRevision(self, estado: Estado, fechaHoraActual: datetime) -> None:
+        self.eventoSismicoSeleccionado.registrarRevision(estado=estado, fechaHoraActual=fechaHoraActual, empleado=self.asLogueado)
         
+    # 76 Fin de CU
     def finCU() -> str:
-        return "Fin de CU"
+        print("Fin de CU") 
