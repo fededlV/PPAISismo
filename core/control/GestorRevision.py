@@ -16,6 +16,9 @@ class GestorRevision:
         self.eventosSismicosAd = EventoSismico.objects.all()
         self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
         self.pantallaRevision= pantallaRevision
+        self.estados = Estado.objects.all()
+        self.accionSeleccionada = None
+        self.asLogueado = None  # Usuario logueado
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
@@ -147,7 +150,7 @@ class GestorRevision:
     
     
     # 67 Buscar estados rechazados
-    def buscarEstadoRechazado(self) -> list[Estado]:
+    def buscarEstadoRechazado(self) -> List[Estado]:
         """
         Busca los estados rechazados en una lista de estados.
         :param estados: Lista de objetos Estado.

@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import JsonResponse
 # Pantalla de Revision
+import json
 
 class PantallaRevision:
     def __init__(self):
@@ -66,11 +67,9 @@ class PantallaRevision:
     # 50 permitir visualizar mapa
     def permitirVisualizarMapa(self,request):
         if request.method == 'POST':
-            import json
             data = json.loads(request.body)
             opcion = data.get('opcion')
-            gestor = GestorRevision()
-            permitir = gestor.tomarRechazoVisualizacion(opcion)
+            permitir = self.gestor.tomarRechazoVisualizacion(opcion)
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere visualizar el mapa.</div>"
             elif opcion == 'Si':
@@ -83,8 +82,7 @@ class PantallaRevision:
     # 51 tomar rechazo de visualizar mapa
     def tomarRechazoVisualizacion(self,request): 
         opcion = request.POST.get('opcion')
-        gestor = GestorRevision()
-        permitir_modificar = gestor.tomarRechazoVisualizacion(opcion)
+        permitir_modificar = self.gestor.tomarRechazoVisualizacion(opcion)
         print(f"(: Opción seleccionada: {opcion}")
         # Puedes devolver un JsonResponse o lo que necesites
         return JsonResponse({'permitir_modificar': permitir_modificar})
@@ -94,11 +92,9 @@ class PantallaRevision:
     # 53 permitir modificar datos
     def permitirModificarDatos(self, request):
         if request.method == 'POST':
-            import json
             data = json.loads(request.body)
             opcion = data.get('opcion')
-            gestor = GestorRevision()
-            permitir = gestor.tomarRechazoModificacion(opcion)
+            permitir = self.gestor.tomarRechazoModificacion(opcion)
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere modificar datos.</div>"
             elif opcion == 'Si':
@@ -111,8 +107,7 @@ class PantallaRevision:
     # 54 permitir modificar datos
     def tomarRechazoModificacion(self, request):
         opcion = request.POST.get('opcion')
-        gestor = GestorRevision()
-        permitir_modificar = gestor.tomarRechazoModificacion(opcion)
+        permitir_modificar = self.gestor.tomarRechazoModificacion(opcion)
         print(f"(: Opción seleccionada: {opcion}")
         # Puedes devolver un JsonResponse o lo que necesites
         return JsonResponse({'permitir_modificar': permitir_modificar})
@@ -120,11 +115,9 @@ class PantallaRevision:
     # 56 solicitar accion
     def solicitarAccion(self, request):
         if request.method == 'POST':
-            import json
             data = json.loads(request.body)
             opcion = data.get('opcion')
-            gestor = GestorRevision()
-            permitir = gestor.tomarAccionRechazarEvento(opcion)
+            permitir = self.gestor.tomarAccionRechazarEvento(opcion)
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere rechazar evento.</div>"
             elif opcion == 'Si':
@@ -137,8 +130,7 @@ class PantallaRevision:
     # 57 tomar accion rechazar evento
     def tomarAccionRechazarEvento(self,request):
         opcion = request.POST.get('opcion')
-        gestor = GestorRevision()
-        permitir_modificar = gestor.tomarAccionRechazarEvento(opcion)
+        permitir_modificar = self.gestor.tomarAccionRechazarEvento(opcion)
         print(f"(: Opción seleccionada: {opcion}")
         # Puedes devolver un JsonResponse o lo que necesites
         return JsonResponse({'permitir_modificar': permitir_modificar})

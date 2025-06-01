@@ -101,3 +101,4 @@ document.getElementById('btn-si-rechazar').onclick = function() {
 document.getElementById('btn-no-rechazar').onclick = function() {
     enviarOpcionRechazarEvento('No');
 };
+
