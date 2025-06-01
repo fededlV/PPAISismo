@@ -12,9 +12,10 @@ from ..boundaries import PantallaRevision
 
 
 class GestorRevision:
-    def __init__(self, eventoSismicoSeleccionado: EventoSismico = None):
+    def __init__(self, eventoSismicoSeleccionado: EventoSismico = None, pantallaRevision:PantallaRevision=None):
         self.eventosSismicosAd = EventoSismico.objects.all()
         self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
+        self.pantallaRevision= pantallaRevision
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
@@ -108,30 +109,13 @@ class GestorRevision:
     def llamarCU18() -> str:
         return "Llamando CU 18"
 
-    @staticmethod
-    def tomarRechazoVisualizacion(opcion: str) -> bool:
-        """ 
-        Procesa el rechazo de visualización de un evento sismico.
-        :param opcion: Opción seleccionada por el usuario.
-        :return: True si la opción Visualizar, False en caso contrario.
-        """
-        if opcion == "Rechazar":
-            print("(: Opción seleccionada: Rechazar")
-            return True
-        return False
+    # 52 tomar rechazo de visualizacion del Mapa
+    def tomarRechazoVisualizacion(self, opcion):
+        return opcion == "Si"
     
-    @staticmethod
-    def tomarRechazoModificacion(opcion: str, valor_rechazo: str = "Si") -> bool:
-        """
-        Procesa el rechazo de modificación de un evento sismico.
-        :param opcion: Opción seleccionada por el usuario.
-        :param valor_rechazo: Valor que representa el rechazo (por defecto "Si").
-        :return: True si la opción es igual a valor_rechazo, False en caso contrario.
-        """
-        if opcion == valor_rechazo:
-            print(f"(: Opción seleccionada: {valor_rechazo}")
-            return True
-        return False
+    # 55 tomar rechazo de visualizacion del Mapa
+    def tomarRechazoModificacion(self, opcion):
+        return opcion == "Si"
     
     @staticmethod
     def tomarAccionRechazarEvento(self, opcion: str) -> bool:

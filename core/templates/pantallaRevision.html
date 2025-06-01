@@ -111,9 +111,49 @@
             <button type="submit">Seleccionar Evento</button>
             <button id="visualizar-mapa-btn" type="button">Visualizar mapa</button>
         </form>
+
     </main>
+
+    <!-- Modal de confirmación -->
+    <div id="modal-confirmar-mapa" style="display:none; ...">
+        <div class="modal-content">
+            <p>¿Desea visualizar el mapa?</p>
+            <button id="btn-si-mapa" type="button">Sí</button>
+            <button id="btn-no-mapa" type="button">No</button>
+        </div>
+    </div>
+    <!-- Contenedor para mensajes -->
+    <div id="mensaje-mapa"></div>
+
     <footer>
         <p>&copy; 2025</p>
     </footer>
+    <script>
+    function enviarOpcionMapa(opcion) {
+        fetch("{% url 'permitirVisualizarMapa' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ opcion: opcion })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('modal-confirmar-mapa').style.display = 'none';
+        });
+    }
+
+    document.getElementById('visualizar-mapa-btn').onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('modal-confirmar-mapa').style.display = 'flex';
+    };
+    document.getElementById('btn-si-mapa').onclick = function() {
+        enviarOpcionMapa('Si');
+    };
+    document.getElementById('btn-no-mapa').onclick = function() {
+        enviarOpcionMapa('No');
+    };
+    </script>
 </body>
 </html>

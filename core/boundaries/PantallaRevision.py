@@ -4,8 +4,8 @@ from ..entities.EventoSismico import *
 from ..entities.CambioEstado import *
 from ..control.GestorRevision import GestorRevision
 from django.shortcuts import render
-
-
+from django.contrib import messages
+from django.http import JsonResponse
 # Pantalla de Revision
 
 class PantallaRevision:
@@ -63,34 +63,43 @@ class PantallaRevision:
     def mostrarDatosOrigen(self) -> None:
         self.origen = self.gestor.eventoSismicoSeleccionado.obtenerDatosOrigen()
 
-    def permitirVisualizarMapa(request): 
+    # 50 permitir visualizar mapa
+    def permitirVisualizarMapa(self,request):
         if request.method == 'POST':
-            opcion = request.POST.get('opcion')
+            import json
+            data = json.loads(request.body)
+            opcion = data.get('opcion')
+            gestor = GestorRevision()
+            permitir = gestor.tomarRechazoVisualizacion(opcion)
             if opcion == 'No':
-                print("(: No se quiere visualizar el mapa")
-                return redirect('permitirModificarDatos')
-            else: 
-                pass
-
-    def tomarRechazoVisualizacion(request): 
+                mensaje = "<div class='alert alert-info'>No se quiere visualizar el mapa.</div>"
+            elif opcion == 'Si':
+                mensaje = "<div class='alert alert-success'>Se permite visualizar el mapa.</div>"
+            else:
+                mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"
+            return JsonResponse({'mensaje': mensaje, 'permitir': permitir})
+        return JsonResponse({'mensaje': ''})
+            
+    # 51 tomar rechazo de visualizar mapa
+    def tomarRechazoVisualizacion(self,request): 
         opcion = request.POST.get('opcion')
         gestor = GestorRevision()
         permitir_modificar = gestor.tomarRechazoVisualizacion(opcion)
         print(f"(: Opción seleccionada: {opcion}")
-        if permitir_modificar:
-            return redirect('permitirModificarDatos')
-        else:
-            pass
+        # Puedes devolver un JsonResponse o lo que necesites
+        return JsonResponse({'permitir_modificar': permitir_modificar})
+
+
+        
 
     def permitirModificarDatos(request):
         if request.method == 'POST':
             opcion = request.POST.get('opcion')
             if opcion == 'No':
                 print("(: No modifican los datos del evento")
-                return redirect('solicitarAccion')
+                return redirect('pantallaRevision')
             elif opcion == 'Si':
                 pass
-        # Si es GET, mostrar la pagina con los botones. 
         else:
             return render(request, 'permitirModificarDatos.html')
 
@@ -120,16 +129,6 @@ class PantallaRevision:
             print("(: Acción de rechazar evento tomada exitosamente")
             # Redirige a la pantalla en la que se ven los eventos sismicos. 
             return redirect('tomarAccionRechazarEvento')
-
-
-
-
-
-
-
-
-
-
 
 
 
