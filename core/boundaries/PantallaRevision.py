@@ -91,44 +91,57 @@ class PantallaRevision:
 
 
         
-
-    def permitirModificarDatos(request):
+    # 53 permitir modificar datos
+    def permitirModificarDatos(self, request):
         if request.method == 'POST':
-            opcion = request.POST.get('opcion')
+            import json
+            data = json.loads(request.body)
+            opcion = data.get('opcion')
+            gestor = GestorRevision()
+            permitir = gestor.tomarRechazoModificacion(opcion)
             if opcion == 'No':
-                print("(: No modifican los datos del evento")
-                return redirect('pantallaRevision')
+                mensaje = "<div class='alert alert-info'>No se quiere modificar datos.</div>"
             elif opcion == 'Si':
-                pass
-        else:
-            return render(request, 'permitirModificarDatos.html')
+                mensaje = "<div class='alert alert-success'>Se permite modificar datos.</div>"
+            else:
+                mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"
+            return JsonResponse({'mensaje': mensaje, 'permitir': permitir})
+        return JsonResponse({'mensaje': ''})
 
-    def tomarRechazoModificacion(self,request):
+    # 54 permitir modificar datos
+    def tomarRechazoModificacion(self, request):
         opcion = request.POST.get('opcion')
-        solicitar_accion = self.gestor.tomarRechazoModificacion(opcion)
+        gestor = GestorRevision()
+        permitir_modificar = gestor.tomarRechazoModificacion(opcion)
         print(f"(: Opción seleccionada: {opcion}")
-        if solicitar_accion:
-            return redirect('solicitarAccion')
-        else:
-            pass
+        # Puedes devolver un JsonResponse o lo que necesites
+        return JsonResponse({'permitir_modificar': permitir_modificar})
 
-    def solicitarAccion(request):
+    # 56 solicitar accion
+    def solicitarAccion(self, request):
         if request.method == 'POST':
-            opcion = request.POST.get('opcion')
-            if opcion == 'Rechazar':
-                print("(: Se solicita la acción de rechazar evento")
-                # return redirect('tomarEvento1')
-            elif opcion == 'Validar':
-                pass
-
-    def tomarAccionRechazarEvento(request):
+            import json
+            data = json.loads(request.body)
+            opcion = data.get('opcion')
+            gestor = GestorRevision()
+            permitir = gestor.tomarAccionRechazarEvento(opcion)
+            if opcion == 'No':
+                mensaje = "<div class='alert alert-info'>No se quiere rechazar evento.</div>"
+            elif opcion == 'Si':
+                mensaje = "<div class='alert alert-success'>Se quiere rechazar evento.</div>"
+            else:
+                mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"
+            return JsonResponse({'mensaje': mensaje, 'permitir': permitir})
+        return JsonResponse({'mensaje': ''})
+    
+    # 57 tomar accion rechazar evento
+    def tomarAccionRechazarEvento(self,request):
         opcion = request.POST.get('opcion')
-        accionRechazar = GestorRevision.tomarAccionRechazarEvento(opcion)
+        gestor = GestorRevision()
+        permitir_modificar = gestor.tomarAccionRechazarEvento(opcion)
         print(f"(: Opción seleccionada: {opcion}")
-        if accionRechazar:
-            print("(: Acción de rechazar evento tomada exitosamente")
-            # Redirige a la pantalla en la que se ven los eventos sismicos. 
-            return redirect('tomarAccionRechazarEvento')
+        # Puedes devolver un JsonResponse o lo que necesites
+        return JsonResponse({'permitir_modificar': permitir_modificar})
 
 
 

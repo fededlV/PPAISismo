@@ -12,7 +12,8 @@ urlpatterns = [
     path('permitirVisualizarMapa/', pantallaRevision.permitirVisualizarMapa, name='permitirVisualizarMapa'),
     path('tomarRechazoVisualizacion/',pantallaRevision.tomarRechazoVisualizacion, name='tomarRechazoVisualizacion'),
     
-    path('permitirModificarDatos/', PantallaRevision.permitirModificarDatos, name='permitirModificarDatos'),
-    path('solicitarAccion/', PantallaRevision.solicitarAccion, name='solicitarAccion'),
+    path('permitirModificarDatos/', pantallaRevision.permitirModificarDatos, name='permitirModificarDatos'),
+    
+    path('solicitaraccion/', pantallaRevision.solicitarAccion, name='solicitaraccion'),
     path('tomarAccionRechazarEvento/', PantallaRevision.tomarAccionRechazarEvento, name='tomarAccionRechazarEvento'),
 ]

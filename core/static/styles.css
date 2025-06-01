@@ -184,7 +184,7 @@ footer {
 
 /*Visualizar mapa*/
 /* Modal styles */
-#modal-confirmar-mapa {
+#modal-confirmar-mapa, #modal-modificar-mapa, #modal-rechazar-evento {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -193,7 +193,7 @@ footer {
     align-items: center;
     justify-content: center;
 }
-#modal-confirmar-mapa .modal-content {
+#modal-confirmar-mapa .modal-content , #modal-modificar-mapa .modal-content, #modal-rechazar-evento .modal-content{
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
@@ -201,7 +201,7 @@ footer {
     margin: auto;
     text-align: center;
 }
-#modal-confirmar-mapa button {
+#modal-confirmar-mapa button , #modal-modificar-mapa button, #modal-rechazar-evento button{
     margin: 0 1rem;
 }
 button, button[type="submit"] {

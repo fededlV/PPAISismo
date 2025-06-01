@@ -117,18 +117,9 @@ class GestorRevision:
     def tomarRechazoModificacion(self, opcion):
         return opcion == "Si"
     
-    @staticmethod
-    def tomarAccionRechazarEvento(self, opcion: str) -> bool:
-        """
-        Procesa la acción de rechazar un evento sismico.
-        :param opcion: Opción seleccionada por el usuario.
-        :return: True si la opción es "Rechazar", False en caso contrario.
-        """
-        if opcion == "Rechazar":
-            print("(: Opción seleccionada: Rechazar")
-            self.accionSeleccionada = opcion
-            return True
-        return False
+    # 58 tomar accion rechazar evento
+    def tomarAccionRechazarEvento(self, opcion):
+        return opcion == "Si"
 
     @staticmethod
     def validarExistenciaDatos(self): 
@@ -172,6 +163,5 @@ class GestorRevision:
     def registrarRevision(self):
         self.eventoSismicoSeleccionado.registrarRevision("rechazado", self.fechaHoraActual, self.asLogueado)
         
-    @staticmethod
     def finCU() -> str:
         return "Fin de CU"
