@@ -10,6 +10,7 @@ class OrigenDeGeneracion(models.Model):
     def __str__(self):
         return f"Evento {self.id} - {self.nombre}"
     
+    # 35
     def getDatosOrigen(self):
         return {
             'nombre': self.nombre,

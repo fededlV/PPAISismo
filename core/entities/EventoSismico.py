@@ -36,10 +36,6 @@ class EventoSismico(models.Model):
 
     # 5 Obtener eventos sismicos
     def obtenerEventosAd(self):
-        """
-        Obtiene los eventos sismicos activos en la base de datos.
-        :return: Lista de eventos sismicos activos.
-        """
         eventosSismicos = EventoSismico.objects.all()
         ambitoEstadoSismico = []
         for evento in eventosSismicos:
@@ -51,10 +47,6 @@ class EventoSismico(models.Model):
     
     # 9 Obtener datos del evento sismico
     def getDatosEventoSismico(self):
-        """
-        Obtiene los datos del evento sismico.
-        :return: Diccionario con los datos del evento sismico.
-        """
         return {
             'id': self.id,
             'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
@@ -76,22 +68,17 @@ class EventoSismico(models.Model):
 
     # 26 Mostrar alcance
     def mostrarAlcance(self):
-        """
-        Muestra el alcance del evento sismico.
-        :return: Alcance del evento sismico.
-        """
         return self.alcanceSismico.getDatosAlcance()
     
+    # 30 Obtener clasificacion
     def obtenerDatosClasificacion(self):
-        """
-        Obtiene los datos de la clasificación del evento sismico.
-        :return: Diccionario con los datos de la clasificación.
-        """
         return self.clasificacion.getDatosClasificacion()
     
+    # 34 Obtener origen
     def obtenerDatosOrigen(self):
-        return self.origen.getDatosOrigen()
+        return self.origenGeneracion.getDatosOrigen()
     
+    # 38 Obtener datos serie y muestras
     def obtenerDatosSerieYmuestra(self):
         return [serie.obtenerDatosMuestras() for serie in self.serieTemporal.all()]
 

@@ -33,12 +33,39 @@ def tomarEvento(request):
         evento_id = request.POST.get('evento_id')
         gestor = GestorRevision()
         gestor.tomarEvento(evento_id)
-        print("(: Evento bloqueado exitosamente")
-        return redirect('opcRegistrarResRevisionMan')
+        eventosSismicosAd = gestor.tomarOpcSeleccionada()
+        alcance = mostrarAlcance(evento_id)  # Usamos el método separado
+        clasificacion=mostrarClasificacion(evento_id)
+        origen=mostrarDatosOrigen(evento_id)
+
+        return render(request, 'pantallaRevision.html', {
+            'eventos': eventosSismicosAd,
+            'alcance': alcance,
+            'clasificacion': clasificacion,
+            'origen': origen
+        })
     else:
         # Si se accede por GET, redirigir a la pantalla de selección
         return redirect('tomarOpcSeleccionada')
     
+# 28 mostrar alcance
+def mostrarAlcance(evento_id):
+    gestor = GestorRevision()
+    gestor.eventoSismicoSeleccionado = EventoSismico.objects.get(id=evento_id)
+    return gestor.mostrarAlcance()
+    
+# 32 mostrar clasificacion
+def mostrarClasificacion(evento_id):
+    gestor = GestorRevision()
+    gestor.eventoSismicoSeleccionado = EventoSismico.objects.get(id=evento_id)
+    return gestor.obtenerClasificacion()
+    
+# 36 mostrar datos origen
+def mostrarDatosOrigen(evento_id):
+    gestor = GestorRevision()
+    gestor.eventoSismicoSeleccionado = EventoSismico.objects.get(id=evento_id)
+    return gestor.obtenerOrigen()
+
 def permitirVisualizarMapa(request): 
     if request.method == 'POST':
         opcion = request.POST.get('opcion')

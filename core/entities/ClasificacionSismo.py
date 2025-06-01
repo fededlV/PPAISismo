@@ -7,7 +7,8 @@ class ClasificacionSismo(models.Model):
 
     def __str__(self):
         return f"Alcance {self.nombre}"
-
+    
+    # 31
     def getDatosClasificacion(self):
         return {
             'kmProfundidadDesde': self.kmProfundidadDesde,

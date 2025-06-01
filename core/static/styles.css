@@ -152,3 +152,32 @@ footer {
         font-size: 1.1rem;
     }
 }
+
+/*ALCANCE*/
+
+/* Alerta de alcance del evento */
+.alcance-table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+    background: #f8fbff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.alcance-table th, .alcance-table td {
+    padding: 0.7rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.alcance-table th {
+    background: #eaf6ff;
+    color: #2d3e50;
+    font-weight: 600;
+    width: 140px;
+}
+
+.alcance-table tr:last-child td {
+    border-bottom: none;
+}

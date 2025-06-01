@@ -17,9 +17,6 @@ class GestorRevision:
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
-        """
-        Toma la opción seleccionada por el usuario y actualiza la lista ordenada de eventos sísmicos.
-        """
         self.buscarEventosSismicos()
         mostrarDatosEventos = self.mostrarDatosEventos()
         self.eventosSismicosAd = self.ordenarPorFechaYHoraOcurrencia(mostrarDatosEventos)
@@ -27,65 +24,21 @@ class GestorRevision:
 
     # 4 Buscar eventos sísmicos
     def buscarEventosSismicos(self) -> List[EventoSismico]:
-        """
-        Recupera los eventos sísmicos desde la capa de entidades.
-        """
         self.eventosSismicosAd = EventoSismico.obtenerEventosAd(self)
 
-
-    # 10 Ordenar eventos sismicos
-    def ordenarPorFechaYHoraOcurrencia(self, eventos: List[dict]) -> List[dict]:
-        """
-        Ordena los eventos sísmicos por fecha de ocurrencia descendente.
-        """
-        return sorted(eventos, key=lambda evento: evento['fechaHoraOcurrencia'], reverse=True)
-
-    
     # 8 Mostrar datos de eventos
     def mostrarDatosEventos(self) -> List[dict]: 
-        """
-        Muestra los datos de los eventos sismicos.
-        :return: Lista de diccionarios con los datos de los eventos sismicos.
-        """
         datosEventos = []
         for i in self.eventosSismicosAd:
             datosEventos.append(i.getDatosEventoSismico())
         return datosEventos  
 
-    # 15 Buscar estado bloqueado
-    def buscarEstadoBloqueado(self):
-        estados = Estado.objects.all()
-        for estado in estados:
-            if estado.ambitoEventoSismico() and estado.esBloqueado():
-                return estado
-        return None
+    # 10 Ordenar eventos sismicos
+    def ordenarPorFechaYHoraOcurrencia(self, eventos: List[dict]) -> List[dict]:
+        return sorted(eventos, key=lambda evento: evento['fechaHoraOcurrencia'], reverse=True)
 
-    # 18 Obtener fecha y hora actual
-    @staticmethod
-    def obtenerFechaHoraActual() -> datetime:
-        """
-        Obtiene la fecha y hora actual.
-        :return: Fecha y hora actual.
-        """
-        return timezone.now()
-    
-    # 19 Bloquear evento
-    def bloquearEvento(self, fechaHoraActual: datetime, estado: Estado) -> None:
-        """
-        Cambia el estado de un evento sismico a bloqueado.
-        :param eventoBloqueado: Evento sismico a bloquear.
-        :param fechaYHoraActual: Fecha y hora actual.
-        """
-
-        eventoSismicoSeleccionado = self.eventoSismicoSeleccionado
-        eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
-          
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
-        """
-        Cambia el estado de un evento sismico a bloqueado.
-        :param evento_id: ID del evento sismico a bloquear.
-        """
         self.eventoSismicoSeleccionado = self.eventosSismicosAd.get(id=evento_id)
         try:
             estado_bloqueado = self.buscarEstadoBloqueado()
@@ -97,37 +50,48 @@ class GestorRevision:
                 
         except EventoSismico.DoesNotExist:
             print(f"(: No se encontró el evento con ID {evento_id}")
+            
+    # 15 Buscar estado bloqueado
+    def buscarEstadoBloqueado(self):
+        estados = Estado.objects.all()
+        for estado in estados:
+            if estado.ambitoEventoSismico() and estado.esBloqueado():
+                return estado
+        return None
 
+    # 18 Obtener fecha y hora actual
+    @staticmethod
+    def obtenerFechaHoraActual() -> datetime:
+        return timezone.now()
+    
+    # 19 Bloquear evento
+    def bloquearEvento(self, fechaHoraActual: datetime, estado: Estado) -> None:
+        eventoSismicoSeleccionado = self.eventoSismicoSeleccionado
+        eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
+          
     # 25 Mostrar alcance
     def mostrarAlcance(self) -> dict:
-        """
-        Muestra el alcance del evento sismico.
-        :param evento: Evento sismico.
-        :return: Diccionario con los datos del alcance del evento sismico.
-        """
         return self.eventoSismicoSeleccionado.mostrarAlcance()
 
-    # cambiar el nombre a obtenerClasificacion()
-    @staticmethod
-    def obtenerClasificacion(evento: EventoSismico) -> dict:
-        """
-        Obtiene los datos de la clasificación del evento sismico.
-        :param evento: Evento sismico.
-        :return: Diccionario con los datos de la clasificación del evento sismico.
-        """
-        return evento.obtenerDatosClasificacion()
+    # 29 obtener clasificacion
+    def obtenerClasificacion(self) -> dict:
+        return self.eventoSismicoSeleccionado.obtenerDatosClasificacion()
     
-    @staticmethod
-    def obtenerOrigen(evento: EventoSismico) -> dict:
-        return evento.obtenerDatosOrigen()
+    # 33 obtener origen
+    def obtenerOrigen(self) -> dict:
+        return self.eventoSismicoSeleccionado.obtenerDatosOrigen()
+    
+    # 37 obtener datos de serie y muestra
+    def obtenerDatosSerieYMuestra(self) : 
+        return self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
+    
+    
     
     @staticmethod
     def obtenerDatosEstacion(evento: EventoSismico) -> dict:
         return evento.obtenerDatosEstacion()
     
-    @staticmethod
-    def obtenerDatosSerieYMuestra(evento: EventoSismico) : 
-        return evento.obtenerDatosSerieYMuestra()
+
 
     @staticmethod
     def obtenerDatosEstacion(): pass
