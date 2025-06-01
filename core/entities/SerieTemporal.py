@@ -24,8 +24,12 @@ class SerieTemporal(models.Model):
     
     # 39
     def obtenerDatosMuestras(self):
-        return [muestra.obtenerDenominacionYValor() for muestra in self.muestraSismica.all()]
+        if self.muestraSismica:
+            return [self.muestraSismica.obtenerDenominacionYValor()]
+        else:
+            return []
 
+    # 45
     def obtenerDatosEstacion(self):
         return self.sismografo.obtenerDatosEstacion()
 

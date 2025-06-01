@@ -11,6 +11,7 @@ class TipoDeDato(models.Model):
     class Meta:
         app_label = 'core'
 
+    #42
     def obtenerDenominacionYValor(self): 
         return f"{self.denominacion} ({self.valorUmbral})"
 

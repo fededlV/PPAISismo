@@ -8,7 +8,8 @@ class DetalleMuestraSismica(models.Model):
         return f"Evento {self.id} - {self.valor}"
     class Meta:
         app_label = 'core'
-
+    
+    # 41
     def obtenerDenominacionYValor(self):
         return self.tipoDato.obtenerDenominacionYValor()
 

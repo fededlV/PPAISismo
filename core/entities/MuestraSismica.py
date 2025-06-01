@@ -13,7 +13,7 @@ class MuestraSismica(models.Model):
 
     def __str__(self):
         return f"Evento {self.id} - {self.fechaHoraMuestra}"
-    
+    # 40
     def obtenerDenominacionYValor(self):
         return self.detallesMuestras.obtenerDenominacionYValor()
 

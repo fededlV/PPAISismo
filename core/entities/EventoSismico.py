@@ -81,7 +81,8 @@ class EventoSismico(models.Model):
     # 38 Obtener datos serie y muestras
     def obtenerDatosSerieYmuestra(self):
         return [serie.obtenerDatosMuestras() for serie in self.serieTemporal.all()]
-
+    
+    # 44 Obtener datos estacion
     def obtenerDatosEstacion(self):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
 

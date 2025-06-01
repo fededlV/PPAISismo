@@ -13,5 +13,6 @@ class EstacionSismologica(models.Model):
     class Meta:
         app_label = 'core'
 
+    # 47
     def getCodigo(self):
         return self.codigoEstacion

@@ -8,6 +8,7 @@ from ..entities.Estado import Estado
 from ..entities.Usuario import Usuario
 from typing import List
 from ..entities.Estado import Estado
+from ..boundaries import PantallaRevision
 
 
 class GestorRevision:
@@ -85,21 +86,25 @@ class GestorRevision:
     def obtenerDatosSerieYMuestra(self) : 
         return self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
     
+    # 43 obtener datos estacion
+    def obtenerDatosEstacion(self):
+        return self.eventoSismicoSeleccionado.obtenerDatosEstacion()
     
+    # 44 clasificar por estacion
+    def clasificarPorEstacion(self):
+        if not self.eventoSismicoSeleccionado:
+            raise ValueError("No se ha seleccionado un evento sismico.")
+        resultado = {}
+        for serie in self.eventoSismicoSeleccionado.serieTemporal.all():
+            estacion = getattr(serie.sismografo, 'estacion', None)
+            if estacion:
+                nombre_estacion = str(estacion)
+                if nombre_estacion not in resultado:
+                    resultado[nombre_estacion] = []
+                resultado[nombre_estacion].append(serie)
+        return resultado
     
-    @staticmethod
-    def obtenerDatosEstacion(evento: EventoSismico) -> dict:
-        return evento.obtenerDatosEstacion()
-    
-
-
-    @staticmethod
-    def obtenerDatosEstacion(): pass
-    
-    @staticmethod
-    def clasificarPorEstacion() : pass
-    
-    @staticmethod
+    # 49 llamar CU 18
     def llamarCU18() -> str:
         return "Llamando CU 18"
 
