@@ -16,7 +16,6 @@ class CambioEstado(models.Model):
 
     # 21. Es actual
     def esActual(self):
-        """Retorna True si este cambio de estado es el actual."""
         return self.fechaHoraFin is None
 
     # 22. Set fecha y hora de Fin
