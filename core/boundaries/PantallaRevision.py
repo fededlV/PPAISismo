@@ -14,24 +14,26 @@ class PantallaRevision:
         self.alcance = None
         self.clasificacion = None
         self.origen = None
+        self.eventosAd = None
         
     # 1 Opcion Registrar Res Revicion Manual
     def opcRegistrarResRevisionMan(self, request):
         gestor = GestorRevision()
         eventosSismicosAd = gestor.tomarOpcSeleccionada()
+        self.habilitarPantalla()
         return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
     
     # 2
-    def habilitarPantalla():
+    def habilitarPantalla(self):
         return "Pantalla habilitada"
 
     # 11
-    def mostrarEventosAD():
-        pass
+    def mostrarEventosAD(self):
+        return self.eventosAd
 
     # 12
     def solicitarSeleccion():
-        pass
+        return "Solicitar seleccion"
 
     # 13 Tomar eventos seleccionado
     def tomarEvento(self, request):
