@@ -87,16 +87,28 @@ class EventoSismico(models.Model):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
 
     def registrarRevision(self, fechaHoraActual, estado, empleado):
-        self.crearCE(estado, fechaHoraActual,empleado)
+        self.crearCambioEstado(estado, fechaHoraActual, empleado)
 
-    def crearCE(self, estado: Estado, fechaHora: datetime, empleado=None):
-        # Cerrar el cambio de estado actual si existe
+    # 74
+    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
         cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
         if cambioEstadoActual:
             cambioEstadoActual.setFechaHoraFin(fechaHora)
             cambioEstadoActual.save()
 
-        # Crear el nuevo cambio de estado
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=empleado,
+            fechaHoraInicio=fechaHora,
+            fecha_cambio=fechaHora 
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado
+    
+    # 23 Crear cambio de estado
+    def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
         nuevoCambioEstado = CambioEstado(
             evento=self,
             estado=estado,
@@ -108,11 +120,11 @@ class EventoSismico(models.Model):
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
 
+    # 20
     def bloquear(self, fechaHoraActual: datetime, estado: Estado) -> None:
         for i in self.cambioEstado.all():
             if i.esActual():
                 i.setFechaHoraFin(fechaHoraActual)
                 print(f"(: Cambio de estado actualizado: {i}")
                 i.save()
-        # Primero crea el cambio de estado
         self.crearCE(estado, fechaHoraActual)
