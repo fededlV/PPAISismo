@@ -97,6 +97,9 @@ document.getElementById('rechazar-btn').onclick = function(e) {
 };
 document.getElementById('btn-si-rechazar').onclick = function() {
     enviarOpcionRechazarEvento('Si');
+    setTimeout(function() {
+        window.location.href = '/opcRegistrarResRevisionMan';
+    }, 500);
 };
 document.getElementById('btn-no-rechazar').onclick = function() {
     enviarOpcionRechazarEvento('No');
