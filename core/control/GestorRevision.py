@@ -50,6 +50,7 @@ class GestorRevision:
             if estado_bloqueado:
                 fechaYHoraActual = self.obtenerFechaHoraActual()
                 self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
+                self.eventoSismicoSeleccionado.estadoActual = estado_bloqueado
                 print(f"(: Evento {evento_id} bloqueado exitosamente")
                 return self.mostrarAlcance()
                 
@@ -148,6 +149,7 @@ class GestorRevision:
         self.registrarRevision(estadosRechazado,fechaHoraActual,self.asLogueado.empleado)
         self.finCU()
         print()
+        print(estadosRechazado)
         print(empleado)
         print(fechaHoraActual)
         print(estadosRechazado)

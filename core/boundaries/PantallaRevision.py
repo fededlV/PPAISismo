@@ -129,6 +129,7 @@ class PantallaRevision:
                 mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"
             return JsonResponse({'mensaje': mensaje, 'permitir': permitir})
         return JsonResponse({'mensaje': ''})
+
     
     # 57 tomar accion rechazar evento
     def tomarAccionRechazarEvento(self,request):

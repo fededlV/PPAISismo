@@ -21,6 +21,7 @@ class Estado(models.Model):
 
     def esRechazado(self):
         return self.nombreEstado == "Rechazado"
+    
 
     class Meta:
         app_label = 'core'
