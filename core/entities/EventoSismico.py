@@ -87,16 +87,9 @@ class EventoSismico(models.Model):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
 
     def registrarRevision(self, fechaHoraActual, estado, empleado):
-        """
-        Registra la revisión del evento cambiando el estado actual y creando uno nuevo.
-        """
-        self.crearCE(estado, fechaHoraActual, empleado)
+        self.crearCE(estado, fechaHoraActual,empleado)
 
     def crearCambioEstado(self, fechaHora, estado=None, empleado=None): # Revisar logica con 20 que solapa
-        """
-        Crea un nuevo cambio de estado para el evento sismico.
-        :return: Nuevo cambio de estado creado.
-        """
         if estado:
             cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
             if cambioEstadoActual:
@@ -114,17 +107,11 @@ class EventoSismico(models.Model):
         return nuevoCambioEstado
     
     # 23 Crear cambio de estado
-    def crearCE(self, estado: Estado, fechaHora: datetime):
-        """
-        Crea un nuevo cambio de estado para el evento sismico.
-        :param estado: Estado del evento sismico.
-        :param fechaHora: Fecha y hora del cambio de estado.
-        :return: Nuevo cambio de estado creado.
-        """
+    def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
         nuevoCambioEstado = CambioEstado(
             evento=self,
             estado=estado,
-            empleado=None,
+            empleado=empleado,
             fecha_cambio=fechaHora,
             fechaHoraInicio=fechaHora
         )
@@ -132,14 +119,6 @@ class EventoSismico(models.Model):
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
 
-
-    # 20 Bloquear evento sismico
-    # def bloquear(self, fechaHora: datetime, cambioEstado: CambioEstado):
-    #     cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-    #     if cambioEstadoActual:
-    #         cambioEstadoActual.setFechaHoraFin(fechaHora)
-    #         self.crearCE(self, fechaHora=fechaHora, estado=cambioEstado)
-    
     def bloquear(self, fechaHoraActual: datetime, estado: Estado) -> None:
         # Primero crea el cambio de estado
         self.crearCE(estado, fechaHoraActual)

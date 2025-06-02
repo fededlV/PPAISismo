@@ -6,7 +6,6 @@ from ..control.GestorRevision import GestorRevision
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import JsonResponse
-# Pantalla de Revision
 import json
 
 class PantallaRevision:
@@ -118,9 +117,13 @@ class PantallaRevision:
             data = json.loads(request.body)
             opcion = data.get('opcion')
             permitir = self.gestor.tomarAccionRechazarEvento(opcion)
+
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere rechazar evento.</div>"
             elif opcion == 'Si':
+                self.gestor.validarExistenciaDatos()
+                self.gestor.validarAccionSeleccionada()
+                self.gestor.registrarRechazoEvento()
                 mensaje = "<div class='alert alert-success'>Se quiere rechazar evento.</div>"
             else:
                 mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"

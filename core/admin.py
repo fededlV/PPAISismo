@@ -29,3 +29,5 @@ admin.site.register(Usuario)
 admin.site.register(MuestraSismica)
 admin.site.register(SerieTemporal)
 
+
+

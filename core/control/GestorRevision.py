@@ -18,7 +18,7 @@ class GestorRevision:
         self.pantallaRevision= pantallaRevision
         self.estados = Estado.objects.all()
         self.accionSeleccionada = None
-        self.asLogueado = None  # Usuario logueado
+        self.asLogueado = Usuario.objects.get()  # Usuario logueado
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
@@ -64,7 +64,7 @@ class GestorRevision:
                 return estado
         return None
 
-    # 18 Obtener fecha y hora actual
+    # 18 y 66 Obtener fecha y hora actual
     @staticmethod
     def obtenerFechaHoraActual() -> datetime:
         return timezone.now()
@@ -122,6 +122,7 @@ class GestorRevision:
     
     # 58 tomar accion rechazar evento
     def tomarAccionRechazarEvento(self, opcion):
+        self.accionSeleccionada = opcion
         return opcion == "Si"
 
     # 60. Validar existencia de datods
@@ -138,33 +139,35 @@ class GestorRevision:
         else:
             return True
     
-    # 62 registrar rechazo del evento sismico ??????????????????????????????????????
+    # 62 registrar rechazo del evento sismico 
     def registrarRechazoEvento(self): 
         print("(: Registrando rechazo del evento sismico")
+        empleado = self.obtenerEmpleadoLogueado()
+        fechaHoraActual = self.obtenerFechaHoraActual()
+        estadosRechazado = self.buscarEstadoRechazado()
+        self.registrarRevision(estadosRechazado,fechaHoraActual,self.asLogueado.empleado)
+        self.finCU()
+        print()
+        print(empleado)
+        print(fechaHoraActual)
+        print(estadosRechazado)
         return None
-        #Aca no se que mas podriamos hacer en este metodo, ya que solamente seria como un disparador de todo, el cual ese todo comenzaria con el self de obtenerEmpleadoLogueado()
-    
+
     # 63 Obtener empleado logueado
-    def obtenerEmpleadoLogueado(self, usuario: Usuario): 
-        self.asLogueado =  usuario.getAsLogueado()
-    
+    def obtenerEmpleadoLogueado(self): 
+        return self.asLogueado.getAsLogueado()
     
     # 67 Buscar estados rechazados
     def buscarEstadoRechazado(self) -> List[Estado]:
-        """
-        Busca los estados rechazados en una lista de estados.
-        :param estados: Lista de objetos Estado.
-        :return: Lista de estados que son de ámbito EventoSismico y están rechazados.
-        """
         for estado in self.estados:
             if estado.ambitoEventoSismico() and estado.esRechazado():
                 return estado
         return None
                 
     # 70 Registrar revision
-    def registrarRevision(self, estado: Estado, fechaHoraActual: datetime) -> None:
-        self.eventoSismicoSeleccionado.registrarRevision(estado=estado, fechaHoraActual=fechaHoraActual, empleado=self.asLogueado)
+    def registrarRevision(self, estado: Estado, fechaHoraActual: datetime,empleado) -> None:
+        self.eventoSismicoSeleccionado.registrarRevision(estado=estado, fechaHoraActual=fechaHoraActual, empleado=empleado)
         
     # 76 Fin de CU
-    def finCU() -> str:
-        print("Fin de CU") 
+    def finCU(self):
+        return "Fin de CU"

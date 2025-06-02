@@ -11,5 +11,5 @@ class Usuario(models.Model):
     class Meta:
         app_label = 'core'
 
-    def get_as_logueado(usuario):
-        return usuario.empleado.getDatos()
+    def getAsLogueado(self):
+        return self.empleado.getDatos()
