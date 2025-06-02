@@ -15,6 +15,7 @@
         <h2>Eventos Sísmicos</h2>
         <form method="post" action="{% url 'tomarEvento' %}">
             {% csrf_token %}
+            {% if not alcance %}
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -52,6 +53,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
                 {% if alcance %}
                     <div class="alert alcance-alert" style="margin-top: 2.5rem;">
                         <strong style="display:block; margin-bottom: 0.7rem; font-size:1.1rem;">
