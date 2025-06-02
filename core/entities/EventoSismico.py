@@ -65,6 +65,24 @@ class EventoSismico(models.Model):
             'cambioEstado': self.cambioEstado,
             'analistaSuperior': self.analistaSuperior
         }
+    
+    # 74
+    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
+        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
+        if cambioEstadoActual:
+            cambioEstadoActual.setFechaHoraFin(fechaHora)
+            cambioEstadoActual.save()
+
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=empleado,
+            fechaHoraInicio=fechaHora,
+            fecha_cambio=fechaHora 
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado
 
     # 26 Mostrar alcance
     def mostrarAlcance(self):
@@ -88,24 +106,6 @@ class EventoSismico(models.Model):
 
     def registrarRevision(self, fechaHoraActual, estado, empleado):
         self.crearCambioEstado(estado, fechaHoraActual, empleado)
-
-    # 74
-    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
-        cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
-        if cambioEstadoActual:
-            cambioEstadoActual.setFechaHoraFin(fechaHora)
-            cambioEstadoActual.save()
-
-        nuevoCambioEstado = CambioEstado(
-            evento=self,
-            estado=estado,
-            empleado=empleado,
-            fechaHoraInicio=fechaHora,
-            fecha_cambio=fechaHora 
-        )
-        nuevoCambioEstado.save()
-        self.cambioEstado.add(nuevoCambioEstado)
-        return nuevoCambioEstado
     
     # 23 Crear cambio de estado
     def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
