@@ -35,14 +35,10 @@ class EventoSismico(models.Model):
 
     # 5 Obtener eventos sismicos
     def obtenerEventosAd(self):
-        eventosSismicos = EventoSismico.objects.all()
-        ambitoEstadoSismico = []
-        for evento in eventosSismicos:
-            a = evento.estadoActual.ambitoEventoSismico()
-            b = evento.estadoActual.esAutoDetectado()
-            if a and b:
-                ambitoEstadoSismico.append(evento)
-        return ambitoEstadoSismico 
+        a = self.estadoActual.ambitoEventoSismico()
+        b = self.estadoActual.esAutoDetectado()
+        c = self.estadoActual.esPendienteRevision()
+        return a and (b or c)
     
     # 9 Obtener datos del evento sismico
     def getDatosEventoSismico(self):
