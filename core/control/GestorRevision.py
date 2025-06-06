@@ -29,9 +29,9 @@ class GestorRevision:
         return self.eventosSismicosAd
 
     # 4 Buscar eventos sísmicos
-    def buscarEventosSismicos(self) -> List[EventoSismico]:
+    def buscarEventosSismicos(self) -> None:
         for i in self.eventosSismicos:
-            if i.obtenerEventosAd(self):
+            if i.obtenerEventosAd():
                 self.eventosSismicosAd.append(i)
 
 
@@ -49,7 +49,7 @@ class GestorRevision:
 
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
-        self.eventoSismicoSeleccionado = self.eventosSismicosAd.get(id=evento_id)
+        self.eventoSismicoSeleccionado = next((evento for evento in self.eventosSismicosAd if evento.id == evento_id), None)
         try:
             estado_bloqueado = self.buscarEstadoBloqueado()
             if estado_bloqueado:
