@@ -83,6 +83,19 @@ class EventoSismico(models.Model):
         nuevoCambioEstado.save()
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
+    
+    # 23 Crear cambio de estado
+    def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=empleado,
+            fecha_cambio=fechaHora,
+            fechaHoraInicio=fechaHora
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado
 
     # 26 Mostrar alcance
     def mostrarAlcance(self):
@@ -109,18 +122,6 @@ class EventoSismico(models.Model):
         self.estadoActual = estado
         self.save()
     
-    # 23 Crear cambio de estado
-    def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
-        nuevoCambioEstado = CambioEstado(
-            evento=self,
-            estado=estado,
-            empleado=empleado,
-            fecha_cambio=fechaHora,
-            fechaHoraInicio=fechaHora
-        )
-        nuevoCambioEstado.save()
-        self.cambioEstado.add(nuevoCambioEstado)
-        return nuevoCambioEstado
 
     # 20
     def bloquear(self, fechaHoraActual: datetime, estado: Estado) -> None:
