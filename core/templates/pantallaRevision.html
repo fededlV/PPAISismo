@@ -10,6 +10,7 @@
 <body>
     <header>
         <h1>Pantalla de Revisión</h1>
+        <a href="{% url 'home' %}" style="color: aliceblue;" >Cancelar CU</a>
     </header>
     <main>
         <h2>Eventos Sísmicos</h2>
@@ -110,7 +111,9 @@
                     </div>
                 {% endif %}
             </div>
+            {% if not alcance %}
             <button type="submit">Seleccionar Evento</button>
+            {% else %}
             <button id="visualizar-mapa-btn"
                     type="button"
                     data-url="{% url 'permitirVisualizarMapa' %}"
@@ -131,6 +134,7 @@
                     data-csrf="{{ csrf_token }}">
                 Rechazar evento
             </button>
+            {% endif %}
         </form>
 
     </main>

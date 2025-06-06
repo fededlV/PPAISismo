@@ -40,9 +40,9 @@ class PantallaRevision:
         if request.method == 'POST':
             evento_id = request.POST.get('evento_id')
             eventoTomado = self.gestor.tomarEvento(evento_id) # LLamo al 14 del gestor
-            self.mostrarAlcance()  # Usamos el método separado
-            self.mostrarClasificacion()  # Usamos el método separado
-            self.mostrarDatosOrigen()  # Usamos el método separado
+            self.mostrarAlcance()  
+            self.mostrarClasificacion()  
+            self.mostrarDatosOrigen()
             return render(request, 'pantallaRevision.html', {
                 'eventos': None,
                 'alcance': self.alcance,
