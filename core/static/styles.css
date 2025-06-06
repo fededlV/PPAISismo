@@ -1,0 +1,226 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6fb;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: #2d3e50;
+    color: #fff;
+    padding: 2rem 1rem 1rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+main {
+    flex: 1;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    margin-bottom: 2rem;
+}
+
+th, td {
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+}
+
+th {
+    background: #2d3e50;
+    color: #fff;
+    font-weight: 500;
+}
+
+tbody tr:nth-child(even) {
+    background: #f0f4fa;
+}
+
+tbody tr:hover {
+    background: #e2eafc;
+    transition: background 0.2s;
+}
+
+input[type="radio"] {
+    accent-color: #2d3e50;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+button[type="submit"] {
+    background: #2d3e50;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: #1a2533;
+}
+
+footer {
+    background: #2d3e50;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.95rem;
+    margin-top: auto;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    main {
+        padding: 1rem 0.5rem;
+    }
+    table, th, td {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 700px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead tr {
+        display: none;
+    }
+    tbody tr {
+        margin-bottom: 1rem;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(44, 62, 80, 0.08);
+        padding: 0.5rem;
+    }
+    td {
+        padding: 0.5rem 1rem;
+        position: relative;
+        text-align: right;
+    }
+    td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        top: 0.5rem;
+        font-weight: bold;
+        color: #2d3e50;
+        text-align: left;
+    }
+    input[type="radio"] {
+        margin-right: 0.5rem;
+    }
+}
+
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.3rem;
+    }
+    h2 {
+        font-size: 1.1rem;
+    }
+    button[type="submit"] {
+        width: 100%;
+        padding: 1rem 0;
+        font-size: 1.1rem;
+    }
+}
+
+/*ALCANCE*/
+
+/* Alerta de alcance del evento */
+.alcance-table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+    background: #f8fbff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.alcance-table th, .alcance-table td {
+    padding: 0.7rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.alcance-table th {
+    background: #eaf6ff;
+    color: #2d3e50;
+    font-weight: 600;
+    width: 140px;
+}
+
+.alcance-table tr:last-child td {
+    border-bottom: none;
+}
+
+/*Visualizar mapa*/
+/* Modal styles */
+#modal-confirmar-mapa, #modal-modificar-mapa, #modal-rechazar-evento {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+#modal-confirmar-mapa .modal-content , #modal-modificar-mapa .modal-content, #modal-rechazar-evento .modal-content{
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+}
+#modal-confirmar-mapa button , #modal-modificar-mapa button, #modal-rechazar-evento button{
+    margin: 0 1rem;
+}
+button, button[type="submit"] {
+    background: #2d3e50;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    transition: background 0.2s;
+}
+
+button:hover, button[type="submit"]:hover {
+    background: #1a2533;
+}
+
+.modal-content p{
+    margin-bottom: 1.5rem;
+}

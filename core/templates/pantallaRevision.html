@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla de Revisión</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Pantalla de Revisión</h1>
+        <a href="{% url 'home' %}" style="color: aliceblue;" >Cancelar CU</a>
+    </header>
+    <main>
+        <h2>Eventos Sísmicos</h2>
+        <form method="post" action="{% url 'tomarEvento' %}">
+            {% csrf_token %}
+            {% if not alcance %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>ID</th>
+                            <th>Fecha de Ocurrencia</th>
+                            <th>Fecha de Fin</th>
+                            <th>Latitud Epicentro</th>
+                            <th>Longitud Epicentro</th>
+                            <th>Latitud Hipocentro</th>
+                            <th>Longitud Hipocentro</th>
+                            <th>Magnitud</th>
+                            <th>Estado Actual</th>
+                            <th>Ámbito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evento in eventos %}
+                        <tr>
+                            <td data-label="Seleccionar">
+                                <input type="radio" name="evento_id" value="{{ evento.id }}" required>
+                            </td>
+                            <td data-label="ID">{{ evento.id }}</td>
+                            <td data-label="Fecha de Ocurrencia">{{ evento.fechaHoraOcurrencia }}</td>
+                            <td data-label="Fecha de Fin">{{ evento.fechaHoraFin }}</td>
+                            <td data-label="Latitud Epicentro">{{ evento.latitudEpicentro }}</td>
+                            <td data-label="Longitud Epicentro">{{ evento.longitudEpicentro }}</td>
+                            <td data-label="Latitud Hipocentro">{{ evento.latitudHipocentro }}</td>
+                            <td data-label="Longitud Hipocentro">{{ evento.longitudHipocentro }}</td>
+                            <td data-label="Magnitud">{{ evento.valorMagnitud }}</td>
+                            <td data-label="Estado Actual">{{ evento.estadoActual}}</td>
+                            <td data-label="Ámbito">{{ evento.ambitoEstado }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% if alcance %}
+                    <div class="alert alcance-alert" style="margin-top: 2.5rem;">
+                        <strong style="display:block; margin-bottom: 0.7rem; font-size:1.1rem;">
+                            Alcance del evento seleccionado:
+                        </strong>
+                        <table class="alcance-table">
+                            <tr>
+                                <th>Nombre</th>
+                                <td>{{ alcance.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripción</th>
+                                <td>{{ alcance.descripcion }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+                {% if clasificacion %}
+                    <div class="alert alcance-alert" style="margin-top: 1.5rem;">
+                        <strong style="display:block; margin-bottom: 0.7rem; font-size:1.1rem;">
+                            Clasificación del evento seleccionado:
+                        </strong>
+                        <table class="alcance-table">
+                            <tr>
+                                <th>Nombre</th>
+                                <td>{{ clasificacion.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Profundidad desde (km)</th>
+                                <td>{{ clasificacion.kmProfundidadDesde }}</td>
+                            </tr>
+                            <tr>
+                                <th>Profundidad hasta (km)</th>
+                                <td>{{ clasificacion.kmProfundidadHasta }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+                {% if origen %}
+                    <div class="alert alcance-alert" style="margin-top: 1.5rem;">
+                        <strong style="display:block; margin-bottom: 0.7rem; font-size:1.1rem;">
+                            Origen del evento seleccionado:
+                        </strong>
+                        <table class="alcance-table">
+                            <tr>
+                                <th>Nombre</th>
+                                <td>{{ origen.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripción</th>
+                                <td>{{ origen.descripcion }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+            {% if not alcance %}
+            <button type="submit">Seleccionar Evento</button>
+            {% else %}
+            <button id="visualizar-mapa-btn"
+                    type="button"
+                    data-url="{% url 'permitirVisualizarMapa' %}"
+                    data-csrf="{{ csrf_token }}">
+                Visualizar mapa
+            </button>
+
+            <button id="modificar-btn"
+                    type="button"
+                    data-url="{% url 'permitirModificarDatos' %}"
+                    data-csrf="{{ csrf_token }}">
+                Modificar datos
+            </button>
+
+            <button id="rechazar-btn"
+                    type="button"
+                    data-url="{% url 'solicitaraccion' %}"
+                    data-csrf="{{ csrf_token }}">
+                Rechazar evento
+            </button>
+            {% endif %}
+        </form>
+
+    </main>
+
+    <!-- Modal de confirmación -->
+    <div id="modal-confirmar-mapa" style="display:none; ...">
+        <div class="modal-content">
+            <p>¿Desea visualizar el mapa?</p>
+            <button id="btn-si-mapa" type="button">Sí</button>
+            <button id="btn-no-mapa" type="button">No</button>
+        </div>
+    </div>
+    <!-- Modal de confirmación para modificar datos -->
+    <div id="modal-modificar-mapa" style="display:none;">
+        <div class="modal-content">
+            <p>¿Desea modificar datos?</p>
+            <button id="btn-si-modificar" type="button">Sí</button>
+            <button id="btn-no-modificar" type="button">No</button>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para rechazar evento -->
+    <div id="modal-rechazar-evento" style="display:none;">
+        <div class="modal-content">
+            <p>¿Desea rechazar evento?</p>
+            <button id="btn-si-rechazar" type="button">Sí</button>
+            <button id="btn-no-rechazar" type="button">No</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025</p>
+    </footer>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
