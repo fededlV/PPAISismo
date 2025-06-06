@@ -24,7 +24,6 @@ class EventoSismico(models.Model):
     clasificacion = models.ForeignKey(ClasificacionSismo,on_delete=models.PROTECT,related_name='eventos_clasificados')
     origenGeneracion = models.ForeignKey(OrigenDeGeneracion,on_delete=models.PROTECT,related_name='eventos_origen')
     serieTemporal = models.ManyToManyField(SerieTemporal, related_name='eventos')
-    #Agregue esto para poder representar la relacion del evento sismico con los cambios de estado. -> FEDE
     cambioEstado = models.ManyToManyField(CambioEstado, related_name='eventos_cambios_estado')
     analistaSuperior = models.ForeignKey(Empleado, on_delete=models.PROTECT, related_name='eventos_analista_superior', null=True, blank=True)
     

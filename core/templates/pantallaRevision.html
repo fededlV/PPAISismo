@@ -10,11 +10,13 @@
 <body>
     <header>
         <h1>Pantalla de Revisión</h1>
+        <a href="{% url 'home' %}" style="color: aliceblue;" >Cancelar CU</a>
     </header>
     <main>
         <h2>Eventos Sísmicos</h2>
         <form method="post" action="{% url 'tomarEvento' %}">
             {% csrf_token %}
+            {% if not alcance %}
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -52,6 +54,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
                 {% if alcance %}
                     <div class="alert alcance-alert" style="margin-top: 2.5rem;">
                         <strong style="display:block; margin-bottom: 0.7rem; font-size:1.1rem;">
@@ -108,7 +111,9 @@
                     </div>
                 {% endif %}
             </div>
+            {% if not alcance %}
             <button type="submit">Seleccionar Evento</button>
+            {% else %}
             <button id="visualizar-mapa-btn"
                     type="button"
                     data-url="{% url 'permitirVisualizarMapa' %}"
@@ -129,6 +134,7 @@
                     data-csrf="{{ csrf_token }}">
                 Rechazar evento
             </button>
+            {% endif %}
         </form>
 
     </main>
