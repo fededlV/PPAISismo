@@ -13,7 +13,8 @@ from ..boundaries import PantallaRevision
 
 class GestorRevision:
     def __init__(self, eventoSismicoSeleccionado: EventoSismico = None, pantallaRevision:PantallaRevision=None):
-        self.eventosSismicosAd = EventoSismico.objects.all()
+        self.eventosSismicosAd = []
+        self.eventosSismicos = EventoSismico.objects.all()
         self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
         self.pantallaRevision= pantallaRevision
         self.estados = Estado.objects.all()
@@ -29,7 +30,12 @@ class GestorRevision:
 
     # 4 Buscar eventos sísmicos
     def buscarEventosSismicos(self) -> List[EventoSismico]:
-        self.eventosSismicosAd = EventoSismico.obtenerEventosAd(self)
+        for evento in self.eventosSismicos:
+            if evento.obtenerEventosAd():
+                self.eventosSismicosAd.append(evento)
+        return self.eventosSismicosAd
+
+
 
     # 8 Mostrar datos de eventos
     def mostrarDatosEventos(self) -> List[dict]: 
@@ -44,7 +50,9 @@ class GestorRevision:
 
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
-        self.eventoSismicoSeleccionado = self.eventosSismicosAd.get(id=evento_id)
+        self.eventoSismicoSeleccionado = next((evento for evento in self.eventosSismicosAd if evento.id == evento_id), None)
+        print("eventos", self.eventoSismicosAd)
+        print(f"(: Evento sismico seleccionado: {self.eventoSismicoSeleccionado}")
         try:
             estado_bloqueado = self.buscarEstadoBloqueado()
             if estado_bloqueado:
@@ -59,8 +67,7 @@ class GestorRevision:
             
     # 15 Buscar estado bloqueado
     def buscarEstadoBloqueado(self):
-        estados = Estado.objects.all()
-        for estado in estados:
+        for estado in self.estados:
             if estado.ambitoEventoSismico() and estado.esBloqueado():
                 return estado
         return None
