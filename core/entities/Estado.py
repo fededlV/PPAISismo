@@ -24,6 +24,12 @@ class Estado(models.Model):
     
     def esPendienteRevision(self):
         return self.nombreEstado == "PendienteRevision"
+    
+    def getAmbito(self):
+        return self.ambito
+
+    def getNombreEstado(self):
+        return self.nombreEstado
 
     class Meta:
         app_label = 'core'

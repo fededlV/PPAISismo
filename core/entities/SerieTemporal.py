@@ -6,11 +6,6 @@ class SerieTemporal(models.Model):
     fechaHoraInicioRegistroMuestras = models.DateTimeField()
     fechaHoraRegistro = models.DateTimeField()
     frecuenciaMuestreo = models.FloatField()
-    sismografo = models.ForeignKey(
-        Sismografo,
-        on_delete=models.CASCADE,
-        related_name='series_temporales'
-    )
     muestraSismica = models.ForeignKey(
         MuestraSismica,
         on_delete=models.CASCADE,
@@ -18,9 +13,14 @@ class SerieTemporal(models.Model):
         null=True,
         blank=True
     )
+    sismografo = models.ForeignKey(
+        Sismografo,
+        on_delete=models.CASCADE,
+        related_name='series_temporales'
+    )
 
     def __str__(self):
-        return f"Evento {self.id} - {self.fechaHoraInicioRegistroMuestras} - {self.sismografo}"
+        return f"Evento {self.id} - {self.fechaHoraInicioRegistroMuestras}"
     
     # 39
     def obtenerDatosMuestras(self):
@@ -30,6 +30,6 @@ class SerieTemporal(models.Model):
             return []
 
     # 45
-    def obtenerDatosEstacion(self):
-        return self.sismografo.obtenerDatosEstacion()
+    def obtenerDatosEstacion(self, sismografo: Sismografo): #Dependencia con sismografo. 
+        return sismografo.obtenerDatosEstacion()
 

@@ -44,15 +44,15 @@ class EventoSismico(models.Model):
     def getDatosEventoSismico(self):
         return {
             'id': self.id,
-            'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
-            'fechaHoraFin': self.fechaHoraFin,
-            'latitudEpicentro': self.latitudEpicentro,
-            'latitudHipocentro': self.latitudHipocentro,
-            'longitudEpicentro': self.longitudEpicentro,
-            'longitudHipocentro': self.longitudHipocentro,
-            'valorMagnitud': self.valorMagnitud,
-            'estadoActual': self.estadoActual.nombreEstado,
-            'ambitoEstado': self.estadoActual.ambito,  # <-- agrega esta línea
+            'fechaHoraFin': self.get_fechaHoraFin(),
+            'fechaHoraOcurrencia': self.get_fechaHoraOcurrencia(),
+            'latitudEpicentro': self.get_latitudEpicentro(),
+            'latitudHipocentro': self.get_latitudHipocentro(),
+            'longitudEpicentro': self.get_longitudEpicentro(),
+            'longitudHipocentro': self.get_longitudHipocentro(),
+            'valorMagnitud': self.get_valorMagnitud(),
+            'estadoActual': self.estadoActual.getNombreEstado(),
+            'ambitoEstado': self.estadoActual.getAmbito(),  # <-- agrega esta línea
             'alcanceSismico': self.alcanceSismico.getDatosAlcance(),
             'clasificacion': self.clasificacion.getDatosClasificacion(),
             'origenGeneracion': self.origenGeneracion.getDatosOrigen(),
@@ -123,3 +123,45 @@ class EventoSismico(models.Model):
         self.crearCambioEstado(estado=estado, fechaHora=fechaHoraActual)
         self.estadoActual = estado
         self.save()
+
+    def get_fechaHoraFin(self):
+        return self.fechaHoraFin
+
+    def get_fechaHoraOcurrencia(self):
+        return self.fechaHoraOcurrencia
+
+    def get_latitudEpicentro(self):
+        return self.latitudEpicentro
+
+    def get_latitudHipocentro(self):
+        return self.latitudHipocentro
+
+    def get_longitudEpicentro(self):
+        return self.longitudEpicentro
+
+    def get_longitudHipocentro(self):
+        return self.longitudHipocentro
+
+    def get_valorMagnitud(self):
+        return self.valorMagnitud
+
+    def get_estadoActual(self):
+        return self.estadoActual
+
+    def get_alcanceSismico(self):
+        return self.alcanceSismico
+
+    def get_clasificacion(self):
+        return self.clasificacion
+
+    def get_origenGeneracion(self):
+        return self.origenGeneracion
+
+    def get_serieTemporal(self):
+        return self.serieTemporal
+
+    def get_cambioEstado(self):
+        return self.cambioEstado
+
+    def get_analistaSuperior(self):
+        return self.analistaSuperior
