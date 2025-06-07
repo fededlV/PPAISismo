@@ -18,8 +18,7 @@ class PantallaRevision:
         
     # 1 Opcion Registrar Res Revicion Manual
     def opcRegistrarResRevisionMan(self, request):
-        gestor = GestorRevision()
-        eventosSismicosAd = gestor.tomarOpcSeleccionada()
+        eventosSismicosAd = self.gestor.tomarOpcSeleccionada()
         self.habilitarPantalla()
         return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
     
@@ -39,6 +38,7 @@ class PantallaRevision:
     def tomarEvento(self, request):
         if request.method == 'POST':
             evento_id = request.POST.get('evento_id')
+            print(f"(: Evento ID recibido: {evento_id}")
             eventoTomado = self.gestor.tomarEvento(evento_id) # LLamo al 14 del gestor
             self.mostrarAlcance()  
             self.mostrarClasificacion()  

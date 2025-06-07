@@ -9,49 +9,64 @@ from ..entities.Usuario import Usuario
 from typing import List
 from ..entities.Estado import Estado
 from ..boundaries import PantallaRevision
+from ..entities.Sesion import Sesion
 
 
 class GestorRevision:
     def __init__(self, eventoSismicoSeleccionado: EventoSismico = None, pantallaRevision:PantallaRevision=None):
-        self.eventosSismicosAd = []
+        self.eventosSismicosAd = [] # Lista de eventos sismicos auto detectados (Son objetos) 
         self.eventosSismicos = EventoSismico.objects.all()
         self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
         self.pantallaRevision= pantallaRevision
         self.estados = Estado.objects.all()
         self.accionSeleccionada = None
         self.asLogueado = Usuario.objects.get()  # Usuario logueado
+        self.sesion = Sesion(usuario=Usuario.objects.get(), fecha_inicio=timezone.now(), fecha_fin=None)  # Sesión del usuario
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
         self.buscarEventosSismicos()
+        self.eventosSismicosAd = self.ordenarPorFechaYHoraOcurrencia(self.eventosSismicosAd)
         mostrarDatosEventos = self.mostrarDatosEventos()
-        self.eventosSismicosAd = self.ordenarPorFechaYHoraOcurrencia(mostrarDatosEventos)
-        return self.eventosSismicosAd
+        print(f"(: Eventos sismicos encontrados: {self.eventosSismicosAd}")
+        return mostrarDatosEventos
 
     # 4 Buscar eventos sísmicos
     def buscarEventosSismicos(self) -> List[EventoSismico]:
+        print("Todos los eventos sismicos: ", self.eventosSismicos)
+        eventosAd =[]
         for evento in self.eventosSismicos:
+            print(f"Evento {evento.id}: obtenerEventosAd() = {evento.obtenerEventosAd()}")
             if evento.obtenerEventosAd():
-                self.eventosSismicosAd.append(evento)
-        return self.eventosSismicosAd
+                eventosAd.append(evento)
+        print("Eventos AD encontrados: ", eventosAd)
+        self.eventosSismicosAd = eventosAd
 
 
 
     # 8 Mostrar datos de eventos
     def mostrarDatosEventos(self) -> List[dict]: 
         datosEventos = []
+        print(self.eventosSismicosAd)
         for i in self.eventosSismicosAd:
             datosEventos.append(i.getDatosEventoSismico())
         return datosEventos  
 
     # 10 Ordenar eventos sismicos
-    def ordenarPorFechaYHoraOcurrencia(self, eventos: List[dict]) -> List[dict]:
-        return sorted(eventos, key=lambda evento: evento['fechaHoraOcurrencia'], reverse=True)
+    def ordenarPorFechaYHoraOcurrencia(self, eventos: List[EventoSismico]) -> List[EventoSismico]:
+        return sorted(eventos, key=lambda evento: evento.fechaHoraOcurrencia, reverse=True)
 
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
+        print("eventos: ", self.eventosSismicosAd)
+        print(f"(: Tomando evento sismico con ID: {evento_id}")
+        try:
+            evento_id = int(evento_id)  # <-- Conversión aquí
+        except (TypeError, ValueError):
+            print("ID de evento inválido:", evento_id)
+            self.eventoSismicoSeleccionado = None
+            return None
         self.eventoSismicoSeleccionado = next((evento for evento in self.eventosSismicosAd if evento.id == evento_id), None)
-        print("eventos", self.eventoSismicosAd)
         print(f"(: Evento sismico seleccionado: {self.eventoSismicoSeleccionado}")
         try:
             estado_bloqueado = self.buscarEstadoBloqueado()
@@ -59,7 +74,6 @@ class GestorRevision:
                 fechaYHoraActual = self.obtenerFechaHoraActual()
                 self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
                 self.eventoSismicoSeleccionado.estadoActual = estado_bloqueado
-                print(f"(: Evento {evento_id} bloqueado exitosamente")
                 return self.mostrarAlcance()
                 
         except EventoSismico.DoesNotExist:
@@ -79,8 +93,7 @@ class GestorRevision:
     
     # 19 Bloquear evento
     def bloquearEvento(self, fechaHoraActual: datetime, estado: Estado) -> None:
-        eventoSismicoSeleccionado = self.eventoSismicoSeleccionado
-        eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
+        self.eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
           
     # 25 Mostrar alcance
     def mostrarAlcance(self) -> dict:
@@ -164,7 +177,7 @@ class GestorRevision:
 
     # 63 Obtener empleado logueado
     def obtenerEmpleadoLogueado(self): 
-        return self.asLogueado.getAsLogueado()
+        return self.sesion.getUsuarioLogueado()
     
     # 67 Buscar estados rechazados
     def buscarEstadoRechazado(self) -> List[Estado]:
