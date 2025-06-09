@@ -15,11 +15,7 @@ class SerieTemporal(models.Model):
         null=True,
         blank=True
     )
-    sismografo = models.ForeignKey(
-        Sismografo,
-        on_delete=models.CASCADE,
-        related_name='series_temporales'
-    )
+    
 
     def __str__(self):
         return f"Evento {self.id} - {self.fechaHoraInicioRegistroMuestras}"
