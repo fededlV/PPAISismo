@@ -1,6 +1,5 @@
 from django.db import models
 from .Estado import Estado
-from typing import List
 from .AlcanceSismico import AlcanceSismico
 from .ClasificacionSismo import ClasificacionSismo
 from .OrigenDeGeneracion import OrigenDeGeneracion

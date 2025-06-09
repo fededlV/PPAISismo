@@ -1,6 +1,8 @@
 from django.db import models
 from .Sismografo import Sismografo
 from .MuestraSismica import MuestraSismica
+
+
 class SerieTemporal(models.Model):
     condicionAlarma = models.BooleanField()
     fechaHoraInicioRegistroMuestras = models.DateTimeField()

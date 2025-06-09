@@ -1,5 +1,7 @@
 from django.db import models
 from .TipoDeDato import TipoDeDato
+
+
 class DetalleMuestraSismica(models.Model):
     valor = models.IntegerField()
     tipoDato = models.ForeignKey(TipoDeDato,on_delete=models.CASCADE,related_name='detalles_muestras_sismicas',null=True, blank=True)
