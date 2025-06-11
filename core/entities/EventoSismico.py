@@ -53,9 +53,7 @@ class EventoSismico(models.Model):
             'estadoActual': self.estadoActual.getNombreEstado(),
             'ambitoEstado': self.estadoActual.getAmbito(),  # <-- agrega esta línea
         }
-        """ 'serieTemporal': self.serieTemporal,
-            'cambioEstado': self.cambioEstado,
-            'analistaSuperior': self.analistaSuperior.getDatos() """ # <- Esto no creo que sea necesario para cuando busca los datos del evento. 
+    
     
     # 74
     def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
