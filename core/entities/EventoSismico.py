@@ -56,12 +56,14 @@ class EventoSismico(models.Model):
     
     
     # 74
-    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
+    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado: Empleado = None):
+        print(f"(: Creando cambio de estado para el evento {self} con estado {estado} y empleado {empleado}")
+        
         cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
         if cambioEstadoActual:
-
             cambioEstadoActual.setFechaHoraFin(fechaHora)
             cambioEstadoActual.save()
+        
         nuevoCambioEstado = CambioEstado(
             evento=self,
             estado=estado,
@@ -106,8 +108,9 @@ class EventoSismico(models.Model):
     def obtenerDatosEstacion(self):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
 
-    def registrarRevision(self, fechaHoraActual, estado, empleado):
-        self.crearCambioEstado(estado, fechaHoraActual, empleado)
+    def registrarRevision(self, fechaHoraActual: datetime, estado: Estado, empleado: Empleado):
+        print(f"(: Registrando revisión para el evento {self} con estado {estado} y empleado {empleado}")
+        self.crearCambioEstado(estado=estado, fechaHora=fechaHoraActual, empleado=empleado)
         self.estadoActual = estado
         self.save()
     

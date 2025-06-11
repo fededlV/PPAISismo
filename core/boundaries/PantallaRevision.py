@@ -40,7 +40,7 @@ class PantallaRevision:
             evento_id = request.POST.get('evento_id')
             print(f"(: Evento ID recibido: {evento_id}")
             eventoTomado = self.gestor.tomarEvento(evento_id) # LLamo al 14 del gestor
-            self.mostrarAlcance()  
+            self.mostrarAlcance()
             self.mostrarClasificacion()  
             self.mostrarDatosOrigen()
             return render(request, 'pantallaRevision.html', {
