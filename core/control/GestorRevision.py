@@ -83,7 +83,7 @@ class GestorRevision:
                 return estado
         return None
 
-    # 18 y 66 Obtener fecha y hora actual
+    # 18 y 65 Obtener fecha y hora actual
     @staticmethod
     def obtenerFechaHoraActual() -> datetime:
         return timezone.now()
@@ -143,21 +143,30 @@ class GestorRevision:
         self.accionSeleccionada = opcion
         return opcion == "Si"
 
-    # 60. Validar existencia de datods
+
+    # 58 iniciar Rechazo Evento
+    def iniciarRechazoEvento(self) -> None:
+        a = self.validarExistenciaDatos()
+        b = self.validarAccionSeleccionada()
+        if a and b:
+            self.registrarRechazoEvento()
+        
+
+    # 59. Validar existencia de datods
     def validarExistenciaDatos(self) -> bool: 
         if not self.eventoSismicoSeleccionado:
             raise ValueError("No se ha seleccionado un evento sismico.")
         else: 
             return True
     
-    # 61. Validar accion seleccionada
+    # 60. Validar accion seleccionada
     def validarAccionSeleccionada(self) -> bool: 
         if not self.accionSeleccionada:
             raise ValueError("No se ha seleccionado una acción.")
         else:
             return True
     
-    # 62 registrar rechazo del evento sismico 
+    # 61 registrar rechazo del evento sismico 
     def registrarRechazoEvento(self): 
         print("(: Registrando rechazo del evento sismico")
         empleado = self.obtenerEmpleadoLogueado()
@@ -172,21 +181,21 @@ class GestorRevision:
         print(estadosRechazado)
         return None
 
-    # 63 Obtener empleado logueado
+    # 62 Obtener empleado logueado
     def obtenerEmpleadoLogueado(self): 
         return self.sesion.getUsuarioLogueado()
     
-    # 67 Buscar estados rechazados
+    # 66 Buscar estados rechazados
     def buscarEstadoRechazado(self) -> List[Estado]:
         for estado in self.estados:
             if estado.ambitoEventoSismico() and estado.esRechazado():
                 return estado
         return None
                 
-    # 70 Registrar revision
+    # 69 Registrar revision
     def registrarRevision(self, estado: Estado, fechaHoraActual: datetime,empleado) -> None:
         self.eventoSismicoSeleccionado.registrarRevision(estado=estado, fechaHoraActual=fechaHoraActual, empleado=empleado)
         
-    # 76 Fin de CU
+    # 75 Fin de CU
     def finCU(self):
         return "Fin de CU"

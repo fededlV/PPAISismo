@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from ..entities.EventoSismico import *
 from ..entities.CambioEstado import *
@@ -123,9 +123,7 @@ class PantallaRevision:
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere rechazar evento.</div>"
             elif opcion == 'Si':
-                self.gestor.validarExistenciaDatos()
-                self.gestor.validarAccionSeleccionada()
-                self.gestor.registrarRechazoEvento()
+                self.gestor.iniciarRechazoEvento()
                 mensaje = "<div class='alert alert-success'>Se quiere rechazar evento.</div>"
             else:
                 mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"
