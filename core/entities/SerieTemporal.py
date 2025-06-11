@@ -30,4 +30,19 @@ class SerieTemporal(models.Model):
     # 45
     def obtenerDatosEstacion(self, sismografo: Sismografo): #Dependencia con sismografo. 
         return sismografo.obtenerDatosEstacion()
+    
+    def get_condicionAlarma(self):
+        return self.condicionAlarma
+
+    def get_fechaHoraInicioRegistroMuestras(self):
+        return self.fechaHoraInicioRegistroMuestras
+
+    def get_fechaHoraRegistro(self):
+        return self.fechaHoraRegistro
+
+    def get_frecuenciaMuestreo(self):
+        return self.frecuenciaMuestreo
+
+    def get_muestraSismica(self):
+        return self.muestraSismica
 

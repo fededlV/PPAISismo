@@ -12,4 +12,4 @@ class Usuario(models.Model):
         app_label = 'core'
 
     def getAsLogueado(self) -> dict:
-        return self.empleado.getDatos()
+        return self.empleado
