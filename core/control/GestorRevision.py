@@ -39,8 +39,6 @@ class GestorRevision:
         print("Eventos AD encontrados: ", eventosAd)
         self.eventosSismicosAd = eventosAd
 
-
-
     # 8 Mostrar datos de eventos
     def mostrarDatosEventos(self) -> List[dict]: 
         datosEventos = []
@@ -106,8 +104,8 @@ class GestorRevision:
     
     # 37 obtener datos de serie y muestra
     def obtenerDatosSerieYMuestra(self) : 
-        self.datosSerieYMuestra =self.gestor.obtenerDatosSerieYMuestra()
-        return self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
+        self.datosSerieYMuestra = self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
+        return self.datosSerieYMuestra
     
     # 43 obtener datos estacion
     def obtenerDatosEstacion(self):

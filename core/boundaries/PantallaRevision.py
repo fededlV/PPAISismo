@@ -43,6 +43,8 @@ class PantallaRevision:
             self.mostrarAlcance()
             self.mostrarClasificacion()  
             self.mostrarDatosOrigen()
+            self.gestor.obtenerDatosSerieYMuestra()
+
             return render(request, 'pantallaRevision.html', {
                 'eventos': None,
                 'alcance': self.alcance,
