@@ -15,7 +15,8 @@ class GestorRevision:
         self.eventosSismicos = EventoSismico.objects.all()
         self.eventoSismicoSeleccionado = eventoSismicoSeleccionado
         self.pantallaRevision= pantallaRevision
-        self.estados = Estado.objects.all()
+        #self.estados = Estado.objects.all()
+        self.fechaHoraActual = self.obtenerFechaHoraActual()
         self.accionSeleccionada = None
         self.asLogueado = Usuario.objects.get()  # Usuario logueado
         self.sesion = Sesion(usuario=Usuario.objects.get(), fecha_inicio=timezone.now(), fecha_fin=None)  # Sesión del usuario
@@ -55,33 +56,40 @@ class GestorRevision:
 
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
-        print("eventos: ", self.eventosSismicosAd)
-        print(f"(: Tomando evento sismico con ID: {evento_id}")
+        print("(: === INICIANDO tomarEvento ===")
+        print(f"(: Eventos disponibles: {len(self.eventosSismicosAd)}")
+        print(f"(: Evento ID recibido: {evento_id}")
+        
         try:
-            evento_id = int(evento_id)  # <-- Conversión aquí
+            evento_id = int(evento_id)
         except (TypeError, ValueError):
-            print("ID de evento inválido:", evento_id)
+            print("(: ❌ ID de evento inválido:", evento_id)
             self.eventoSismicoSeleccionado = None
             return None
-        self.eventoSismicoSeleccionado = next((evento for evento in self.eventosSismicosAd if evento.id == evento_id), None)
-        print(f"(: Evento sismico seleccionado: {self.eventoSismicoSeleccionado}")
-        try:
-            estado_bloqueado = self.buscarEstadoBloqueado()
-            if estado_bloqueado:
-                fechaYHoraActual = self.obtenerFechaHoraActual()
-                self.bloquearEvento(fechaYHoraActual, estado_bloqueado)
-                self.eventoSismicoSeleccionado.estadoActual = estado_bloqueado
-                return self.mostrarAlcance()
-                
-        except EventoSismico.DoesNotExist:
-            print(f"(: No se encontró el evento con ID {evento_id}")
+        
+        # Buscar el evento en la lista
+        self.eventoSismicoSeleccionado = next(
+            (evento for evento in self.eventosSismicosAd if evento.id == evento_id), 
+            None
+        )
+        
+        if self.eventoSismicoSeleccionado:
+            print(f"(: ✓ Evento seleccionado: {self.eventoSismicoSeleccionado.id}")
+            print(f"(: Estado actual ANTES del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
             
-    # 15 Buscar estado bloqueado
-    def buscarEstadoBloqueado(self):
-        for estado in self.estados:
-            if estado.ambitoEventoSismico() and estado.esBloqueado():
-                return estado
-        return None
+            # 19 - Bloquear el evento (¡ESTO ES CLAVE!)
+            print("(: Llamando a bloquearEvento()...")
+            self.bloquearEvento()
+            
+            # Recargar el evento desde la BD para ver el cambio
+            self.eventoSismicoSeleccionado.refresh_from_db()
+            print(f"(: Estado actual DESPUÉS del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
+            print("(: === tomarEvento COMPLETADO ===\n")
+        else:
+            print(f"(: ❌ No se encontró el evento con ID {evento_id}")
+            
+    # 15 Buscar estado bloqueado (ya no es necesario con polimorfismo)
+    # El estado se maneja automáticamente en el patrón State
 
     # 18 y 66 Obtener fecha y hora actual
     @staticmethod
@@ -89,8 +97,15 @@ class GestorRevision:
         return timezone.now()
     
     # 19 Bloquear evento
-    def bloquearEvento(self, fechaHoraActual: datetime, estado: Estado) -> None:
-        self.eventoSismicoSeleccionado.bloquear(fechaHoraActual, estado)
+    def bloquearEvento(self) -> None:
+        print("(: --- Iniciando bloquearEvento() ---")
+        print(f"(: Evento a bloquear: ID={self.eventoSismicoSeleccionado.id}")
+        print(f"(: Tipo del estadoActual: {type(self.eventoSismicoSeleccionado.estadoActual).__name__}")
+        
+        # Delegamos al evento que a su vez delega al estado (Patrón State)
+        self.eventoSismicoSeleccionado.bloquear(self.fechaHoraActual)
+        
+        print("(: --- bloquearEvento() COMPLETADO ---\n")
           
     # 25 Mostrar alcance
     def mostrarAlcance(self) -> dict:

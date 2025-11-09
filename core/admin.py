@@ -14,6 +14,18 @@ from .entities.Usuario import Usuario
 from .entities.MuestraSismica import MuestraSismica
 from .entities.SerieTemporal import SerieTemporal
 
+# Estados concretos
+from .entities.AutoDetectado import AutoDetectado
+from .entities.Bloqueado import Bloqueado
+from .entities.PendienteDeRevision import PendienteDeRevision
+from .entities.Confirmado import Confirmado
+from .entities.Rechazado import Rechazado
+from .entities.Derivado import Derivado
+from .entities.PendienteDeCierre import PendienteDeCierre
+from .entities.Cerrado import Cerrado
+from .entities.EventoSinRevision import EventoSinRevision
+from .entities.AutoConfirmado import AutoConfirmado
+
 admin.site.register(AlcanceSismico)
 admin.site.register(CambioEstado)
 admin.site.register(ClasificacionSismo)
@@ -28,6 +40,18 @@ admin.site.register(TipoDeDato)
 admin.site.register(Usuario)
 admin.site.register(MuestraSismica)
 admin.site.register(SerieTemporal)
+
+# Registrar estados concretos
+admin.site.register(AutoDetectado)
+admin.site.register(Bloqueado)
+admin.site.register(PendienteDeRevision)
+admin.site.register(Confirmado)
+admin.site.register(Rechazado)
+admin.site.register(Derivado)
+admin.site.register(PendienteDeCierre)
+admin.site.register(Cerrado)
+admin.site.register(EventoSinRevision)
+admin.site.register(AutoConfirmado)
 
 
 

@@ -12,3 +12,11 @@ from .entities.Usuario import Usuario
 from .entities.Empleado import Empleado
 from .entities.Sismografo import Sismografo
 from .entities.TipoDeDato import TipoDeDato
+
+# Estados concretos
+from .entities.AutoDetectado import AutoDetectado
+from .entities.Bloqueado import Bloqueado
+from .entities.Rechazado import Rechazado
+from .entities.PendienteDeRevision import PendienteDeRevision
+from .entities.Confirmado import Confirmado
+from .entities.Derivado import Derivado
