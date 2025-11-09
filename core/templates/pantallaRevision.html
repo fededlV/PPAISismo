@@ -134,13 +134,22 @@
                     data-csrf="{{ csrf_token }}">
                 Rechazar evento
             </button>
+            <button id="rechazar-btn"
+                    type="button">
+                    Solicitar revision experto 
+            </button>
+            <button id="rechazar-btn"
+                    type="button">
+                    Confirmar evento
+            </button>
+
             {% endif %}
         </form>
 
     </main>
 
     <!-- Modal de confirmación -->
-    <div id="modal-confirmar-mapa" style="display:none; ...">
+    <div id="modal-confirmar-mapa" style="display:none;">
         <div class="modal-content">
             <p>¿Desea visualizar el mapa?</p>
             <button id="btn-si-mapa" type="button">Sí</button>

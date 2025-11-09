@@ -7,7 +7,7 @@ from typing import List
 from ..entities.Estado import Estado
 from ..boundaries import PantallaRevision
 from ..entities.Sesion import Sesion
-
+from ..entities.Empleado import Empleado
 
 class GestorRevision:
     def __init__(self, eventoSismicoSeleccionado: EventoSismico = None, pantallaRevision:PantallaRevision=None):
@@ -18,8 +18,8 @@ class GestorRevision:
         #self.estados = Estado.objects.all()
         self.fechaHoraActual = self.obtenerFechaHoraActual()
         self.accionSeleccionada = None
-        self.asLogueado = Usuario.objects.get()  # Usuario logueado
-        self.sesion = Sesion(usuario=Usuario.objects.get(), fecha_inicio=timezone.now(), fecha_fin=None)  # Sesión del usuario
+        self.datosSerieYMuestra = None 
+        self.sesion = Sesion.objects.all()
 
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
@@ -39,8 +39,6 @@ class GestorRevision:
                 eventosAd.append(evento)
         print("Eventos AD encontrados: ", eventosAd)
         self.eventosSismicosAd = eventosAd
-
-
 
     # 8 Mostrar datos de eventos
     def mostrarDatosEventos(self) -> List[dict]: 
@@ -91,7 +89,7 @@ class GestorRevision:
     # 15 Buscar estado bloqueado (ya no es necesario con polimorfismo)
     # El estado se maneja automáticamente en el patrón State
 
-    # 18 y 66 Obtener fecha y hora actual
+    # 18 y 65 Obtener fecha y hora actual
     @staticmethod
     def obtenerFechaHoraActual() -> datetime:
         return timezone.now()
@@ -121,7 +119,8 @@ class GestorRevision:
     
     # 37 obtener datos de serie y muestra
     def obtenerDatosSerieYMuestra(self) : 
-        return self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
+        self.datosSerieYMuestra = self.eventoSismicoSeleccionado.obtenerDatosSerieYmuestra()
+        return self.datosSerieYMuestra
     
     # 43 obtener datos estacion
     def obtenerDatosEstacion(self):
@@ -158,50 +157,66 @@ class GestorRevision:
         self.accionSeleccionada = opcion
         return opcion == "Si"
 
-    # 60. Validar existencia de datods
+
+    # 58 iniciar Rechazo Evento
+    def iniciarRechazoEvento(self) -> None:
+        a = self.validarExistenciaDatos()
+        b = self.validarAccionSeleccionada()
+        print(f"(: Validando existencia de datos: {a}, Validando accion seleccionada: {b}")
+        if a and b:
+            self.registrarRechazoEvento()
+        
+
+    # 59. Validar existencia de datods
     def validarExistenciaDatos(self) -> bool: 
         if not self.eventoSismicoSeleccionado:
             raise ValueError("No se ha seleccionado un evento sismico.")
         else: 
             return True
     
-    # 61. Validar accion seleccionada
+    # 60. Validar accion seleccionada
     def validarAccionSeleccionada(self) -> bool: 
         if not self.accionSeleccionada:
             raise ValueError("No se ha seleccionado una acción.")
         else:
             return True
     
-    # 62 registrar rechazo del evento sismico 
-    def registrarRechazoEvento(self): 
+    # 61 registrar rechazo del evento sismico 
+    def registrarRechazoEvento(self) -> None: 
         print("(: Registrando rechazo del evento sismico")
         empleado = self.obtenerEmpleadoLogueado()
         fechaHoraActual = self.obtenerFechaHoraActual()
         estadosRechazado = self.buscarEstadoRechazado()
-        self.registrarRevision(estadosRechazado,fechaHoraActual,self.asLogueado.empleado)
+        self.registrarRevision(estadosRechazado,fechaHoraActual, empleado)
         self.finCU()
         print()
         print(estadosRechazado)
         print(empleado)
         print(fechaHoraActual)
         print(estadosRechazado)
-        return None
+        return
 
-    # 63 Obtener empleado logueado
-    def obtenerEmpleadoLogueado(self): 
-        return self.sesion.getUsuarioLogueado()
+    # 62 Obtener empleado logueado
+    def obtenerEmpleadoLogueado(self) -> Empleado: 
+        return self.sesion.first().getUsuarioLogueado()
     
-    # 67 Buscar estados rechazados
-    def buscarEstadoRechazado(self) -> List[Estado]:
+    # 66 Buscar estados rechazados
+    def buscarEstadoRechazado(self) -> Estado:
         for estado in self.estados:
-            if estado.ambitoEventoSismico() and estado.esRechazado():
+            a = estado.ambitoEventoSismico()
+            b = estado.esRechazado()
+            print(f"(: Verificando estado: {estado}, Ambito: {a}, Rechazado: {b}")
+            if a and b:
+                print(f"(: Estado rechazado encontrado: {estado}")
                 return estado
         return None
                 
-    # 70 Registrar revision
-    def registrarRevision(self, estado: Estado, fechaHoraActual: datetime,empleado) -> None:
+    # 69 Registrar revision
+    def registrarRevision(self, estado: Estado, fechaHoraActual: datetime, empleado: Empleado) -> None:
+        print("(: Registrando revision del evento sismico")
+        print(f"Estado: {estado}, Fecha y hora actual: {fechaHoraActual}, Empleado: {empleado}")
         self.eventoSismicoSeleccionado.registrarRevision(estado=estado, fechaHoraActual=fechaHoraActual, empleado=empleado)
         
-    # 76 Fin de CU
+    # 75 Fin de CU
     def finCU(self):
         return "Fin de CU"
