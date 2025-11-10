@@ -1,8 +1,12 @@
 from typing import List
 from django.db import models
+
+from .Empleado import Empleado
 from .Estado import Estado    
 from .CambioEstado import CambioEstado
 from datetime import datetime
+from .EventoSismico import EventoSismico
+from .Bloqueado import Bloqueado
 
 
 class AutoDetectado(Estado):
@@ -29,6 +33,19 @@ class AutoDetectado(Estado):
         - El CambioEstado actual (con fechaHoraFin = None) o None si no existe
         """
         return next((cambio for cambio in ce if cambio.esActual()), None)
+    
+    def crearCambioEstado(self, evento:EventoSismico, estado: Estado, fechaHora: datetime, empleado: Empleado = None):
+        print(f"(: Creando cambio de estado para el evento {evento} con estado {estado} y empleado {empleado}")
+        
+        nuevoCambioEstado = CambioEstado(
+            evento=evento,
+            estado=estado,
+            empleado=empleado,
+            fechaHoraInicio=fechaHora,
+            fecha_cambio=fechaHora 
+        )
+        nuevoCambioEstado.save()
+        return nuevoCambioEstado
 
     def bloquear(self, fechaHora: datetime, ce: List[CambioEstado], e) -> None:
         """
@@ -51,7 +68,6 @@ class AutoDetectado(Estado):
             print(f"   - Cambio de estado actual finalizado: {cambioEstadoActual}")
         
         # 3. Buscar o crear el estado Bloqueado usando la clase correcta
-        from .Bloqueado import Bloqueado
         estado_bloqueado = Bloqueado.objects.filter(
             nombreEstado="Bloqueado",
             ambito="EventoSismico"
@@ -67,7 +83,8 @@ class AutoDetectado(Estado):
             print(f"   - Estado Bloqueado encontrado: {estado_bloqueado.id}")
         
         # 4. Crear nuevo cambio de estado a Bloqueado
-        nuevo_cambio_estado = e.crearCambioEstado(
+        nuevo_cambio_estado = self.crearCambioEstado(
+            evento=e,
             estado=estado_bloqueado, 
             fechaHora=fechaHora
         )
