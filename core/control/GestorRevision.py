@@ -202,7 +202,7 @@ class GestorRevision:
         return self.sesion.first().getUsuarioLogueado()
     
     # 66 Buscar estados rechazados
-    def ç(self) -> Estado:
+    def buscarEstadoRechazado(self) -> Estado:
         for estado in Estado.objects.all():
             a = estado.ambitoEventoSismico()
             b = estado.esRechazado()
