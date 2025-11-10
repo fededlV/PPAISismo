@@ -6,6 +6,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pantalla de Revisión</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        :root {
+            --patagonia-sky: #87CEEB;
+            --patagonia-mountain: #4A5568;
+            --patagonia-ice: #E0F2F7;
+            --patagonia-stone: #6B7280;
+            --patagonia-grass: #8B9D83;
+            --patagonia-earth: #A0826D;
+            --patagonia-deep: #2C3E50;
+        }
+        
+        body {
+            background: linear-gradient(180deg, var(--patagonia-sky) 0%, var(--patagonia-ice) 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--patagonia-deep);
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--patagonia-mountain) 0%, var(--patagonia-deep) 100%);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        header h1 {
+            color: var(--patagonia-ice);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        main {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin: 2rem auto;
+            padding: 2rem;
+            max-width: 95%;
+        }
+        
+        h2 {
+            color: var(--patagonia-mountain);
+            border-bottom: 3px solid var(--patagonia-grass);
+            padding-bottom: 0.5rem;
+        }
+        
+        table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        thead {
+            background: linear-gradient(135deg, var(--patagonia-stone) 0%, var(--patagonia-mountain) 100%);
+        }
+        
+        thead th {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: var(--patagonia-ice);
+        }
+        
+        tbody tr:hover {
+            background-color: #B8D4E0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .alert.alcance-alert {
+            background: linear-gradient(135deg, var(--patagonia-ice) 0%, white 100%);
+            border-left: 5px solid var(--patagonia-grass);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .alcance-table {
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .alcance-table th {
+            background: var(--patagonia-stone);
+            color: white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--patagonia-grass) 0%, var(--patagonia-earth) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--patagonia-earth) 0%, var(--patagonia-grass) 100%);
+        }
+        
+        button#rechazar-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        }
+        
+        button#rechazar-btn:hover {
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--patagonia-mountain);
+        }
+        
+        footer {
+            background: var(--patagonia-deep);
+            color: var(--patagonia-ice);
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -146,6 +276,17 @@
             {% endif %}
         </form>
 
+        <!-- Contenedor para mostrar el mapa -->
+        <div id="contenedor-mapa" style="display: none; margin-top: 2rem;">
+            <h3 style="color: var(--patagonia-mountain);">📍 Mapa del Evento Sísmico</h3>
+            <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <img id="imagen-mapa" src="" alt="Mapa del evento sísmico" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </div>
+
+        <!-- Mensaje de respuesta -->
+        <div id="mensaje-mapa" style="margin-top: 1rem;"></div>
+
     </main>
 
     <!-- Modal de confirmación -->
@@ -177,6 +318,6 @@
     <footer>
         <p>&copy; 2025</p>
     </footer>
-    <script src="{% static 'script.js' %}"></script>
+    <script src="{% static 'script.js' %}?v=2"></script>
 </body>
 </html>
