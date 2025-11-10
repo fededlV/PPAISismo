@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from ..entities.EventoSismico import *
 from ..entities.CambioEstado import *
@@ -18,8 +18,7 @@ class PantallaRevision:
         
     # 1 Opcion Registrar Res Revicion Manual
     def opcRegistrarResRevisionMan(self, request):
-        gestor = GestorRevision()
-        eventosSismicosAd = gestor.tomarOpcSeleccionada()
+        eventosSismicosAd = self.gestor.tomarOpcSeleccionada()
         self.habilitarPantalla()
         return render(request, 'pantallaRevision.html', {'eventos': eventosSismicosAd})
     
@@ -39,10 +38,13 @@ class PantallaRevision:
     def tomarEvento(self, request):
         if request.method == 'POST':
             evento_id = request.POST.get('evento_id')
+            print(f"(: Evento ID recibido: {evento_id}")
             eventoTomado = self.gestor.tomarEvento(evento_id) # LLamo al 14 del gestor
-            self.mostrarAlcance()  
+            self.mostrarAlcance()
             self.mostrarClasificacion()  
             self.mostrarDatosOrigen()
+            self.gestor.obtenerDatosSerieYMuestra()
+
             return render(request, 'pantallaRevision.html', {
                 'eventos': None,
                 'alcance': self.alcance,
@@ -123,9 +125,7 @@ class PantallaRevision:
             if opcion == 'No':
                 mensaje = "<div class='alert alert-info'>No se quiere rechazar evento.</div>"
             elif opcion == 'Si':
-                self.gestor.validarExistenciaDatos()
-                self.gestor.validarAccionSeleccionada()
-                self.gestor.registrarRechazoEvento()
+                self.gestor.iniciarRechazoEvento()
                 mensaje = "<div class='alert alert-success'>Se quiere rechazar evento.</div>"
             else:
                 mensaje = "<div class='alert alert-danger'>Opción no válida.</div>"

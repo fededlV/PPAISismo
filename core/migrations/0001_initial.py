@@ -127,7 +127,6 @@ class Migration(migrations.Migration):
                 ('fechaHoraRegistro', models.DateTimeField()),
                 ('frecuenciaMuestreo', models.FloatField()),
                 ('muestraSismica', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='series_temporales', to='core.muestrasismica')),
-                ('sismografo', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='series_temporales', to='core.sismografo')),
             ],
         ),
         migrations.CreateModel(

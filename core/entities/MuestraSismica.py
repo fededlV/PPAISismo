@@ -1,6 +1,7 @@
-from datetime import datetime
 from django.db import models
 from .DetalleMuestraSismica import DetalleMuestraSismica
+
+
 class MuestraSismica(models.Model):
     fechaHoraMuestra = models.DateTimeField(null=True, blank=True)
     detallesMuestras = models.ForeignKey(

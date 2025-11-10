@@ -1,6 +1,5 @@
 from django.db import models
 from .Estado import Estado
-from typing import List
 from .AlcanceSismico import AlcanceSismico
 from .ClasificacionSismo import ClasificacionSismo
 from .OrigenDeGeneracion import OrigenDeGeneracion
@@ -28,50 +27,47 @@ class EventoSismico(models.Model):
     analistaSuperior = models.ForeignKey(Empleado, on_delete=models.PROTECT, related_name='eventos_analista_superior', null=True, blank=True)
     
     def __str__(self):
-        return f"Evento {self.id} - {self.estadoActual}"
+        try:
+            estado_nombre = self.estadoActual.nombreEstado if self.estadoActual else "Sin Estado"
+            return f"Evento {self.id} - {estado_nombre}"
+        except:
+            return f"Evento {self.id} - Estado inválido"
     
     class Meta:
         app_label = 'core'
 
     # 5 Obtener eventos sismicos
     def obtenerEventosAd(self):
-        eventosSismicos = EventoSismico.objects.all()
-        ambitoEstadoSismico = []
-        for evento in eventosSismicos:
-            a = evento.estadoActual.ambitoEventoSismico()
-            b = evento.estadoActual.esAutoDetectado()
-            if a and b:
-                ambitoEstadoSismico.append(evento)
-        return ambitoEstadoSismico 
+        a = self.estadoActual.ambitoEventoSismico()
+        b = self.estadoActual.esAutoDetectado()
+        c = self.estadoActual.esPendienteRevision()
+        return a and (b or c)
     
     # 9 Obtener datos del evento sismico
     def getDatosEventoSismico(self):
         return {
             'id': self.id,
-            'fechaHoraOcurrencia': self.fechaHoraOcurrencia,
-            'fechaHoraFin': self.fechaHoraFin,
-            'latitudEpicentro': self.latitudEpicentro,
-            'latitudHipocentro': self.latitudHipocentro,
-            'longitudEpicentro': self.longitudEpicentro,
-            'longitudHipocentro': self.longitudHipocentro,
-            'valorMagnitud': self.valorMagnitud,
-            'estadoActual': self.estadoActual.nombreEstado,
-            'ambitoEstado': self.estadoActual.ambito,  # <-- agrega esta línea
-            'alcanceSismico': self.alcanceSismico.getDatosAlcance(),
-            'clasificacion': self.clasificacion.getDatosClasificacion(),
-            'origenGeneracion': self.origenGeneracion.getDatosOrigen(),
-            'serieTemporal': self.serieTemporal,
-            'cambioEstado': self.cambioEstado,
-            'analistaSuperior': self.analistaSuperior
+            'fechaHoraFin': self.get_fechaHoraFin(),
+            'fechaHoraOcurrencia': self.get_fechaHoraOcurrencia(),
+            'latitudEpicentro': self.get_latitudEpicentro(),
+            'latitudHipocentro': self.get_latitudHipocentro(),
+            'longitudEpicentro': self.get_longitudEpicentro(),
+            'longitudHipocentro': self.get_longitudHipocentro(),
+            'valorMagnitud': self.get_valorMagnitud(),
+            'estadoActual': self.estadoActual.getNombreEstado(),
+            'ambitoEstado': self.estadoActual.getAmbito(),  # <-- agrega esta línea
         }
     
+    
     # 74
-    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado=None):
+    def crearCambioEstado(self, estado: Estado, fechaHora: datetime, empleado: Empleado = None):
+        print(f"(: Creando cambio de estado para el evento {self} con estado {estado} y empleado {empleado}")
+        
         cambioEstadoActual = next((ce for ce in self.cambioEstado.all() if ce.esActual()), None)
         if cambioEstadoActual:
-
             cambioEstadoActual.setFechaHoraFin(fechaHora)
             cambioEstadoActual.save()
+        
         nuevoCambioEstado = CambioEstado(
             evento=self,
             estado=estado,
@@ -82,6 +78,19 @@ class EventoSismico(models.Model):
         nuevoCambioEstado.save()
         self.cambioEstado.add(nuevoCambioEstado)
         return nuevoCambioEstado
+    
+    # 23 Crear cambio de estado
+    """ def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
+        nuevoCambioEstado = CambioEstado(
+            evento=self,
+            estado=estado,
+            empleado=empleado,
+            fecha_cambio=fechaHora,
+            fechaHoraInicio=fechaHora
+        )
+        nuevoCambioEstado.save()
+        self.cambioEstado.add(nuevoCambioEstado)
+        return nuevoCambioEstado """
 
     # 26 Mostrar alcance
     def mostrarAlcance(self):
@@ -103,31 +112,71 @@ class EventoSismico(models.Model):
     def obtenerDatosEstacion(self):
         return [serie.obtenerDatosEstacion() for serie in self.serieTemporal.all()]
 
-    def registrarRevision(self, fechaHoraActual, estado, empleado):
-        self.crearCambioEstado(estado, fechaHoraActual, empleado)
+    def registrarRevision(self, fechaHoraActual: datetime, estado: Estado, empleado: Empleado):
+        print(f"(: Registrando revisión para el evento {self} con estado {estado} y empleado {empleado}")
+        self.crearCambioEstado(estado=estado, fechaHora=fechaHoraActual, empleado=empleado)
         self.estadoActual = estado
         self.save()
     
-    # 23 Crear cambio de estado
-    def crearCE(self, estado: Estado, fechaHora: datetime,empleado=None):
-        nuevoCambioEstado = CambioEstado(
-            evento=self,
-            estado=estado,
-            empleado=empleado,
-            fecha_cambio=fechaHora,
-            fechaHoraInicio=fechaHora
-        )
-        nuevoCambioEstado.save()
-        self.cambioEstado.add(nuevoCambioEstado)
-        return nuevoCambioEstado
 
     # 20
-    def bloquear(self, fechaHoraActual: datetime, estado: Estado) -> None:
-        for i in self.cambioEstado.all():
-            if i.esActual():
-                i.setFechaHoraFin(fechaHoraActual)
-                print(f"(: Cambio de estado actualizado: {i}")
-                i.save()
-        self.crearCE(estado, fechaHoraActual)
+    def bloquear(self, fechaHoraActual: datetime) -> None:
+        """
+        Delega la responsabilidad de bloqueo al estado actual (polimorfismo)
+        El estado concreto (ej: AutoDetectado) implementará la lógica específica
+        """
+        print("(: Delegando bloqueo al estado actual del evento sismico")
+        ce = list(self.cambioEstado.all())  # Array de cambios de estado
+        self.estadoActual.bloquear(fechaHoraActual, ce, self)  # Delega al estado concreto
+
+    def setEstado(self, estado: Estado) -> None:
+        print("(: Actualizando estado actual del evento sismico")
         self.estadoActual = estado
         self.save()
+    
+    def setCambioEstado(self, cambioEstado: CambioEstado) -> None:
+        print("(: Agregando cambio de estado al evento sismico")
+        self.cambioEstado.add(cambioEstado)
+        self.save()
+
+    def get_fechaHoraFin(self):
+        return self.fechaHoraFin
+
+    def get_fechaHoraOcurrencia(self):
+        return self.fechaHoraOcurrencia
+
+    def get_latitudEpicentro(self):
+        return self.latitudEpicentro
+
+    def get_latitudHipocentro(self):
+        return self.latitudHipocentro
+
+    def get_longitudEpicentro(self):
+        return self.longitudEpicentro
+
+    def get_longitudHipocentro(self):
+        return self.longitudHipocentro
+
+    def get_valorMagnitud(self):
+        return self.valorMagnitud
+
+    def get_estadoActual(self):
+        return self.estadoActual
+
+    def get_alcanceSismico(self):
+        return self.alcanceSismico
+
+    def get_clasificacion(self):
+        return self.clasificacion
+
+    def get_origenGeneracion(self):
+        return self.origenGeneracion
+
+    def get_serieTemporal(self):
+        return self.serieTemporal
+
+    def get_cambioEstado(self):
+        return self.cambioEstado
+
+    def get_analistaSuperior(self):
+        return self.analistaSuperior

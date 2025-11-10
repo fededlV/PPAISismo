@@ -11,7 +11,7 @@ class Empleado(models.Model):
     class Meta:
         app_label = 'core'
 
-    def getDatos(self):
+    def getDatos(self) -> dict: 
         return {
             'apellido': self.apellido,
             'mail': self.mail,
