@@ -1,3 +1,13 @@
+/* Helpers de UI inicial */
+document.addEventListener('DOMContentLoaded', function () {
+    // Ocultar el botón "Seleccionar Evento" si no hay eventos renderizados
+    const seleccionarBtn = document.querySelector('form button[type="submit"]');
+    const radiosEventos = document.querySelectorAll('tbody input[name="evento_id"]');
+    if (seleccionarBtn && radiosEventos.length === 0) {
+        seleccionarBtn.style.display = 'none';
+    }
+});
+
 /*VISUALIZAR MAPA*/
 
 function enviarOpcionMapa(opcion) {
@@ -51,16 +61,21 @@ function enviarOpcionMapa(opcion) {
     });
 }
 
-document.getElementById('visualizar-mapa-btn').onclick = function(e) {
-    e.preventDefault();
-    document.getElementById('modal-confirmar-mapa').style.display = 'flex';
-};
-document.getElementById('btn-si-mapa').onclick = function() {
-    enviarOpcionMapa('Si');
-};
-document.getElementById('btn-no-mapa').onclick = function() {
-    enviarOpcionMapa('No');
-};
+const btnVisualizarMapa = document.getElementById('visualizar-mapa-btn');
+if (btnVisualizarMapa) {
+    btnVisualizarMapa.onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('modal-confirmar-mapa').style.display = 'flex';
+    };
+}
+const btnSiMapa = document.getElementById('btn-si-mapa');
+if (btnSiMapa) {
+    btnSiMapa.onclick = function() { enviarOpcionMapa('Si'); };
+}
+const btnNoMapa = document.getElementById('btn-no-mapa');
+if (btnNoMapa) {
+    btnNoMapa.onclick = function() { enviarOpcionMapa('No'); };
+}
 
 
 // MODIFICAR DATOS
@@ -86,16 +101,21 @@ function enviarOpcionModificar(opcion) {
     });
 }
 
-document.getElementById('modificar-btn').onclick = function(e) {
-    e.preventDefault();
-    document.getElementById('modal-modificar-mapa').style.display = 'flex';
-};
-document.getElementById('btn-si-modificar').onclick = function() {
-    enviarOpcionModificar('Si');
-};
-document.getElementById('btn-no-modificar').onclick = function() {
-    enviarOpcionModificar('No');
-};
+const btnModificar = document.getElementById('modificar-btn');
+if (btnModificar) {
+    btnModificar.onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('modal-modificar-mapa').style.display = 'flex';
+    };
+}
+const btnSiModificar = document.getElementById('btn-si-modificar');
+if (btnSiModificar) {
+    btnSiModificar.onclick = function() { enviarOpcionModificar('Si'); };
+}
+const btnNoModificar = document.getElementById('btn-no-modificar');
+if (btnNoModificar) {
+    btnNoModificar.onclick = function() { enviarOpcionModificar('No'); };
+}
 
 // RECHAZAR EVENTO
 function enviarOpcionRechazarEvento(opcion) {
@@ -120,17 +140,24 @@ function enviarOpcionRechazarEvento(opcion) {
     });
 }
 
-document.getElementById('rechazar-btn').onclick = function(e) {
-    e.preventDefault();
-    document.getElementById('modal-rechazar-evento').style.display = 'flex';
-};
-document.getElementById('btn-si-rechazar').onclick = function() {
-    enviarOpcionRechazarEvento('Si');
-    setTimeout(function() {
-        window.location.href = '/opcRegistrarResRevisionMan';
-    }, 500);
-};
-document.getElementById('btn-no-rechazar').onclick = function() {
-    enviarOpcionRechazarEvento('No');
-};
+const btnRechazar = document.getElementById('rechazar-btn');
+if (btnRechazar) {
+    btnRechazar.onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('modal-rechazar-evento').style.display = 'flex';
+    };
+}
+const btnSiRechazar = document.getElementById('btn-si-rechazar');
+if (btnSiRechazar) {
+    btnSiRechazar.onclick = function() {
+        enviarOpcionRechazarEvento('Si');
+        setTimeout(function() {
+            window.location.href = '/opcRegistrarResRevisionMan';
+        }, 500);
+    };
+}
+const btnNoRechazar = document.getElementById('btn-no-rechazar');
+if (btnNoRechazar) {
+    btnNoRechazar.onclick = function() { enviarOpcionRechazarEvento('No'); };
+}
 

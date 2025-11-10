@@ -55,38 +55,38 @@ class GestorRevision:
 
     # 14 Tomar evento sismico
     def tomarEvento(self, evento_id: int) -> None:
-        print("(: === INICIANDO tomarEvento ===")
-        print(f"(: Eventos disponibles: {len(self.eventosSismicosAd)}")
-        print(f"(: Evento ID recibido: {evento_id}")
-        
-        try:
-            evento_id = int(evento_id)
-        except (TypeError, ValueError):
-            print("(: ❌ ID de evento inválido:", evento_id)
-            self.eventoSismicoSeleccionado = None
-            return None
-        
-        # Buscar el evento en la lista
-        self.eventoSismicoSeleccionado = next(
-            (evento for evento in self.eventosSismicosAd if evento.id == evento_id), 
-            None
-        )
-        
-        if self.eventoSismicoSeleccionado:
-            print(f"(: ✓ Evento seleccionado: {self.eventoSismicoSeleccionado.id}")
-            print(f"(: Estado actual ANTES del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
+            print("(: === INICIANDO tomarEvento ===")
+            print(f"(: Eventos disponibles: {len(self.eventosSismicosAd)}")
+            print(f"(: Evento ID recibido: {evento_id}")
+
+            try:
+                evento_id = int(evento_id)
+            except (TypeError, ValueError):
+                print("(: ❌ ID de evento inválido:", evento_id)
+                self.eventoSismicoSeleccionado = None
+                return None
             
-            # 19 - Bloquear el evento (¡ESTO ES CLAVE!)
-            print("(: Llamando a bloquearEvento()...")
-            self.bloquearEvento()
+            # Buscar el evento en la lista
+            self.eventoSismicoSeleccionado = next(
+                (evento for evento in self.eventosSismicosAd if evento.id == evento_id), 
+                None
+            )
             
-            # Recargar el evento desde la BD para ver el cambio
-            self.eventoSismicoSeleccionado.refresh_from_db()
-            print(f"(: Estado actual DESPUÉS del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
-            print("(: === tomarEvento COMPLETADO ===\n")
-        else:
-            print(f"(: ❌ No se encontró el evento con ID {evento_id}")
-            
+            if self.eventoSismicoSeleccionado:
+                print(f"(: ✓ Evento seleccionado: {self.eventoSismicoSeleccionado.id}")
+                print(f"(: Estado actual ANTES del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
+                
+                # 19 - Bloquear el evento (¡ESTO ES CLAVE!)
+                print("(: Llamando a bloquearEvento()...")
+                self.bloquearEvento()
+                
+                # Recargar el evento desde la BD para ver el cambio
+                self.eventoSismicoSeleccionado.refresh_from_db()
+                print(f"(: Estado actual DESPUÉS del bloqueo: {self.eventoSismicoSeleccionado.estadoActual.nombreEstado}")
+                print("(: === tomarEvento COMPLETADO ===\n")
+            else:
+                print(f"(: ❌ No se encontró el evento con ID {evento_id}")
+
     # 15 Buscar estado bloqueado (ya no es necesario con polimorfismo)
     # El estado se maneja automáticamente en el patrón State
 
