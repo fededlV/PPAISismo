@@ -21,6 +21,7 @@ class GestorRevision:
         self.datosSerieYMuestra = None 
         self.sesion = Sesion.objects.all()
 
+
     # 3 Tomar opción seleccionada
     def tomarOpcSeleccionada(self):
         self.buscarEventosSismicos()
@@ -201,8 +202,8 @@ class GestorRevision:
         return self.sesion.first().getUsuarioLogueado()
     
     # 66 Buscar estados rechazados
-    def buscarEstadoRechazado(self) -> Estado:
-        for estado in self.estados:
+    def ç(self) -> Estado:
+        for estado in Estado.objects.all():
             a = estado.ambitoEventoSismico()
             b = estado.esRechazado()
             print(f"(: Verificando estado: {estado}, Ambito: {a}, Rechazado: {b}")

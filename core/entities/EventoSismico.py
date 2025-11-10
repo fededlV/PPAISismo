@@ -127,6 +127,7 @@ class EventoSismico(models.Model):
         """
         print("(: Delegando bloqueo al estado actual del evento sismico")
         ce = list(self.cambioEstado.all())  # Array de cambios de estado
+        print(ce, fechaHoraActual, self)
         self.estadoActual.bloquear(fechaHoraActual, ce, self)  # Delega al estado concreto
 
     def setEstado(self, estado: Estado) -> None:

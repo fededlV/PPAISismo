@@ -54,7 +54,7 @@ class PantallaRevision:
         else:
             # Si se accede por GET, redirigir a la pantalla de selección
             return redirect('tomarOpcSeleccionada')
-        
+                
     # 28 mostrar alcance
     def mostrarAlcance(self) -> None:
         self.alcance = self.gestor.eventoSismicoSeleccionado.mostrarAlcance()
